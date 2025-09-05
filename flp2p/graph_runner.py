@@ -103,11 +103,16 @@ def run_rounds(
             
         # Evaluate (average across clients)
         with torch.no_grad():
-            losses, accs = [], []
+            total_samples = 0
+            weighted_loss = 0.0
+            weighted_acc = 0.0
             for client in clients:
                 loss, acc = client.evaluate()
-                losses.append(loss)
-                accs.append(acc)
-        metrics.append((sum(losses) / len(losses), sum(accs) / len(accs)))
-    print(metrics)
+                num_samples = len(client.test_loader.dataset)
+                weighted_loss += loss * num_samples
+                weighted_acc += acc * num_samples
+                total_samples += num_samples
+            avg_loss = weighted_loss / total_samples
+            avg_acc = weighted_acc / total_samples
+        metrics.append((avg_loss, avg_acc))
     return metrics 
