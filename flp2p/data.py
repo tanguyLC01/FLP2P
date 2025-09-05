@@ -76,6 +76,14 @@ def plot_partition_distribution(partitions: List[np.ndarray], labels: np.ndarray
     plt.savefig(os.path.join(path_to_save, "client_class_repartition.png"))
     plt.close()
 
+def get_dataset(config: Dict) -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
+    if config.name == "mnist":
+        return get_mnist_datasets(root=config.root)
+    elif config.name == "cifar10":
+        return get_cifar10_datasets(root=config.root)
+    else:
+        raise ValueError(f"Unknown dataset: {config.name}")
+
 def build_client_loaders(
     train_dataset: torch.utils.data.Dataset,
     test_dataset: torch.utils.data.Dataset,

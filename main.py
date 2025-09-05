@@ -6,7 +6,7 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 
 from flp2p.client import FLClient
-from flp2p.data import build_client_loaders, get_mnist_datasets
+from flp2p.data import build_client_loaders, get_dataset
 from flp2p.graph_runner import build_topology, run_rounds, plot_topology
 from flp2p.networks.lenet5 import LeNet5
 
@@ -18,7 +18,7 @@ def main(cfg: DictConfig) -> None:
 
     log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
     # Data
-    train_ds, test_ds = get_mnist_datasets(root=cfg.data.root)
+    train_ds, test_ds = get_dataset(cfg.data)
     client_loaders = build_client_loaders(
         train_dataset=train_ds,
         test_dataset=test_ds,
