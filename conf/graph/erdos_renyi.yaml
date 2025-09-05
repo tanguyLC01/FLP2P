@@ -1,0 +1,3 @@
+name: erdos_renyi
+topology: erdos_renyi
+er_p: 0.2 

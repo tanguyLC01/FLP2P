@@ -1,0 +1,4 @@
+name: dirichlet
+num_clients: 5
+strategy: dirichlet
+alpha: 0.5 

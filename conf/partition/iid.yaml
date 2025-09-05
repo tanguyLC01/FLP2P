@@ -1,0 +1,4 @@
+name: iid
+num_clients: 50
+strategy: iid
+alpha: 0.5  # ignored for iid 
