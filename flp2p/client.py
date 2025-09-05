@@ -4,7 +4,6 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-
 #ShareMode = Literal["backbone", "full"]
 
 
@@ -72,7 +71,7 @@ class FLClient:
                     correct += (preds == targets).sum().item()
         avg_loss = total_loss / max(1, num_samples)
         avg_acc = correct / max(1, num_samples)
-        return avg_loss, avg_acc
+        return avg_loss, avg_acc, max(1, num_samples)
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:

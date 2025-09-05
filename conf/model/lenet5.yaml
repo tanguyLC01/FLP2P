@@ -1,3 +1,4 @@
 name: lenet5
 latent_dimension: 256
 num_classes: 10 
+in_channels: 1
