@@ -7,11 +7,13 @@ from tqdm import tqdm
 
 from .client import FLClient
 import random
+import logging
+
 
 
 Topology = Literal["ring", "erdos_renyi", "random"]
 
-
+log = logging.getLogger(__name__)
 
 def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topology.png") -> None:
     """
@@ -27,9 +29,10 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     plt.axis('off')
     plt.savefig(path)
     plt.close()
+
     
-def build_topology(num_clients: int, topology: Topology = "ring", er_p: float = 0.2, seed: int = 42) -> nx.Graph:
-    if topology == "ring":
+def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
+    if cfg.topology == "ring":
         return nx.cycle_graph(num_clients)
     elif topology == "erdos_renyi":
         return nx.erdos_renyi_graph(num_clients, er_p, seed=seed)
@@ -88,25 +91,27 @@ def run_rounds(
     rounds: int = 5,
     local_epochs: int = 1,
     progress: bool = True,
-) -> List[Tuple[float, float]]:
-    metrics: List[Tuple[float, float]] = []
+) -> Dict[str, List[Tuple[float, float]]]:
+    metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
     for rnd in tqdm(range(rounds), disable=not progress, desc="Rounds"):
         
         # Local training
+        train_acc, train_loss = 0, 0
+        train_samples = 0
         for client in clients:
-            client.local_train(local_epochs=local_epochs)
-            
+            loss, acc, n_samples = client.local_train(local_epochs=local_epochs)
+            train_samples += n_samples
+            train_acc  += acc * n_samples
+            train_loss  += loss * n_samples
+        metrics['train'].append((train_loss/n_samples, train_acc/n_samples))
         # Share with neighbors and aggregate
         neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
         for node in graph.nodes:
             neighbors = list(graph.neighbors(node))
-            selected_neighbors = [n for n in neighbors if random.random() < 0.5]
-            if not selected_neighbors:
-                neighbor_states.append({})
-                continue
+            selected_neighbors = [n for n in neighbors if random.random() < 0.5] + [node]
             gradients = [clients[n].get_gradient() for n in selected_neighbors]
-            weights = [graph.get_edge_data(node, n).get("weight", 1.0) for n in selected_neighbors]
+            weights = [graph.get_edge_data(node, n).get("weight", 1/len(selected_neighbors)) for n in selected_neighbors]
             aggregated = aggregate_gradients_weighted(gradients, weights)
             # Store or use aggregated as needed, e.g., append to neighbor_states
             neighbor_states.append(aggregated)
@@ -128,5 +133,5 @@ def run_rounds(
                 total_samples += num_samples
             avg_loss = weighted_loss / total_samples
             avg_acc = weighted_acc / total_samples
-        metrics.append((avg_loss, avg_acc))
+            metrics["test"].append((avg_loss, avg_acc))
     return metrics 

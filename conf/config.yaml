@@ -4,11 +4,11 @@ defaults:
   - partition: iid
   - client: default
   - train: default
-  - graph: erdos_renyi
+  - graph: fiedler
 
 seed: 42
 use_cuda: true
-run_name: test_run
+run_name: mnist_test
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}

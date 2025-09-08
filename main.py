@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Tuple
 
 import torch
 import hydra
@@ -9,7 +9,14 @@ from flp2p.client import FLClient
 from flp2p.data import build_client_loaders, get_dataset
 from flp2p.graph_runner import build_topology, run_rounds, plot_topology
 from flp2p.networks.lenet5 import LeNet5
+import logging
+import pickle
 
+log = logging.getLogger(__name__)
+
+def print_metrics(metrics: List[Tuple[float, float]], mode: str) -> None:
+    for r, (loss, acc) in enumerate(metrics):
+        log.info(f"{mode}, Round {r+1:03d}: loss={loss:.4f}, acc={acc:.4f}")
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
 def main(cfg: DictConfig) -> None:
@@ -44,11 +51,9 @@ def main(cfg: DictConfig) -> None:
         clients.append(client)
 
     # Graph
-    graph = build_topology(
-        num_clients=cfg.partition.num_clients,
-        topology=cfg.graph.topology,
-        er_p=cfg.graph.er_p,
-    )
+    graph = build_topology(cfg.partition.num_clients, cfg.graph)
+    pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
+
     
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology.png"))
 
@@ -61,8 +66,9 @@ def main(cfg: DictConfig) -> None:
         progress=cfg.train.progress,
     )
 
-    for r, (loss, acc) in enumerate(metrics):
-        print(f"Round {r+1:03d}: loss={loss:.4f}, acc={acc:.4f}")
+    print_metrics(metrics['train'], 'Train')
+    print_metrics(metrics['test'], 'Test')
+
 
 
 if __name__ == "__main__":
