@@ -34,22 +34,22 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
 def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
     if cfg.topology == "ring":
         return nx.cycle_graph(num_clients)
-    elif topology == "erdos_renyi":
-        return nx.erdos_renyi_graph(num_clients, er_p, seed=seed)
-    elif topology == "random":
-        topology = nx.gnm_random_graph(num_clients, max(1, int(er_p * num_clients * (num_clients - 1) / 2)), seed=seed)
+    elif cfg.topology == "erdos_renyi":
+        return nx.erdos_renyi_graph(num_clients, cfg.er_p, seed=seed)
+    elif cfg.topology == "random":
+        cfg.topology = nx.gnm_random_graph(num_clients, max(1, int(cfg.er_p * num_clients * (num_clients - 1) / 2)), seed=seed)
     else:
-        raise ValueError(f"Unknown topology: {topology}")
-    
+        raise ValueError(f"Unknown topology: {cfg.topology}")
+
     # Ensure self-loops and set edge weights to 1/d for each node
-    for node in topology.nodes():
-        if not topology.has_edge(node, node):
-            topology.add_edge(node, node)
-    for node in topology.nodes():
-        d = topology.degree[node]
-        for neighbor in topology.neighbors(node):
-            topology[node][neighbor]["weight"] = 1.0 / d
-    return topology
+    for node in cfg.topology.nodes():
+        if not cfg.topology.has_edge(node, node):
+            cfg.topology.add_edge(node, node)
+    for node in cfg.topology.nodes():
+        d = cfg.topology.degree[node]
+        for neighbor in cfg.topology.neighbors(node):
+            cfg.topology[node][neighbor]["weight"] = 1.0 / d
+    return cfg.topology
 
 
 
