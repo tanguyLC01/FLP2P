@@ -9,7 +9,7 @@ from .client import FLClient
 import random
 
 
-Topology = Literal["ring", "erdos_renyi"]
+Topology = Literal["ring", "erdos_renyi", "random"]
 
 
 
@@ -31,9 +31,23 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
 def build_topology(num_clients: int, topology: Topology = "ring", er_p: float = 0.2, seed: int = 42) -> nx.Graph:
     if topology == "ring":
         return nx.cycle_graph(num_clients)
-    if topology == "erdos_renyi":
+    elif topology == "erdos_renyi":
         return nx.erdos_renyi_graph(num_clients, er_p, seed=seed)
-    raise ValueError(f"Unknown topology: {topology}")
+    elif topology == "random":
+        topology = nx.gnm_random_graph(num_clients, max(1, int(er_p * num_clients * (num_clients - 1) / 2)), seed=seed)
+    else:
+        raise ValueError(f"Unknown topology: {topology}")
+    
+    # Ensure self-loops and set edge weights to 1/d for each node
+    for node in topology.nodes():
+        if not topology.has_edge(node, node):
+            topology.add_edge(node, node)
+    for node in topology.nodes():
+        d = topology.degree[node]
+        for neighbor in topology.neighbors(node):
+            topology[node][neighbor]["weight"] = 1.0 / d
+    return topology
+
 
 
 def average_states(state_list: List[Dict[str, torch.Tensor]]) -> Dict[str, torch.Tensor]:
