@@ -6,7 +6,7 @@ import torch
 from tqdm import tqdm
 
 from .client import FLClient
-import random
+import numpy as np
 import logging
 
 
@@ -21,10 +21,7 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     """
     pos = nx.spring_layout(graph) if not nx.get_node_attributes(graph, 'pos') else nx.get_node_attributes(graph, 'pos')
     plt.figure(figsize=(6, 6))
-    nx.draw_networkx(graph, pos, with_labels=True, node_color='skyblue', edge_color='gray', node_size=700)
-    edge_labels = nx.get_edge_attributes(graph, 'weight')
-    if edge_labels:
-        nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
+    nx.draw_networkx(graph, pos, with_labels=False, node_color='skyblue', edge_color='gray', node_size=700)
     plt.title(title)
     plt.axis('off')
     plt.savefig(path)
@@ -33,23 +30,23 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     
 def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
     if cfg.topology == "ring":
-        return nx.cycle_graph(num_clients)
+        graph = nx.cycle_graph(num_clients)
     elif cfg.topology == "erdos_renyi":
-        return nx.erdos_renyi_graph(num_clients, cfg.er_p, seed=seed)
+        graph = nx.erdos_renyi_graph(num_clients, cfg.er_p, seed=seed)
     elif cfg.topology == "random":
-        cfg.topology = nx.gnm_random_graph(num_clients, max(1, int(cfg.er_p * num_clients * (num_clients - 1) / 2)), seed=seed)
+        graph = nx.gnm_random_graph(num_clients, max(1, int(cfg.er_p * num_clients * (num_clients - 1) / 2)), seed=seed)
     else:
         raise ValueError(f"Unknown topology: {cfg.topology}")
 
     # Ensure self-loops and set edge weights to 1/d for each node
-    for node in cfg.topology.nodes():
-        if not cfg.topology.has_edge(node, node):
-            cfg.topology.add_edge(node, node)
-    for node in cfg.topology.nodes():
-        d = cfg.topology.degree[node]
-        for neighbor in cfg.topology.neighbors(node):
-            cfg.topology[node][neighbor]["weight"] = 1.0 / d
-    return cfg.topology
+    for node in graph.nodes():
+        if not graph.has_edge(node, node):
+            graph.add_edge(node, node)
+    for node in graph.nodes():
+        d = graph.degree[node]
+        for neighbor in graph.neighbors(node):
+            graph[node][neighbor]["weight"] = 1.0 / d
+    return graph
 
 
 
@@ -90,28 +87,34 @@ def run_rounds(
     graph: nx.Graph,
     rounds: int = 5,
     local_epochs: int = 1,
+    participation_rate: float = 0.5,
     progress: bool = True,
 ) -> Dict[str, List[Tuple[float, float]]]:
     metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
     for rnd in tqdm(range(rounds), disable=not progress, desc="Rounds"):
         
         # Local training
-        train_acc, train_loss = 0, 0
+        correct, train_loss = 0, 0
         train_samples = 0
         for client in clients:
             loss, acc, n_samples = client.local_train(local_epochs=local_epochs)
             train_samples += n_samples
-            train_acc  += acc * n_samples
+            correct  += acc * n_samples
             train_loss  += loss * n_samples
-        metrics['train'].append((train_loss/n_samples, train_acc/n_samples))
+        metrics['train'].append((train_loss/train_samples, correct/train_samples))
         # Share with neighbors and aggregate
         neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
         for node in graph.nodes:
             neighbors = list(graph.neighbors(node))
-            selected_neighbors = [n for n in neighbors if random.random() < 0.5] + [node]
-            gradients = [clients[n].get_gradient() for n in selected_neighbors]
-            weights = [graph.get_edge_data(node, n).get("weight", 1/len(selected_neighbors)) for n in selected_neighbors]
+            selected_neighbors = np.random.choice(neighbors, size=int(len(neighbors)*participation_rate))
+            if not node in selected_neighbors:
+                selected_neighbors = np.concatenate((selected_neighbors, [node]))
+            total_samples_per_node = sum([len(clients[n].train_loader.dataset) for n in selected_neighbors])
+            # We multiply each gradient by n_k/n
+            gradients = [aggregate_gradients_weighted([clients[n].get_gradient()], [len(clients[n].train_loader.dataset)/total_samples_per_node])for n in selected_neighbors]
+            
+            weights = [graph.get_edge_data(node, n)["weight"]*len(neighbors)/len(selected_neighbors) for n in selected_neighbors]
             aggregated = aggregate_gradients_weighted(gradients, weights)
             # Store or use aggregated as needed, e.g., append to neighbor_states
             neighbor_states.append(aggregated)

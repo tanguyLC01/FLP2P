@@ -53,7 +53,6 @@ class FLClient:
         optimizer = self._optimizer()
         self.model.train()
         total_loss = 0.0
-        num_samples = 0
         correct = 0
         for _ in range(local_epochs):
             for inputs, targets in self.train_loader:
@@ -64,14 +63,14 @@ class FLClient:
                 loss = criterion(outputs, targets)
                 loss.backward()
                 optimizer.step()
-                total_loss += loss.item() * inputs.size(0)
-                num_samples += inputs.size(0)
+                total_loss += loss.item()
                 with torch.no_grad():
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
-        avg_loss = total_loss / max(1, num_samples)
-        avg_acc = correct / max(1, num_samples)
-        return avg_loss, avg_acc, max(1, num_samples)
+        num_samples = len(self.train_loader.dataset)
+        avg_loss = total_loss / len(self.train_loader) # The loss is alreadt average on a batch, so we take the mean on the number of batches
+        avg_acc = correct / num_samples / local_epochs
+        return avg_loss, avg_acc, num_samples
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
@@ -79,19 +78,18 @@ class FLClient:
         self.model.eval()
         criterion = nn.CrossEntropyLoss()
         total_loss = 0.0
-        num_samples = 0
+        num_samples = len(self.test_loader.dataset)
         correct = 0
         for inputs, targets in loader:
             inputs = inputs.to(self.device)
             targets = targets.to(self.device)
             outputs = self.model(inputs)
             loss = criterion(outputs, targets)
-            total_loss += loss.item() * inputs.size(0)
-            num_samples += inputs.size(0)
+            total_loss += loss.item()
             preds = outputs.argmax(dim=1)
             correct += (preds == targets).sum().item()
-        avg_loss = total_loss / max(1, num_samples)
-        avg_acc = correct / max(1, num_samples)
+        avg_loss = total_loss / len(self.test_loader) # Same remarks as in train
+        avg_acc = correct / num_samples
         return avg_loss, avg_acc
     
 

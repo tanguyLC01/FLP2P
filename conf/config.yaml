@@ -1,14 +1,14 @@
 defaults:
-  - data: mnist
+  - data: cifar10
   - model: lenet5
   - partition: iid
   - client: default
   - train: default
-  - graph: fiedler
+  - graph: random
 
 seed: 42
 use_cuda: true
-run_name: mnist_test
+run_name: cifar_randomg_raph_sample_based_ponderation
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}

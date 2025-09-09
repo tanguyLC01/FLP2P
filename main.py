@@ -11,6 +11,8 @@ from flp2p.graph_runner import build_topology, run_rounds, plot_topology
 from flp2p.networks.lenet5 import LeNet5
 import logging
 import pickle
+import random
+import numpy as np
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +24,12 @@ def print_metrics(metrics: List[Tuple[float, float]], mode: str) -> None:
 def main(cfg: DictConfig) -> None:
     print(OmegaConf.to_yaml(cfg))
     device = torch.device("cuda" if torch.cuda.is_available() and cfg.use_cuda else "cpu")
-
+    np.random.seed(cfg.seed) 
+    random.seed(cfg.seed)   
+    torch.manual_seed(cfg.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(cfg.seed)
+        torch.cuda.manual_seed_all(cfg.seed)
     log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
     # Data
     train_ds, test_ds = get_dataset(cfg.data)
@@ -51,7 +58,7 @@ def main(cfg: DictConfig) -> None:
         clients.append(client)
 
     # Graph
-    graph = build_topology(cfg.partition.num_clients, cfg.graph)
+    graph = build_topology(cfg.partition.num_clients, cfg.graph, seed=cfg.seed)
     pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
 
     
@@ -64,6 +71,7 @@ def main(cfg: DictConfig) -> None:
         rounds=cfg.train.rounds,
         local_epochs=cfg.train.local_epochs,
         progress=cfg.train.progress,
+        participation_rate=cfg.train.participation_rate
     )
 
     print_metrics(metrics['train'], 'Train')
