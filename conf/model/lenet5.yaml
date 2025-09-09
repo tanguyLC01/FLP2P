@@ -1,4 +1,4 @@
-name: lenet5
+name: mnist
 latent_dimension: 400
 num_classes: 10 
 in_channels: 3

@@ -68,9 +68,10 @@ class FLClient:
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
         num_samples = len(self.train_loader.dataset)
-        avg_loss = total_loss / len(self.train_loader) # The loss is alreadt average on a batch, so we take the mean on the number of batches
+        avg_loss = total_loss / len(self.train_loader) # The loss is already average on a batch, so we take the mean on the number of batches
         avg_acc = correct / num_samples / local_epochs
-        return avg_loss, avg_acc, num_samples
+        gradient_norm = self.get_gradient_norm()
+        return avg_loss, avg_acc, num_samples, gradient_norm
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
@@ -92,6 +93,14 @@ class FLClient:
         avg_acc = correct / num_samples
         return avg_loss, avg_acc
     
+    def get_gradient_norm(self) -> float:
+        total_norm = 0.0
+        for p in self.model.parameters():
+            if p.grad is not None:
+                param_norm = p.grad.data.norm(2)
+                total_norm += param_norm.item() ** 2
+        total_norm = total_norm ** 0.5
+        return total_norm
 
     def update_state(self, aggregated_gradient: Dict[str, torch.Tensor], alpha: Optional[float] = None) -> None:
         """

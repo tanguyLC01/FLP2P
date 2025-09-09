@@ -8,7 +8,7 @@ defaults:
 
 seed: 42
 use_cuda: true
-run_name: cifar_randomg_raph_sample_based_ponderation
+run_name: test_gradient
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}

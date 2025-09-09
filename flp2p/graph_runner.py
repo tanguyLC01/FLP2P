@@ -94,14 +94,14 @@ def run_rounds(
     for rnd in tqdm(range(rounds), disable=not progress, desc="Rounds"):
         
         # Local training
-        correct, train_loss = 0, 0
-        train_samples = 0
+        correct, train_loss, train_samples, train_gradient_norm = 0, 0, 0, 0
         for client in clients:
-            loss, acc, n_samples = client.local_train(local_epochs=local_epochs)
+            loss, acc, n_samples, gradient_norm = client.local_train(local_epochs=local_epochs)
             train_samples += n_samples
             correct  += acc * n_samples
             train_loss  += loss * n_samples
-        metrics['train'].append((train_loss/train_samples, correct/train_samples))
+            train_gradient_norm += gradient_norm
+        metrics['train'].append((train_loss/train_samples, correct/train_samples, train_gradient_norm/train_samples))
         # Share with neighbors and aggregate
         neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
