@@ -73,7 +73,7 @@ def plot_partition_distribution(partitions: List[np.ndarray], labels: np.ndarray
     plt.xticks(np.arange(num_clients))
     plt.legend(title='Class')
     plt.tight_layout()
-    plt.savefig(os.path.join(path_to_save, "client_class_repartition.png"))
+    plt.savefig(os.path.join(path_to_save, f"{title}.png"))
     plt.close()
 
 def get_dataset(config: Dict) -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
@@ -92,18 +92,25 @@ def build_client_loaders(
 ) -> List[Tuple[DataLoader, DataLoader]]:
     labels = np.array(train_dataset.targets)
     if config.partition.strategy == "iid":
-        parts = iid_partition(num_clients=config.partition.num_clients, num_samples=len(train_dataset))
+        train_parts = iid_partition(num_clients=config.partition.num_clients, num_samples=len(train_dataset))
+        test_parts = iid_partition(num_clients=config.partition.num_clients, num_samples=len(test_dataset))
+        
     elif config.partition.strategy == "dirichlet":
-        parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
+        train_parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
+        test_parts = dirichlet_partition(labels=np.array(test_dataset.targets), num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
     else:
         raise ValueError(f"Unknown partition strategy: {config.partition.strategy}")
 
-    plot_partition_distribution(parts, labels, path_to_save=save_plot_path)
+    plot_partition_distribution(train_parts, labels, path_to_save=save_plot_path, title="train_data_distribution")
+    plot_partition_distribution(test_parts, np.array(test_dataset.targets), path_to_save=save_plot_path, title="test_data_distribution")
+    
     loaders: List[Tuple[DataLoader, DataLoader]] = []
-    for idxs in parts:
-        train_subset = Subset(train_dataset, indices=idxs.tolist())
+    for idxs_train, idxs_test in zip(train_parts, test_parts):
+        train_subset = Subset(train_dataset, indices=idxs_train.tolist())
+        test_subset = Subset(test_dataset, indices=idxs_test.tolist())
+        
         # Use the full test set for all clients by default
         train_loader = DataLoader(train_subset, batch_size=config.get("batch_size", 64), shuffle=True, num_workers=config.get("num_workers", 2))
-        test_loader = DataLoader(test_dataset, batch_size=config.get("batch_size", 64), shuffle=False, num_workers=config.get("num_workers", 2))
+        test_loader = DataLoader(test_subset, batch_size=config.get("batch_size", 64), shuffle=False, num_workers=config.get("num_workers", 2))
         loaders.append((train_loader, test_loader))
     return loaders 
