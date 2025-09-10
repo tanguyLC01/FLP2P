@@ -68,7 +68,7 @@ class FLClient:
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
         num_samples = len(self.train_loader.dataset)
-        avg_loss = total_loss / len(self.train_loader) # The loss is already average on a batch, so we take the mean on the number of batches
+        avg_loss = total_loss / len(self.train_loader) / local_epochs # The loss is already average on a batch, so we take the mean on the number of batches and local_epochs
         avg_acc = correct / num_samples / local_epochs
         gradient_norm = self.get_gradient_norm()
         return avg_loss, avg_acc, num_samples, gradient_norm

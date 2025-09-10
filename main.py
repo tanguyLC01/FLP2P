@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple
+from typing import List, Dict
 
 import torch
 import hydra
@@ -16,9 +16,12 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
-def print_metrics(metrics: List[Tuple[float, float]], mode: str) -> None:
-    for r, (loss, acc) in enumerate(metrics):
-        log.info(f"{mode}, Round {r+1:03d}: loss={loss:.4f}, acc={acc:.4f}")
+def print_metrics(metrics: List[Dict[str, float]], mode: str) -> None:
+    for r, res_dict in enumerate(metrics):
+        res = f"{mode}, Round {r+1:03d}: "
+        for key in res_dict:
+            res += f'{key}={res_dict[key]:.4f}, '
+        log.info(res)
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
 def main(cfg: DictConfig) -> None:

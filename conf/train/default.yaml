@@ -1,4 +1,4 @@
-rounds: 10
-local_epochs: 1
+rounds: 100
+local_epochs: 3
 progress: true
 participation_rate: 1
