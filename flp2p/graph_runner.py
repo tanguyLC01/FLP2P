@@ -101,7 +101,8 @@ def run_rounds(
             correct  += acc * n_samples
             train_loss  += loss * n_samples
             train_gradient_norm += gradient_norm
-        metrics['train'].append((train_loss/train_samples, correct/train_samples, train_gradient_norm/train_samples))
+        train_results = {'loss': train_loss/train_samples, 'accuracy': correct/train_samples, 'gradient_norm': train_gradient_norm/len(clients)}
+        metrics['train'].append(train_results)
         # Share with neighbors and aggregate
         neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
@@ -136,5 +137,6 @@ def run_rounds(
                 total_samples += num_samples
             avg_loss = weighted_loss / total_samples
             avg_acc = weighted_acc / total_samples
-            metrics["test"].append((avg_loss, avg_acc))
+            test_metrics = {"loss": avg_loss, "accuracy": avg_acc}
+            metrics["test"].append(test_metrics)
     return metrics 
