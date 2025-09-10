@@ -9,7 +9,6 @@ from .client import FLClient
 import numpy as np
 import logging
 from pyvis.network import Network
-from pyvis.export import snapshot
 
 
 
@@ -17,7 +16,7 @@ Topology = Literal["ring", "erdos_renyi", "random"]
 
 log = logging.getLogger(__name__)
 
-def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topology.png") -> None:
+def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topology") -> None:
     """
     Plot the given networkx graph topology using PyVis and save a PNG image of it.
     """
@@ -25,13 +24,6 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     net.from_nx(graph)
     html_path = path if path.endswith(".html") else path + ".html"
     net.save_graph(html_path)
-
-    # Save as PNG image using pyvis.export.snapshot (requires pyppeteer)
-    try:
-        img_path = path if path.endswith(".png") else path + ".png"
-        snapshot(html_path, img_path)
-    except Exception as e:
-        print(f"Could not save PNG image: {e}")
 
     
 def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
