@@ -105,18 +105,38 @@ def run_rounds(
         # Share with neighbors and aggregate
         neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
+        # For each edge, decide if it is active this round (bidirectional selection)
+        active_edges = set()
+        for u, v in graph.edges():
+            if np.random.rand() < participation_rate:
+                active_edges.add((u, v))
+                active_edges.add((v, u))
+
+        # For each node, collect its selected neighbors (including self)
+        selected_neighbors_per_node = []
         for node in graph.nodes:
             neighbors = list(graph.neighbors(node))
-            selected_neighbors = np.random.choice(neighbors, size=int(len(neighbors)*participation_rate))
-            if not node in selected_neighbors:
-                selected_neighbors = np.concatenate((selected_neighbors, [node]))
+            selected_neighbors = [n for n in neighbors if (node, n) in active_edges]
+            if node not in selected_neighbors:
+                selected_neighbors.append(node)
+            selected_neighbors_per_node.append(selected_neighbors)
+            
+        for node, selected_neighbors in enumerate(selected_neighbors_per_node):
             total_samples_per_node = sum([len(clients[n].train_loader.dataset) for n in selected_neighbors])
             # We multiply each gradient by n_k/n
-            gradients = [aggregate_gradients_weighted([clients[n].get_gradient()], [len(clients[n].train_loader.dataset)/total_samples_per_node])for n in selected_neighbors]
-            
-            weights = [graph.get_edge_data(node, n)["weight"]*len(neighbors)/len(selected_neighbors) for n in selected_neighbors]
+            gradients = [
+            aggregate_gradients_weighted(
+                [clients[n].get_gradient()],
+                [len(clients[n].train_loader.dataset) / total_samples_per_node]
+            )
+            for n in selected_neighbors
+            ]
+            neighbors = list(graph.neighbors(node))
+            weights = [
+            graph.get_edge_data(node, n)["weight"] * len(neighbors) / len(selected_neighbors)
+            for n in selected_neighbors
+            ]
             aggregated = aggregate_gradients_weighted(gradients, weights)
-            # Store or use aggregated as needed, e.g., append to neighbor_states
             neighbor_states.append(aggregated)
     
         # Apply aggregated shared states
