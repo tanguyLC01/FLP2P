@@ -8,6 +8,8 @@ from tqdm import tqdm
 from .client import FLClient
 import numpy as np
 import logging
+from pyvis.network import Network
+from pyvis.export import snapshot
 
 
 
@@ -17,15 +19,19 @@ log = logging.getLogger(__name__)
 
 def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topology.png") -> None:
     """
-    Plot the given networkx graph topology.
+    Plot the given networkx graph topology using PyVis and save a PNG image of it.
     """
-    pos = nx.spring_layout(graph) if not nx.get_node_attributes(graph, 'pos') else nx.get_node_attributes(graph, 'pos')
-    plt.figure(figsize=(6, 6))
-    nx.draw_networkx(graph, pos, with_labels=False, node_color='skyblue', edge_color='gray', node_size=700)
-    plt.title(title)
-    plt.axis('off')
-    plt.savefig(path)
-    plt.close()
+    net = Network(notebook=False, width="700px", height="700px", bgcolor="#222222", font_color="white")
+    net.from_nx(graph)
+    html_path = path if path.endswith(".html") else path + ".html"
+    net.save_graph(html_path)
+
+    # Save as PNG image using pyvis.export.snapshot (requires pyppeteer)
+    try:
+        img_path = path if path.endswith(".png") else path + ".png"
+        snapshot(html_path, img_path)
+    except Exception as e:
+        print(f"Could not save PNG image: {e}")
 
     
 def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
@@ -107,11 +113,10 @@ def run_rounds(
         neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
         # For each edge, decide if it is active this round (bidirectional selection)
-        active_edges = set()
-        for u, v in graph.edges():
-            if np.random.rand() < participation_rate:
-                active_edges.add((u, v))
-                active_edges.add((v, u))
+        active_edges = set(np.random.choice(graph.edges(), size=int(participation_rate * graph.number_of_edges()), replace=False))
+        for u, v in active_edges:
+            active_edges.add((u, v))
+            active_edges.add((v, u))
 
         # For each node, collect its selected neighbors (including self)
         selected_neighbors_per_node = []
