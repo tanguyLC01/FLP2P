@@ -1,4 +1,4 @@
 name: dirichlet
 num_clients: 100
 strategy: dirichlet
-dirichlet_alpha: 0.5 
+dirichlet_alpha: 0.5

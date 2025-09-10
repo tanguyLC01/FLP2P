@@ -1,14 +1,14 @@
 defaults:
   - data: cifar10
   - model: lenet5
-  - partition: dirichlet
+  - partition: iid
   - client: default
   - train: default
   - graph: random
 
 seed: 42
 use_cuda: true
-run_name: test_cifar
+run_name: test_cifar10
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}

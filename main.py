@@ -65,7 +65,7 @@ def main(cfg: DictConfig) -> None:
     pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
 
     
-    plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology.png"))
+    plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
 
     # Train
     metrics = run_rounds(

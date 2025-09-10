@@ -101,20 +101,20 @@ def run_rounds(
             train_gradient_norm += gradient_norm
         train_results = {'loss': train_loss/train_samples, 'accuracy': correct/train_samples, 'gradient_norm': train_gradient_norm/len(clients)}
         metrics['train'].append(train_results)
+        
         # Share with neighbors and aggregate
         neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
         # For each edge, decide if it is active this round (bidirectional selection)
-        active_edges = set(np.random.choice(graph.edges(), size=int(participation_rate * graph.number_of_edges()), replace=False))
-        for u, v in active_edges:
-            active_edges.add((u, v))
-            active_edges.add((v, u))
+        edges = np.array(list(graph.edges()))
+        idxs = np.random.choice(len(edges), int(participation_rate * len(edges)), replace=False)
+        active_edges = edges[idxs]
 
         # For each node, collect its selected neighbors (including self)
         selected_neighbors_per_node = []
         for node in graph.nodes:
             neighbors = list(graph.neighbors(node))
-            selected_neighbors = [n for n in neighbors if (node, n) in active_edges]
+            selected_neighbors = [n for n in neighbors if (node, n) or (n, node) in active_edges]
             if node not in selected_neighbors:
                 selected_neighbors.append(node)
             selected_neighbors_per_node.append(selected_neighbors)
@@ -131,7 +131,7 @@ def run_rounds(
             ]
             neighbors = list(graph.neighbors(node))
             weights = [
-            graph.get_edge_data(node, n)["weight"] * len(neighbors) / len(selected_neighbors)
+            graph.get_edge_data(node, n)["width"] * len(neighbors) / len(selected_neighbors)
             for n in selected_neighbors
             ]
             aggregated = aggregate_gradients_weighted(gradients, weights)
