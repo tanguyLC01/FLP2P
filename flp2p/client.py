@@ -124,6 +124,15 @@ class FLClient:
             Dict mapping parameter names to their gradients (torch.Tensor).
             Only parameters with gradients are included.
         """
+        # Compute gradients from a single batch (sampled from train_loader)
+        self.model.train()
+        inputs, targets = next(iter(self.train_loader))
+        inputs = inputs.to(self.device)
+        targets = targets.to(self.device)
+        self.model.zero_grad()
+        outputs = self.model(inputs)
+        loss = nn.CrossEntropyLoss()(outputs, targets)
+        loss.backward()
         gradients = {}
         for name, param in self.model.named_parameters():
             gradients[name] = param.grad.clone().detach().cpu()
