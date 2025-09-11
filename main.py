@@ -33,7 +33,9 @@ def main(cfg: DictConfig) -> None:
     if torch.cuda.is_available():
         torch.cuda.manual_seed(cfg.seed)
         torch.cuda.manual_seed_all(cfg.seed)
+        
     log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
+    
     # Data
     train_ds, test_ds = get_dataset(cfg.data)
     client_loaders = build_client_loaders(
@@ -63,8 +65,6 @@ def main(cfg: DictConfig) -> None:
     # Graph
     graph = build_topology(cfg.partition.num_clients, cfg.graph, seed=cfg.seed)
     pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
-
-    
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
 
     # Train
