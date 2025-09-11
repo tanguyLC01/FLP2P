@@ -28,7 +28,7 @@ class FLClient:
         self.test_loader = test_loader
         self.learning_rate = config.get("learning_rate", 0.01)
         self.weight_decay = config.get("weight_decay", 0.0)
-        self.momentum = config.get("momentum", 0.9)
+        self.momentum = config.get("momentum", 0.0)
         # Store gradients of neighbors from the previous round
         self.prev_neighbor_gradients = {}
         
@@ -75,11 +75,11 @@ class FLClient:
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
-        loader = data_loader or self.test_loader or self.train_loader
+        loader = data_loader or self.test_loader
         self.model.eval()
         criterion = nn.CrossEntropyLoss()
         total_loss = 0.0
-        num_samples = len(self.test_loader.dataset)
+        num_samples = len(loader.dataset)
         correct = 0
         for inputs, targets in loader:
             inputs = inputs.to(self.device)
@@ -126,8 +126,7 @@ class FLClient:
         """
         gradients = {}
         for name, param in self.model.named_parameters():
-            if param.grad is not None:
-                gradients[name] = param.grad.clone().detach().cpu()
+            gradients[name] = param.grad.clone().detach().cpu()
         return gradients
 
 

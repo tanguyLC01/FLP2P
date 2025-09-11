@@ -130,6 +130,7 @@ def run_rounds(
             train_loss  += loss * n_samples
             train_gradient_norm += gradient_norm
         train_results = {'loss': train_loss/train_samples, 'accuracy': correct/train_samples, 'gradient_norm': train_gradient_norm/len(clients)}
+        log.info(f"Train, Round {rnd} : loss => {train_loss/train_samples},  accuracy: {correct/train_samples}, gradient_norm : {train_gradient_norm/len(clients)}")
         metrics['train'].append(train_results)
         
         # Share with neighbors and aggregate
@@ -159,10 +160,10 @@ def run_rounds(
             )
             for n in selected_neighbors
             ]
-            neighbors = list(graph.neighbors(node))
+            node_degree = graph.degree[node]
             weights = [
-            graph.get_edge_data(node, n)["width"] * len(neighbors) / len(selected_neighbors)
-            for n in selected_neighbors
+                graph.get_edge_data(node, n).get("width", graph.get_edge_data(n, node)["width"]) * node_degree / len(selected_neighbors)
+                for n in selected_neighbors
             ]
             aggregated = aggregate_gradients_weighted(gradients, weights)
             neighbor_states.append(aggregated)
@@ -185,5 +186,6 @@ def run_rounds(
             avg_loss = weighted_loss / total_samples
             avg_acc = weighted_acc / total_samples
             test_metrics = {"loss": avg_loss, "accuracy": avg_acc}
+            log.info(f"Test, Round {rnd} : loss => {avg_loss},  accuracy: {avg_acc}")
             metrics["test"].append(test_metrics)
     return metrics 
