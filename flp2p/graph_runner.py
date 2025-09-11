@@ -132,9 +132,10 @@ def run_rounds(
             ]
             node_degree = graph.degree[node]
             weights = [
-                graph.get_edge_data(node, n).get("width", graph.get_edge_data(n, node)["width"]) * node_degree / len(selected_neighbors)
+                graph.get_edge_data(node, n).get("width")  * node_degree / len(selected_neighbors)
                 for n in selected_neighbors
             ]
+            log.info(weights)
             aggregated = aggregate_gradients_weighted(gradients, weights)
             neighbor_states.append(aggregated)
     
