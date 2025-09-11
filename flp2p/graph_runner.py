@@ -20,8 +20,13 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     """
     Plot the given networkx graph topology using PyVis and save a PNG image of it.
     """
+    # Remove self-loops for visualization
+    graph_no_self_loops = graph.copy()
+    self_loops = list(nx.selfloop_edges(graph_no_self_loops))
+    graph_no_self_loops.remove_edges_from(self_loops)
+
     net = Network(notebook=False, width="700px", height="700px", bgcolor="#222222", font_color="white")
-    net.from_nx(graph)
+    net.from_nx(graph_no_self_loops)
     html_path = path if path.endswith(".html") else path + ".html"
     net.save_graph(html_path)
 
@@ -33,6 +38,31 @@ def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
         graph = nx.erdos_renyi_graph(num_clients, cfg.er_p, seed=seed)
     elif cfg.topology == "random":
         graph = nx.gnm_random_graph(num_clients, max(1, int(cfg.er_p * num_clients * (num_clients - 1) / 2)), seed=seed)
+    elif cfg.topology == "two_clusters":
+        # Create two clusters, each with its own center node
+        num_cluster1 = num_clients // 2
+
+        # Assign node indices
+        center1 = 0
+        center2 = num_cluster1
+        cluster1_nodes = list(range(0, num_cluster1))
+        cluster2_nodes = list(range(num_cluster1, num_clients))
+
+        graph = nx.Graph()
+        graph.add_nodes_from(range(num_clients))
+
+        # Connect each node in cluster 1 to center1 (except center1 itself)
+        for node in cluster1_nodes:
+            if node != center1:
+                graph.add_edge(center1, node)
+
+        # Connect each node in cluster 2 to center2 (except center2 itself)
+        for node in cluster2_nodes:
+            if node != center2:
+                graph.add_edge(center2, node)
+
+        # Connect the two centers
+        graph.add_edge(center1, center2)
     else:
         raise ValueError(f"Unknown topology: {cfg.topology}")
 
