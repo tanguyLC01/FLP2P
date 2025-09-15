@@ -117,6 +117,7 @@ def run_rounds(
     local_epochs: int = 1,
     participation_rate: float = 0.5,
     progress: bool = True,
+    consensus_lr: int = 0.1,
 ) -> Dict[str, List[Tuple[float, float]]]:
     metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
     for rnd in tqdm(range(rounds), disable=not progress, desc="Rounds"):
@@ -152,26 +153,32 @@ def run_rounds(
             
         for node, selected_neighbors in enumerate(selected_neighbors_per_node):
             total_samples_per_node = sum([len(clients[n].train_loader.dataset) for n in selected_neighbors])
+            
             # We multiply each gradient by n_k/n
+            # gradients = [
+            # aggregate_gradients_weighted(
+            #     [clients[n].get_gradient()],
+            #     [len(clients[n].train_loader.dataset) / total_samples_per_node]
+            # )
+            # for n in selected_neighbors
+            # ]  
             gradients = [
-            aggregate_gradients_weighted(
-                [clients[n].get_gradient()],
-                [len(clients[n].train_loader.dataset) / total_samples_per_node]
-            )
+                clients[n].get_gradient()
             for n in selected_neighbors
             ]
+            
             node_degree = graph.degree[node]
             weights = [
-                graph.get_edge_data(node, n).get("width")  * node_degree / len(selected_neighbors)
+                graph.get_edge_data(node, n).get("weight")  * node_degree / len(selected_neighbors)
                 for n in selected_neighbors
             ]
-            log.info(weights)
+            # weights = list(np.ones(len(selected_neighbors)))
             aggregated = aggregate_gradients_weighted(gradients, weights)
             neighbor_states.append(aggregated)
     
         # Apply aggregated shared states
         for node, agg_state in enumerate(neighbor_states):
-            clients[node].update_state(agg_state)
+            clients[node].update_state(agg_state, consensus_lr=consensus_lr)
             
         # Evaluate (average across clients)
         with torch.no_grad():

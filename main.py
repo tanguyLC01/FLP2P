@@ -45,11 +45,15 @@ def main(cfg: DictConfig) -> None:
         save_plot_path=log_path
     )
     
+    base_model = LeNet5(cfg.model).to(device)
+    init_state = base_model.state_dict()
+
     # Model + Clients
     clients: List[FLClient] = []
     for i in range(cfg.partition.num_clients):
         if cfg.model.name == "lenet5":
             model = LeNet5(cfg.model).to(device)
+            model.load_state_dict(init_state)
         else:
             raise ValueError(f"Unknown model: {cfg.model.name}")
         train_loader, test_loader = client_loaders[i]
@@ -61,6 +65,8 @@ def main(cfg: DictConfig) -> None:
             config=cfg.client
         )
         clients.append(client)
+    
+    
 
     # Graph
     graph = build_topology(cfg.partition.num_clients, cfg.graph, seed=cfg.seed)

@@ -1,5 +1,5 @@
 name: lenet5
-latent_dimension: 400
+latent_dimension: 1024
 num_classes: 10 
 in_channels: 3
-batch_norm: false
+batch_norm: true

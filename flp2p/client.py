@@ -54,6 +54,7 @@ class FLClient:
         self.model.train()
         total_loss = 0.0
         correct = 0
+        total = 0
         for _ in range(local_epochs):
             for inputs, targets in self.train_loader:
                 inputs = inputs.to(self.device)
@@ -63,13 +64,14 @@ class FLClient:
                 loss = criterion(outputs, targets)
                 loss.backward()
                 optimizer.step()
+                total += targets.size(0)
                 total_loss += loss.item()
                 with torch.no_grad():
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
         num_samples = len(self.train_loader.dataset)
         avg_loss = total_loss / len(self.train_loader) / local_epochs # The loss is already average on a batch, so we take the mean on the number of batches and local_epochs
-        avg_acc = correct / num_samples / local_epochs
+        avg_acc = correct / total
         gradient_norm = self.get_gradient_norm()
         return avg_loss, avg_acc, num_samples, gradient_norm
 
@@ -102,20 +104,18 @@ class FLClient:
         total_norm = total_norm ** 0.5
         return total_norm
 
-    def update_state(self, aggregated_gradient: Dict[str, torch.Tensor], alpha: Optional[float] = None) -> None:
+    def update_state(self, aggregated_gradient: Dict[str, torch.Tensor], consensus_lr: float = 0.1) -> None:
         """
         Update the model state using the aggregated gradient.
         Args:
             aggregated_gradient: Dict mapping parameter names to aggregated gradients (torch.Tensor).
             alpha: Learning rate to use for the update. If None, use self.learning_rate.
         """
-        if alpha is None:
-            alpha = self.learning_rate
         with torch.no_grad():
             for name, param in self.model.named_parameters():
                 if name in aggregated_gradient and param.requires_grad:
                     grad = aggregated_gradient[name].to(param.device).type_as(param)
-                    param.data -= alpha * grad
+                    param.data -= consensus_lr * grad
         
     def get_gradient(self) -> Dict[str, torch.Tensor]:
         """
@@ -125,14 +125,6 @@ class FLClient:
             Only parameters with gradients are included.
         """
         # Compute gradients from a single batch (sampled from train_loader)
-        self.model.train()
-        inputs, targets = next(iter(self.train_loader))
-        inputs = inputs.to(self.device)
-        targets = targets.to(self.device)
-        self.model.zero_grad()
-        outputs = self.model(inputs)
-        loss = nn.CrossEntropyLoss()(outputs, targets)
-        loss.backward()
         gradients = {}
         for name, param in self.model.named_parameters():
             gradients[name] = param.grad.clone().detach().cpu()

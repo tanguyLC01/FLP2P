@@ -27,8 +27,8 @@ def get_cifar10_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset
     return train, test
 
 
-def iid_partition(num_clients: int, num_samples: int) -> List[np.ndarray]:
-    indices = np.random.permutation(num_samples)
+def iid_partition(num_clients: int, labels: np.ndarray) -> List[np.ndarray]:
+    indices = np.random.permutation(len(labels))
     splits = np.array_split(indices, num_clients)
     return [np.array(split, dtype=np.int64) for split in splits]
 
@@ -47,6 +47,36 @@ def dirichlet_partition(labels: np.ndarray, num_clients: int, alpha: float) -> L
             client_indices[client_id].extend(shard.tolist())
 
     return [np.array(sorted(idxs), dtype=np.int64) for idxs in client_indices]
+
+def match_test_partition(
+    train_parts: List[np.ndarray],
+    train_labels: np.ndarray,
+    test_labels: np.ndarray
+) -> List[np.ndarray]:
+    """
+    Ensure test partition follows the same class distribution as train partition.
+    """
+    
+    num_clients = len(train_parts)
+    test_indices = np.arange(len(test_labels))
+    test_parts: List[List[int]] = [[] for _ in range(num_clients)]
+
+    for cls in sorted(np.unique(train_labels)):
+        train_counts = np.array([np.sum(train_labels[part] == cls) for part in train_parts])
+        if train_counts.sum() == 0:
+            continue
+
+        proportions = train_counts / train_counts.sum()
+        cls_indices = test_indices[test_labels == cls]
+        np.random.shuffle(cls_indices)
+
+        splits = (np.cumsum(proportions) * len(cls_indices)).astype(int)[:-1]
+        shards = np.split(cls_indices, splits)
+
+        for client_id, shard in enumerate(shards):
+            test_parts[client_id].extend(shard.tolist())
+
+    return [np.array(sorted(idxs), dtype=np.int64) for idxs in test_parts]
 
 def plot_partition_distribution(partitions: List[np.ndarray], labels: np.ndarray, title: str = "Data Distribution", path_to_save: str = "./") -> None:
     num_clients = len(partitions)
@@ -92,8 +122,8 @@ def build_client_loaders(
 ) -> List[Tuple[DataLoader, DataLoader]]:
     labels = np.array(train_dataset.targets)
     if config.partition.strategy == "iid":
-        train_parts = iid_partition(num_clients=config.partition.num_clients, num_samples=len(train_dataset))
-        test_parts = iid_partition(num_clients=config.partition.num_clients, num_samples=len(test_dataset))
+        train_parts = iid_partition(num_clients=config.partition.num_clients, labels=labels)
+        test_parts = match_test_partition(train_parts, labels, np.array(test_dataset.targets))
         
     elif config.partition.strategy == "dirichlet":
         train_parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)

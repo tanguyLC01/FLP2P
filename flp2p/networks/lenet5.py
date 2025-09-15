@@ -43,12 +43,12 @@ class LeNet5(nn.Module):
                 OrderedDict(
                     [
                     ('conv1', nn.Sequential(
-                        nn.Conv2d(in_channels, 6, kernel_size=5),
+                        nn.Conv2d(in_channels, 32, kernel_size=5),
                         nn.ReLU(),
                         nn.MaxPool2d(2, 2)
                     )),
                     ('conv2', nn.Sequential(
-                        nn.Conv2d(6, 16, kernel_size=5),
+                        nn.Conv2d(32, 64, kernel_size=5),
                         nn.ReLU(),
                         nn.MaxPool2d(2, 2)
                     )),

@@ -8,7 +8,8 @@ defaults:
 
 seed: 42
 use_cuda: true
-run_name: test_cifar10
+run_name: test_cifar10_noponderationsample
+consensus_lr: 0.1
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
