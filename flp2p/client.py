@@ -1,4 +1,4 @@
-from typing import Dict, Literal, Optional, Tuple
+from typing import Dict, Literal, Optional, Tuple, List
 
 import torch
 from torch import nn
@@ -30,20 +30,18 @@ class FLClient:
         self.weight_decay = config.get("weight_decay", 0.0)
         self.momentum = config.get("momentum", 0.0)
         # Store gradients of neighbors from the previous round
-        self.prev_neighbor_gradients = {}
+        self.neighbor_gradients: Dict[int, Dict[str, torch.Tensor]] = {}
         
-    def store_neighbor_gradients(self, neighbor_gradients: Dict[str, Dict[str, torch.Tensor]]) -> None:
+        
+    def store_neighbor_gradients(self, neighbor_gradients: Dict[int, Dict[str, torch.Tensor]]) -> None:
         """
         Store all the gradients of neighbors from the previous round.
         Args:
             neighbor_gradients: Dict mapping neighbor IDs to their gradients dict (param_name -> tensor)
         """
-        # Deep copy to avoid reference issues
-        self.prev_neighbor_gradients = {
-            neighbor_id: {k: v.clone().detach().cpu() for k, v in grads.items()}
-            for neighbor_id, grads in neighbor_gradients.items()
-        }
-
+        for neighbor_id, gradients in neighbor_gradients.items():
+            self.neighbor_gradients[neighbor_id] = gradients.copy()
+            
     def _optimizer(self) -> torch.optim.Optimizer:
         return torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=self.momentum, weight_decay=self.weight_decay)
 
@@ -55,6 +53,9 @@ class FLClient:
         total_loss = 0.0
         correct = 0
         total = 0
+        grad_sums = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
+        batch_count = 0
+
         for _ in range(local_epochs):
             for inputs, targets in self.train_loader:
                 inputs = inputs.to(self.device)
@@ -63,17 +64,26 @@ class FLClient:
                 outputs = self.model(inputs)
                 loss = criterion(outputs, targets)
                 loss.backward()
+                # Accumulate gradients
+                for name, param in self.model.named_parameters():
+                    if param.grad is not None and param.requires_grad:
+                        grad_sums[name] += param.grad.detach()
                 optimizer.step()
                 total += targets.size(0)
                 total_loss += loss.item()
                 with torch.no_grad():
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
+                batch_count += 1
+
         num_samples = len(self.train_loader.dataset)
-        avg_loss = total_loss / len(self.train_loader) / local_epochs # The loss is already average on a batch, so we take the mean on the number of batches and local_epochs
+        avg_loss = total_loss / len(self.train_loader) / local_epochs
         avg_acc = correct / total
-        gradient_norm = self.get_gradient_norm()
-        return avg_loss, avg_acc, num_samples, gradient_norm
+        # Compute average gradient
+        avg_gradients = {name: (grad_sum / batch_count) * num_samples for name, grad_sum in grad_sums.items()}
+        # Optionally, compute average gradient norm
+        avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in avg_gradients.values()) ** 0.5
+        return avg_loss, avg_acc, num_samples, avg_grad_norm, avg_gradients
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
@@ -103,14 +113,39 @@ class FLClient:
                 total_norm += param_norm.item() ** 2
         total_norm = total_norm ** 0.5
         return total_norm
+    
+    def aggregate_gradients_weighted(self, gradients_list: List[Dict[str, torch.Tensor]], weights: List[float]) -> Dict[str, torch.Tensor]:
+        """
+        Aggregate gradients weighted by the adjacency matrix (weights).
+        Args:
+            gradients_list: List of gradients dicts (param_name -> tensor) from neighbors.
+            weights: List of weights (same order as gradients_list) from adjacency matrix.
+        Returns:
+            Dict of aggregated gradients (param_name -> tensor).
+        """
+        if not gradients_list or not weights or len(gradients_list) != len(weights):
+            return {}
+        agg: Dict[str, torch.Tensor] = {}
+        param_names = gradients_list[0].keys()
+        for name in param_names:
+            weighted_grads = [g[name].float() * w for g, w in zip(gradients_list, weights) if name in g]
+            if weighted_grads:
+                agg[name] = sum(weighted_grads)
+        return agg
 
-    def update_state(self, aggregated_gradient: Dict[str, torch.Tensor], consensus_lr: float = 0.1) -> None:
+    def update_state(self, neighbor_weights: List[float], consensus_lr: float = 0.1) -> None:
         """
         Update the model state using the aggregated gradient.
         Args:
-            aggregated_gradient: Dict mapping parameter names to aggregated gradients (torch.Tensor).
+            aneighbor_weights: List of weights corresponding to the stored neighbor gradients.
             alpha: Learning rate to use for the update. If None, use self.learning_rate.
         """
+        if not self.neighbor_gradients:
+            return
+        aggregated_gradient = self.aggregate_gradients_weighted(
+            gradients_list=list(self.neighbor_gradients.values()),
+            weights=neighbor_weights)
+
         with torch.no_grad():
             for name, param in self.model.named_parameters():
                 if name in aggregated_gradient and param.requires_grad:

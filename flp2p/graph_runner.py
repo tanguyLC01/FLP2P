@@ -66,12 +66,8 @@ def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
     else:
         raise ValueError(f"Unknown topology: {cfg.topology}")
 
-    # Ensure self-loops and set edge weights to 1/d for each node
     for node in graph.nodes():
-        if not graph.has_edge(node, node):
-            graph.add_edge(node, node)
-    for node in graph.nodes():
-        d = graph.degree[node]
+        d = graph.degree[node] +  1  # +1 to include self-loop
         for neighbor in graph.neighbors(node):
             graph[node][neighbor]["weight"] = 1.0 / d
     return graph
@@ -90,24 +86,7 @@ def average_states(state_list: List[Dict[str, torch.Tensor]]) -> Dict[str, torch
         avg[key] = stacked.mean(dim=0)
     return avg
 
-def aggregate_gradients_weighted(gradients_list: List[Dict[str, torch.Tensor]], weights: List[float]) -> Dict[str, torch.Tensor]:
-    """
-    Aggregate gradients weighted by the adjacency matrix (weights).
-    Args:
-        gradients_list: List of gradients dicts (param_name -> tensor) from neighbors.
-        weights: List of weights (same order as gradients_list) from adjacency matrix.
-    Returns:
-        Dict of aggregated gradients (param_name -> tensor).
-    """
-    if not gradients_list or not weights or len(gradients_list) != len(weights):
-        return {}
-    agg: Dict[str, torch.Tensor] = {}
-    param_names = gradients_list[0].keys()
-    for name in param_names:
-        weighted_grads = [g[name].float() * w for g, w in zip(gradients_list, weights) if name in g]
-        if weighted_grads:
-            agg[name] = sum(weighted_grads)
-    return agg
+
 
 
 def run_rounds(
@@ -120,72 +99,92 @@ def run_rounds(
     consensus_lr: int = 0.1,
 ) -> Dict[str, List[Tuple[float, float]]]:
     metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
+    
+    for client in clients:
+        client.total_neighbors_samples = sum(len(clients[n].train_loader.dataset) for n in graph.neighbors(clients.index(client))) 
+        
     for rnd in tqdm(range(rounds), disable=not progress, desc="Rounds"):
         
-        # Local training
-        correct, train_loss, train_samples, train_gradient_norm = 0, 0, 0, 0
-        for client in clients:
-            loss, acc, n_samples, gradient_norm = client.local_train(local_epochs=local_epochs)
-            train_samples += n_samples
-            correct  += acc * n_samples
-            train_loss  += loss * n_samples
-            train_gradient_norm += gradient_norm
-        train_results = {'loss': train_loss/train_samples, 'accuracy': correct/train_samples, 'gradient_norm': train_gradient_norm/len(clients)}
-        log.info(f"Train, Round {rnd} : loss => {train_loss/train_samples},  accuracy: {correct/train_samples}, gradient_norm : {train_gradient_norm/len(clients)}")
-        metrics['train'].append(train_results)
-        
-        # Share with neighbors and aggregate
-        neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
-
         # For each edge, decide if it is active this round (bidirectional selection)
         edges = np.array(list(graph.edges()))
         idxs = np.random.choice(len(edges), int(participation_rate * len(edges)), replace=False)
         active_edges = edges[idxs]
+        
+        # Local training (only for clients with a vertex in active_edges)
+        active_nodes = set(active_edges.flatten())
+        correct, train_loss, train_samples, train_gradient_norm = 0, 0, 0, 0
+        gradients_per_client = {}
+        for idx, client in enumerate(clients):
+            if idx in active_nodes:
+                loss, acc, n_samples, gradient_norm, avg_gradients = client.local_train(local_epochs=local_epochs)
+                train_samples += n_samples
+                correct += acc * n_samples
+                train_loss += loss * n_samples
+                gradients_per_client[idx] = avg_gradients
+                train_gradient_norm += gradient_norm
+        train_results = {
+        'loss': train_loss / train_samples,
+        'accuracy': correct / train_samples,
+        'gradient_norm': train_gradient_norm / max(1, len(active_nodes))
+        }
+        log.info(f"Train, Round {rnd} : loss => {train_results['loss']},  accuracy: {train_results['accuracy']}, gradient_norm : {train_results['gradient_norm']}")
+        metrics['train'].append(train_results)
+        
+        
+        for active_node in active_nodes:
+            neighbors = list(graph.neighbors(active_node))
+            neighbor_gradients = {n: gradients_per_client[n] for n in neighbors if n in gradients_per_client}
+            clients[active_node].store_neighbor_gradients(neighbor_gradients)
+        
+        # # Share with neighbors and aggregate
+        # neighbor_states: List[Dict[str, Dict[str, torch.Tensor]]] = []
 
-        # For each node, collect its selected neighbors (including self)
-        selected_neighbors_per_node = []
-        for node in graph.nodes:
-            neighbors = list(graph.neighbors(node))
-            selected_neighbors = [n for n in neighbors if (node, n) or (n, node) in active_edges]
-            if node not in selected_neighbors:
-                selected_neighbors.append(node)
-            selected_neighbors_per_node.append(selected_neighbors)
+        # # For each node, collect its selected neighbors (including self)
+        # selected_neighbors_per_node = []
+        # for node in graph.nodes:
+        #     neighbors = list(graph.neighbors(node))
+        #     selected_neighbors = [n for n in neighbors if (node, n) or (n, node) in active_edges]
+        #     if node not in selected_neighbors:
+        #         selected_neighbors.append(node)
+        #     selected_neighbors_per_node.append(selected_neighbors)
             
-        for node, selected_neighbors in enumerate(selected_neighbors_per_node):
-            total_samples_per_node = sum([len(clients[n].train_loader.dataset) for n in selected_neighbors])
+        # # Each node aggregates the gradients of its selected neighbors and add the gradient of previous round 
+        # for node, selected_neighbors in enumerate(selected_neighbors_per_node):
+           
+        #     # We multiply each gradient by n_k/n
+        #     # gradients = [
+        #     # aggregate_gradients_weighted(
+        #     #     [clients[n].get_gradient()],
+        #     #     [len(clients[n].train_loader.dataset) / total_samples_per_node]
+        #     # )
+        #     # for n in selected_neighbors
+        #     # ]  
+        #     gradients = [
+        #         clients[n].get_gradient()
+        #     for n in selected_neighbors
+        #     ]
             
-            # We multiply each gradient by n_k/n
-            # gradients = [
-            # aggregate_gradients_weighted(
-            #     [clients[n].get_gradient()],
-            #     [len(clients[n].train_loader.dataset) / total_samples_per_node]
-            # )
-            # for n in selected_neighbors
-            # ]  
-            gradients = [
-                clients[n].get_gradient()
-            for n in selected_neighbors
-            ]
-            
-            node_degree = graph.degree[node]
-            weights = [
-                graph.get_edge_data(node, n).get("weight")  * node_degree / len(selected_neighbors)
-                for n in selected_neighbors
-            ]
-            # weights = list(np.ones(len(selected_neighbors)))
-            aggregated = aggregate_gradients_weighted(gradients, weights)
-            neighbor_states.append(aggregated)
+        #     node_degree = graph.degree[node]
+        #     weights = [
+        #         graph.get_edge_data(node, n).get("weight")  * node_degree / len(selected_neighbors)
+        #         for n in selected_neighbors
+        #     ]
+        #     # weights = list(np.ones(len(selected_neighbors)))
+        #     aggregated = aggregate_gradients_weighted(gradients, weights)
+        #     neighbor_states.append(aggregated)
     
         # Apply aggregated shared states
-        for node, agg_state in enumerate(neighbor_states):
-            clients[node].update_state(agg_state, consensus_lr=consensus_lr)
+        for node in active_nodes:
+            weights = list(np.ones(len(graph.neighbors(node))))
+            clients[node].update_state(weights, consensus_lr=consensus_lr)
             
         # Evaluate (average across clients)
         with torch.no_grad():
             total_samples = 0
             weighted_loss = 0.0
             weighted_acc = 0.0
-            for client in clients:
+            for node in active_nodes:
+                client = clients[node]
                 loss, acc = client.evaluate()
                 num_samples = len(client.test_loader.dataset)
                 weighted_loss += loss * num_samples
