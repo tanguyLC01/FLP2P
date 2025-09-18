@@ -1,0 +1,4 @@
+name: pathological
+num_clients: 100
+strategy: pathological
+num_classes_per_client: 2

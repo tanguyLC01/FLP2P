@@ -6,6 +6,7 @@ import torch
 from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt
+from collections import defaultdict
 
 
 def get_mnist_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
@@ -55,6 +56,40 @@ def dirichlet_partition(labels: np.ndarray, num_clients: int, alpha: float) -> L
             client_indices[client_id].extend(shard.tolist())
 
     return [np.array(sorted(idxs), dtype=np.int64) for idxs in client_indices]
+
+def pathology_partition(labels: np.ndarray, num_clients: int, num_classes_per_client: int) -> List[np.ndarray]:
+    
+    num_classes = len(np.unique(labels))
+    class_to_indices = {i: [] for i in range(num_classes)}
+    for idx, label in enumerate(labels):
+        class_to_indices[label].append(idx)
+        
+    # for class_id in class_to_indices:
+    #     self._rng.shuffle(class_to_indices[class_id])
+    
+    sample_number = sum([len(idxs) for idxs in class_to_indices.values()])
+    shard_per_class = int(num_classes_per_client * num_clients / num_classes)
+    
+    dict_users = defaultdict(list)
+    for label in class_to_indices.keys():
+        x = np.array(class_to_indices[label])
+        shards = np.array_split(x, shard_per_class)
+        class_to_indices[label] = [shard.tolist() for shard in shards]
+        
+    rand_set_all = list(range(num_classes)) * shard_per_class
+    np.random.shuffle(rand_set_all)
+    rand_set_all = np.array(rand_set_all).reshape((num_clients, -1))
+
+    for cid in range(num_clients):
+        rand_set_label = rand_set_all[cid]
+        rand_set = []
+        for label in rand_set_label:
+            idx = np.random.choice(len(class_to_indices[label]), replace=False)
+            rand_set.append(class_to_indices[label].pop(idx))
+        dict_users[cid] = np.concatenate(rand_set)
+    
+    return [np.array(sorted(idxs), dtype=np.int64) for idxs in dict_users.values()]
+
 
 def match_test_partition(
     train_parts: List[np.ndarray],
@@ -138,6 +173,9 @@ def build_client_loaders(
     elif config.partition.strategy == "dirichlet":
         train_parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
         test_parts = dirichlet_partition(labels=np.array(test_dataset.targets), num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
+    elif config.partition.strategy == "pathological":
+        train_parts = pathology_partition(labels=labels, num_clients=config.partition.num_clients, num_classes_per_client=config.partition.num_classes_per_client)
+        test_parts = match_test_partition(train_parts, labels, np.array(test_dataset.targets))
     else:
         raise ValueError(f"Unknown partition strategy: {config.partition.strategy}")
 
