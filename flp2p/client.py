@@ -32,6 +32,8 @@ class FLClient:
         # Store gradients of neighbors from the previous round
         self.neighbor_gradients: Dict[int, Dict[str, torch.Tensor]] = {}
         
+        self.total_neighbors_samples = 0
+        
         
     def store_neighbor_gradients(self, neighbor_gradients: Dict[int, Dict[str, torch.Tensor]]) -> None:
         """
@@ -80,7 +82,7 @@ class FLClient:
         avg_loss = total_loss / len(self.train_loader) / local_epochs
         avg_acc = correct / total
         # Compute average gradient
-        avg_gradients = {name: (grad_sum / batch_count) * num_samples for name, grad_sum in grad_sums.items()}
+        avg_gradients = {name: (grad_sum / batch_count) for name, grad_sum in grad_sums.items()}
         # Optionally, compute average gradient norm
         avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in avg_gradients.values()) ** 0.5
         return avg_loss, avg_acc, num_samples, avg_grad_norm, avg_gradients
@@ -114,7 +116,7 @@ class FLClient:
         total_norm = total_norm ** 0.5
         return total_norm
     
-    def aggregate_gradients_weighted(self, gradients_list: List[Dict[str, torch.Tensor]], weights: List[float]) -> Dict[str, torch.Tensor]:
+    def aggregate_gradients_weighted(self, gradients_dict:  Dict[int, Dict[str, torch.Tensor]], weights: List[float]) -> Dict[str, torch.Tensor]:
         """
         Aggregate gradients weighted by the adjacency matrix (weights).
         Args:
@@ -123,17 +125,19 @@ class FLClient:
         Returns:
             Dict of aggregated gradients (param_name -> tensor).
         """
-        if not gradients_list or not weights or len(gradients_list) != len(weights):
+        if not gradients_dict or not weights or len(gradients_dict) != len(weights):
             return {}
         agg: Dict[str, torch.Tensor] = {}
-        param_names = gradients_list[0].keys()
+        param_names = list(gradients_dict.values())[0].keys()
         for name in param_names:
-            weighted_grads = [g[name].float() * w for g, w in zip(gradients_list, weights) if name in g]
+            weighted_grads = []
+            for idx in gradients_dict:
+                weighted_grads.append(gradients_dict[idx][name].float() * weights[idx])
             if weighted_grads:
                 agg[name] = sum(weighted_grads)
         return agg
 
-    def update_state(self, neighbor_weights: List[float], consensus_lr: float = 0.1) -> None:
+    def update_state(self, neighbor_weights: List[float], consensus_lr: int = 0.1) -> None:
         """
         Update the model state using the aggregated gradient.
         Args:
@@ -142,8 +146,9 @@ class FLClient:
         """
         if not self.neighbor_gradients:
             return
+        
         aggregated_gradient = self.aggregate_gradients_weighted(
-            gradients_list=list(self.neighbor_gradients.values()),
+            gradients_dict=self.neighbor_gradients,
             weights=neighbor_weights)
 
         with torch.no_grad():

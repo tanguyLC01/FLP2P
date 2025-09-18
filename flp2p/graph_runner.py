@@ -31,7 +31,7 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     net.save_graph(html_path)
 
     
-def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
+def build_topology(num_clients: int, cfg: Dict, seed: int = 42, consensus_lr: int = 0.1) -> nx.Graph:
     if cfg.topology == "ring":
         graph = nx.cycle_graph(num_clients)
     elif cfg.topology == "erdos_renyi":
@@ -66,10 +66,10 @@ def build_topology(num_clients: int, cfg: Dict, seed: int = 42) -> nx.Graph:
     else:
         raise ValueError(f"Unknown topology: {cfg.topology}")
 
+    max_degree = max([val for (node, val) in graph.degree()])
     for node in graph.nodes():
-        d = graph.degree[node] +  1  # +1 to include self-loop
         for neighbor in graph.neighbors(node):
-            graph[node][neighbor]["weight"] = 1.0 / d
+            graph[node][neighbor]["weight"] = 1/max_degree
     return graph
 
 
@@ -115,25 +115,29 @@ def run_rounds(
         correct, train_loss, train_samples, train_gradient_norm = 0, 0, 0, 0
         gradients_per_client = {}
         for idx, client in enumerate(clients):
-            if idx in active_nodes:
+            if idx in active_nodes: # Nodes are from 1 to M
                 loss, acc, n_samples, gradient_norm, avg_gradients = client.local_train(local_epochs=local_epochs)
                 train_samples += n_samples
                 correct += acc * n_samples
                 train_loss += loss * n_samples
                 gradients_per_client[idx] = avg_gradients
                 train_gradient_norm += gradient_norm
+                
         train_results = {
         'loss': train_loss / train_samples,
         'accuracy': correct / train_samples,
         'gradient_norm': train_gradient_norm / max(1, len(active_nodes))
         }
+        
         log.info(f"Train, Round {rnd} : loss => {train_results['loss']},  accuracy: {train_results['accuracy']}, gradient_norm : {train_results['gradient_norm']}")
         metrics['train'].append(train_results)
         
-        
+        # print(active_nodes)
+        # print(list(gradients_per_client.keys()))
         for active_node in active_nodes:
             neighbors = list(graph.neighbors(active_node))
             neighbor_gradients = {n: gradients_per_client[n] for n in neighbors if n in gradients_per_client}
+            neighbor_gradients[active_node] = gradients_per_client[int(active_node)]
             clients[active_node].store_neighbor_gradients(neighbor_gradients)
         
         # # Share with neighbors and aggregate
@@ -175,7 +179,10 @@ def run_rounds(
     
         # Apply aggregated shared states
         for node in active_nodes:
-            weights = list(np.ones(len(graph.neighbors(node))))
+            weights = {}
+            for n in graph.neighbors(node):
+                weights[n] = graph.get_edge_data(node, n).get("weight")
+            weights[node] = 1 - graph.degree[node] / max([val for (_, val) in graph.degree])
             clients[node].update_state(weights, consensus_lr=consensus_lr)
             
         # Evaluate (average across clients)

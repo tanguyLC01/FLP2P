@@ -26,6 +26,14 @@ def get_cifar10_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset
     test = datasets.CIFAR10(root=root, train=False, download=True, transform=transform)
     return train, test
 
+def get_fashion_mnist_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,)),  # Fashion-MNIST is grayscale (1 channel)
+    ])
+    train = datasets.FashionMNIST(root=root, train=True, download=True, transform=transform)
+    test = datasets.FashionMNIST(root=root, train=False, download=True, transform=transform)
+    return train, test
 
 def iid_partition(num_clients: int, labels: np.ndarray) -> List[np.ndarray]:
     indices = np.random.permutation(len(labels))
@@ -111,6 +119,8 @@ def get_dataset(config: Dict) -> Tuple[torch.utils.data.Dataset, torch.utils.dat
         return get_mnist_datasets(root=config.root)
     elif config.name == "cifar10":
         return get_cifar10_datasets(root=config.root)
+    elif config.name == "fashion_mnist":
+        return get_fashion_mnist_datasets(root=config.root)
     else:
         raise ValueError(f"Unknown dataset: {config.name}")
 
