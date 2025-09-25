@@ -37,25 +37,25 @@ class FLClient:
         
     def store_neighbor_gradients(self, neighbor_gradients: Dict[int, Dict[str, torch.Tensor]]) -> None:
         """
-        Store all the gradients of neighbors from the previous round.
+        Store all the gradients of neighbors from the new round.
         Args:
             neighbor_gradients: Dict mapping neighbor IDs to their gradients dict (param_name -> tensor)
         """
         for neighbor_id, gradients in neighbor_gradients.items():
             self.neighbor_gradients[neighbor_id] = gradients.copy()
+        del neighbor_gradients
             
     def _optimizer(self) -> torch.optim.Optimizer:
-        return torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=self.momentum, weight_decay=self.weight_decay)
+        return torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay, momentum=self.momentum)
 
     def local_train(self, local_epochs: int = 1, criterion: Optional[nn.Module] = None) -> Tuple[float, float]:
         if criterion is None:
             criterion = nn.CrossEntropyLoss()
         optimizer = self._optimizer()
         self.model.train()
-        total_loss = 0.0
         correct = 0
         total = 0
-        grad_sums = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
+        gradient = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
         batch_count = 0
 
         for _ in range(local_epochs):
@@ -66,26 +66,23 @@ class FLClient:
                 outputs = self.model(inputs)
                 loss = criterion(outputs, targets)
                 loss.backward()
-                # Accumulate gradients
-                for name, param in self.model.named_parameters():
-                    if param.grad is not None and param.requires_grad:
-                        grad_sums[name] += param.grad.detach()
                 optimizer.step()
                 total += targets.size(0)
-                total_loss += loss.item()
                 with torch.no_grad():
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
                 batch_count += 1
 
         num_samples = len(self.train_loader.dataset)
-        avg_loss = total_loss / len(self.train_loader) / local_epochs
-        avg_acc = correct / total
+        
         # Compute average gradient
-        avg_gradients = {name: (grad_sum / batch_count) for name, grad_sum in grad_sums.items()}
+        for name, param in self.model.named_parameters():
+            if param.grad is not None and param.requires_grad:
+                gradient[name] = param.grad.detach().clone()
         # Optionally, compute average gradient norm
-        avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in avg_gradients.values()) ** 0.5
-        return avg_loss, avg_acc, num_samples, avg_grad_norm, avg_gradients
+        avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in gradient.values()) ** 0.5
+        
+        return num_samples, avg_grad_norm, gradient
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
@@ -103,7 +100,7 @@ class FLClient:
             total_loss += loss.item()
             preds = outputs.argmax(dim=1)
             correct += (preds == targets).sum().item()
-        avg_loss = total_loss / len(self.test_loader) # Same remarks as in train
+        avg_loss = total_loss / len(loader) # Same remarks as in train
         avg_acc = correct / num_samples
         return avg_loss, avg_acc
     
@@ -125,8 +122,8 @@ class FLClient:
         Returns:
             Dict of aggregated gradients (param_name -> tensor).
         """
-        if not gradients_dict or not weights or len(gradients_dict) != len(weights):
-            return {}
+        #if not gradients_dict or not weights or len(gradients_dict) != len(weights):
+        #    return {}
         agg: Dict[str, torch.Tensor] = {}
         param_names = list(gradients_dict.values())[0].keys()
         for name in param_names:
@@ -170,12 +167,11 @@ class FLClient:
             gradients[name] = param.grad.clone().detach().cpu()
         return gradients
 
-
     def get_state(self) -> Dict[str, torch.Tensor]:
-        return {k: v.clone().detach().cpu() for k, v in self.model.state_dict().items()}
+        return {k: v.clone().detach() for k, v in self.model.state_dict().items()}
 
     def set_state(self, state: Dict[str, torch.Tensor]) -> None:
         current = self.model.state_dict()
         mapped = {k: v.to(current[k].device).type_as(current[k]) for k, v in state.items() if k in current}
         current.update(mapped)
-        self.model.load_state_dict(current) 
+        self.model.load_state_dict(current)

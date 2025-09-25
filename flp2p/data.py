@@ -42,6 +42,7 @@ def iid_partition(num_clients: int, labels: np.ndarray) -> List[np.ndarray]:
     return [np.array(split, dtype=np.int64) for split in splits]
 
 
+
 def dirichlet_partition(labels: np.ndarray, num_clients: int, alpha: float) -> List[np.ndarray]:
     num_classes = labels.max() + 1
     class_indices = [np.where(labels == y)[0] for y in range(num_classes)]
@@ -59,16 +60,16 @@ def dirichlet_partition(labels: np.ndarray, num_clients: int, alpha: float) -> L
 
 def pathology_partition(labels: np.ndarray, num_clients: int, num_classes_per_client: int) -> List[np.ndarray]:
     
+
     num_classes = len(np.unique(labels))
     class_to_indices = {i: [] for i in range(num_classes)}
     for idx, label in enumerate(labels):
         class_to_indices[label].append(idx)
         
-    # for class_id in class_to_indices:
-    #     self._rng.shuffle(class_to_indices[class_id])
+    shard_per_class = num_classes_per_client * num_clients // num_classes
+    assert (num_clients * num_classes_per_client) % num_classes == 0, \
+    "Incompatible settings: num_clients * num_classes_per_client must be divisible by num_classes"
     
-    sample_number = sum([len(idxs) for idxs in class_to_indices.values()])
-    shard_per_class = int(num_classes_per_client * num_clients / num_classes)
     
     dict_users = defaultdict(list)
     for label in class_to_indices.keys():
@@ -78,7 +79,7 @@ def pathology_partition(labels: np.ndarray, num_clients: int, num_classes_per_cl
         
     rand_set_all = list(range(num_classes)) * shard_per_class
     np.random.shuffle(rand_set_all)
-    rand_set_all = np.array(rand_set_all).reshape((num_clients, -1))
+    rand_set_all = np.array(rand_set_all).reshape((num_clients, num_classes_per_client))
 
     for cid in range(num_clients):
         rand_set_label = rand_set_all[cid]
@@ -98,6 +99,9 @@ def match_test_partition(
 ) -> List[np.ndarray]:
     """
     Ensure test partition follows the same class distribution as train partition.
+    We get the proportion of each class in each client dataset.
+    Then, we split the classes indices based on theses proportions.
+    Lastly, we assign the splits/shards to each client.
     """
     
     num_clients = len(train_parts)
@@ -168,17 +172,14 @@ def build_client_loaders(
     labels = np.array(train_dataset.targets)
     if config.partition.strategy == "iid":
         train_parts = iid_partition(num_clients=config.partition.num_clients, labels=labels)
-        test_parts = match_test_partition(train_parts, labels, np.array(test_dataset.targets))
-        
     elif config.partition.strategy == "dirichlet":
         train_parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
-        test_parts = dirichlet_partition(labels=np.array(test_dataset.targets), num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
     elif config.partition.strategy == "pathological":
         train_parts = pathology_partition(labels=labels, num_clients=config.partition.num_clients, num_classes_per_client=config.partition.num_classes_per_client)
-        test_parts = match_test_partition(train_parts, labels, np.array(test_dataset.targets))
     else:
         raise ValueError(f"Unknown partition strategy: {config.partition.strategy}")
 
+    test_parts = match_test_partition(train_parts, train_labels=labels, test_labels=np.array(test_dataset.targets))
     plot_partition_distribution(train_parts, labels, path_to_save=save_plot_path, title="train_data_distribution")
     plot_partition_distribution(test_parts, np.array(test_dataset.targets), path_to_save=save_plot_path, title="test_data_distribution")
     
