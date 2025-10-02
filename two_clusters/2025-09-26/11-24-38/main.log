@@ -1,0 +1,1201 @@
+[2025-09-26 11:24:40,685][flp2p.graph_runner][INFO] - Data split check on random client
+[2025-09-26 11:24:50,518][flp2p.graph_runner][INFO] - Train, Round 0 : gradient_norm : 0.6400974201532581
+[2025-09-26 11:24:54,902][flp2p.graph_runner][INFO] - Train, Round 0 : loss => 2.2939255044430116,  accuracy: 0.13016
+[2025-09-26 11:24:54,902][flp2p.graph_runner][INFO] - Test, Round 0 : loss => 2.2939647749602794,  accuracy: 0.1336
+[2025-09-26 11:24:54,910][flp2p.graph_runner][INFO] - Mean Distance between models : 0.059318168626891245, Std between models : 0.00850689955426999
+[2025-09-26 11:25:04,383][flp2p.graph_runner][INFO] - Train, Round 1 : gradient_norm : 0.8813506394308795
+[2025-09-26 11:25:08,774][flp2p.graph_runner][INFO] - Train, Round 1 : loss => 2.2729519786714,  accuracy: 0.17358
+[2025-09-26 11:25:08,774][flp2p.graph_runner][INFO] - Test, Round 1 : loss => 2.273507609549165,  accuracy: 0.1775
+[2025-09-26 11:25:08,779][flp2p.graph_runner][INFO] - Mean Distance between models : 0.11743647505839666, Std between models : 0.0143314489678054
+[2025-09-26 11:25:18,341][flp2p.graph_runner][INFO] - Train, Round 2 : gradient_norm : 1.7089492209997441
+[2025-09-26 11:25:22,775][flp2p.graph_runner][INFO] - Train, Round 2 : loss => 2.222043395344215,  accuracy: 0.205
+[2025-09-26 11:25:22,775][flp2p.graph_runner][INFO] - Test, Round 2 : loss => 2.222608784928918,  accuracy: 0.2101
+[2025-09-26 11:25:22,778][flp2p.graph_runner][INFO] - Mean Distance between models : 0.20603808065255483, Std between models : 0.02433769682854738
+[2025-09-26 11:25:32,333][flp2p.graph_runner][INFO] - Train, Round 3 : gradient_norm : 3.9040940124974286
+[2025-09-26 11:25:36,775][flp2p.graph_runner][INFO] - Train, Round 3 : loss => 2.097320900084097,  accuracy: 0.2405
+[2025-09-26 11:25:36,776][flp2p.graph_runner][INFO] - Test, Round 3 : loss => 2.1007480822861195,  accuracy: 0.2448
+[2025-09-26 11:25:36,778][flp2p.graph_runner][INFO] - Mean Distance between models : 0.34840564131736756, Std between models : 0.04021971778368575
+[2025-09-26 11:25:46,373][flp2p.graph_runner][INFO] - Train, Round 4 : gradient_norm : 5.650558259894616
+[2025-09-26 11:25:50,724][flp2p.graph_runner][INFO] - Train, Round 4 : loss => 2.007644826400129,  accuracy: 0.26268
+[2025-09-26 11:25:50,724][flp2p.graph_runner][INFO] - Test, Round 4 : loss => 2.011215786719322,  accuracy: 0.2645
+[2025-09-26 11:25:50,727][flp2p.graph_runner][INFO] - Mean Distance between models : 0.48648304012086657, Std between models : 0.04685405152798283
+[2025-09-26 11:26:00,225][flp2p.graph_runner][INFO] - Train, Round 5 : gradient_norm : 6.61579566674809
+[2025-09-26 11:26:04,606][flp2p.graph_runner][INFO] - Train, Round 5 : loss => 1.957117120676403,  accuracy: 0.29006
+[2025-09-26 11:26:04,606][flp2p.graph_runner][INFO] - Test, Round 5 : loss => 1.9671506127752363,  accuracy: 0.2874
+[2025-09-26 11:26:04,609][flp2p.graph_runner][INFO] - Mean Distance between models : 0.6144960112041897, Std between models : 0.050716170204466976
+[2025-09-26 11:26:14,123][flp2p.graph_runner][INFO] - Train, Round 6 : gradient_norm : 6.718090247428354
+[2025-09-26 11:26:18,544][flp2p.graph_runner][INFO] - Train, Round 6 : loss => 1.870223528523988,  accuracy: 0.3162
+[2025-09-26 11:26:18,544][flp2p.graph_runner][INFO] - Test, Round 6 : loss => 1.882596499966085,  accuracy: 0.3162
+[2025-09-26 11:26:18,547][flp2p.graph_runner][INFO] - Mean Distance between models : 0.7574236061837938, Std between models : 0.05320845674790478
+[2025-09-26 11:26:28,101][flp2p.graph_runner][INFO] - Train, Round 7 : gradient_norm : 8.318114463094654
+[2025-09-26 11:26:32,486][flp2p.graph_runner][INFO] - Train, Round 7 : loss => 1.848203388648697,  accuracy: 0.33062
+[2025-09-26 11:26:32,486][flp2p.graph_runner][INFO] - Test, Round 7 : loss => 1.8698452152833342,  accuracy: 0.3269
+[2025-09-26 11:26:32,489][flp2p.graph_runner][INFO] - Mean Distance between models : 0.9167260315683153, Std between models : 0.056390785293794994
+[2025-09-26 11:26:42,067][flp2p.graph_runner][INFO] - Train, Round 8 : gradient_norm : 8.229138027997637
+[2025-09-26 11:26:46,465][flp2p.graph_runner][INFO] - Train, Round 8 : loss => 1.7894914218142062,  accuracy: 0.35704
+[2025-09-26 11:26:46,465][flp2p.graph_runner][INFO] - Test, Round 8 : loss => 1.8116538972020149,  accuracy: 0.3453
+[2025-09-26 11:26:46,467][flp2p.graph_runner][INFO] - Mean Distance between models : 1.0755335211753845, Std between models : 0.059672592235363815
+[2025-09-26 11:26:56,054][flp2p.graph_runner][INFO] - Train, Round 9 : gradient_norm : 7.983986736169612
+[2025-09-26 11:27:00,450][flp2p.graph_runner][INFO] - Train, Round 9 : loss => 1.6969201178490365,  accuracy: 0.37858
+[2025-09-26 11:27:00,450][flp2p.graph_runner][INFO] - Test, Round 9 : loss => 1.7413783301517367,  accuracy: 0.37
+[2025-09-26 11:27:00,454][flp2p.graph_runner][INFO] - Mean Distance between models : 1.2389408005608453, Std between models : 0.06121198600102931
+[2025-09-26 11:27:09,935][flp2p.graph_runner][INFO] - Train, Round 10 : gradient_norm : 9.352616013732868
+[2025-09-26 11:27:14,339][flp2p.graph_runner][INFO] - Train, Round 10 : loss => 1.6904310751564895,  accuracy: 0.39118
+[2025-09-26 11:27:14,339][flp2p.graph_runner][INFO] - Test, Round 10 : loss => 1.7398858977749945,  accuracy: 0.3753
+[2025-09-26 11:27:14,342][flp2p.graph_runner][INFO] - Mean Distance between models : 1.404478300942315, Std between models : 0.06303880397941891
+[2025-09-26 11:27:23,898][flp2p.graph_runner][INFO] - Train, Round 11 : gradient_norm : 9.098281488947029
+[2025-09-26 11:27:28,300][flp2p.graph_runner][INFO] - Train, Round 11 : loss => 1.6303060414670387,  accuracy: 0.40492
+[2025-09-26 11:27:28,300][flp2p.graph_runner][INFO] - Test, Round 11 : loss => 1.6958985701225697,  accuracy: 0.3878
+[2025-09-26 11:27:28,304][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5739034467273287, Std between models : 0.0636284449681705
+[2025-09-26 11:27:37,822][flp2p.graph_runner][INFO] - Train, Round 12 : gradient_norm : 9.213848585742342
+[2025-09-26 11:27:42,241][flp2p.graph_runner][INFO] - Train, Round 12 : loss => 1.5847441595566427,  accuracy: 0.42612
+[2025-09-26 11:27:42,241][flp2p.graph_runner][INFO] - Test, Round 12 : loss => 1.6752016535542906,  accuracy: 0.3979
+[2025-09-26 11:27:42,244][flp2p.graph_runner][INFO] - Mean Distance between models : 1.750489756796095, Std between models : 0.06458223577157335
+[2025-09-26 11:27:51,762][flp2p.graph_runner][INFO] - Train, Round 13 : gradient_norm : 9.996038917914174
+[2025-09-26 11:27:56,189][flp2p.graph_runner][INFO] - Train, Round 13 : loss => 1.6245191429989247,  accuracy: 0.42812
+[2025-09-26 11:27:56,189][flp2p.graph_runner][INFO] - Test, Round 13 : loss => 1.712407580895722,  accuracy: 0.3978
+[2025-09-26 11:27:56,191][flp2p.graph_runner][INFO] - Mean Distance between models : 1.9346619764963786, Std between models : 0.06441636978796775
+[2025-09-26 11:28:05,677][flp2p.graph_runner][INFO] - Train, Round 14 : gradient_norm : 9.934076988420447
+[2025-09-26 11:28:10,065][flp2p.graph_runner][INFO] - Train, Round 14 : loss => 1.584728819358198,  accuracy: 0.4353
+[2025-09-26 11:28:10,066][flp2p.graph_runner][INFO] - Test, Round 14 : loss => 1.7116443496912719,  accuracy: 0.3968
+[2025-09-26 11:28:10,070][flp2p.graph_runner][INFO] - Mean Distance between models : 2.1258107317818538, Std between models : 0.06530913123904644
+[2025-09-26 11:28:19,582][flp2p.graph_runner][INFO] - Train, Round 15 : gradient_norm : 11.283395766078863
+[2025-09-26 11:28:23,996][flp2p.graph_runner][INFO] - Train, Round 15 : loss => 1.6649701470061193,  accuracy: 0.4247
+[2025-09-26 11:28:23,997][flp2p.graph_runner][INFO] - Test, Round 15 : loss => 1.800322111199051,  accuracy: 0.3857
+[2025-09-26 11:28:24,001][flp2p.graph_runner][INFO] - Mean Distance between models : 2.3243665960099964, Std between models : 0.06773465726857092
+[2025-09-26 11:28:33,529][flp2p.graph_runner][INFO] - Train, Round 16 : gradient_norm : 10.439474840013377
+[2025-09-26 11:28:37,920][flp2p.graph_runner][INFO] - Train, Round 16 : loss => 1.4664698214470586,  accuracy: 0.48034
+[2025-09-26 11:28:37,920][flp2p.graph_runner][INFO] - Test, Round 16 : loss => 1.627939111061394,  accuracy: 0.4305
+[2025-09-26 11:28:37,925][flp2p.graph_runner][INFO] - Mean Distance between models : 2.5293026606241864, Std between models : 0.07036622041797916
+[2025-09-26 11:28:47,409][flp2p.graph_runner][INFO] - Train, Round 17 : gradient_norm : 11.075943538057446
+[2025-09-26 11:28:51,827][flp2p.graph_runner][INFO] - Train, Round 17 : loss => 1.6043028331255613,  accuracy: 0.4437
+[2025-09-26 11:28:51,827][flp2p.graph_runner][INFO] - Test, Round 17 : loss => 1.7963475789256393,  accuracy: 0.3965
+[2025-09-26 11:28:51,831][flp2p.graph_runner][INFO] - Mean Distance between models : 2.744438642925686, Std between models : 0.07175165474267654
+[2025-09-26 11:29:01,381][flp2p.graph_runner][INFO] - Train, Round 18 : gradient_norm : 10.812147220445471
+[2025-09-26 11:29:05,795][flp2p.graph_runner][INFO] - Train, Round 18 : loss => 1.5684088765065884,  accuracy: 0.46806
+[2025-09-26 11:29:05,795][flp2p.graph_runner][INFO] - Test, Round 18 : loss => 1.7739836732588707,  accuracy: 0.4088
+[2025-09-26 11:29:05,799][flp2p.graph_runner][INFO] - Mean Distance between models : 2.967358785205417, Std between models : 0.07603778754620674
+[2025-09-26 11:29:15,302][flp2p.graph_runner][INFO] - Train, Round 19 : gradient_norm : 10.797931538556737
+[2025-09-26 11:29:19,668][flp2p.graph_runner][INFO] - Train, Round 19 : loss => 1.4207528011331076,  accuracy: 0.49522
+[2025-09-26 11:29:19,668][flp2p.graph_runner][INFO] - Test, Round 19 : loss => 1.667371618462354,  accuracy: 0.4352
+[2025-09-26 11:29:19,670][flp2p.graph_runner][INFO] - Mean Distance between models : 3.1984522395663793, Std between models : 0.07845233638556663
+[2025-09-26 11:29:29,197][flp2p.graph_runner][INFO] - Train, Round 20 : gradient_norm : 12.10706850247338
+[2025-09-26 11:29:33,643][flp2p.graph_runner][INFO] - Train, Round 20 : loss => 1.3908076102975049,  accuracy: 0.51102
+[2025-09-26 11:29:33,643][flp2p.graph_runner][INFO] - Test, Round 20 : loss => 1.678178917556256,  accuracy: 0.4375
+[2025-09-26 11:29:33,646][flp2p.graph_runner][INFO] - Mean Distance between models : 3.437223196029663, Std between models : 0.08089726220887009
+[2025-09-26 11:29:43,139][flp2p.graph_runner][INFO] - Train, Round 21 : gradient_norm : 12.44508051992502
+[2025-09-26 11:29:47,573][flp2p.graph_runner][INFO] - Train, Round 21 : loss => 1.401049068230617,  accuracy: 0.50864
+[2025-09-26 11:29:47,573][flp2p.graph_runner][INFO] - Test, Round 21 : loss => 1.7172476106442511,  accuracy: 0.4355
+[2025-09-26 11:29:47,578][flp2p.graph_runner][INFO] - Mean Distance between models : 3.684936761856079, Std between models : 0.0843119214880979
+[2025-09-26 11:29:57,067][flp2p.graph_runner][INFO] - Train, Round 22 : gradient_norm : 13.242889373458567
+[2025-09-26 11:30:01,508][flp2p.graph_runner][INFO] - Train, Round 22 : loss => 1.517841117140613,  accuracy: 0.4906
+[2025-09-26 11:30:01,508][flp2p.graph_runner][INFO] - Test, Round 22 : loss => 1.8785246750041842,  accuracy: 0.4155
+[2025-09-26 11:30:01,511][flp2p.graph_runner][INFO] - Mean Distance between models : 3.940237882402208, Std between models : 0.08661790204834445
+[2025-09-26 11:30:11,030][flp2p.graph_runner][INFO] - Train, Round 23 : gradient_norm : 12.867761715433776
+[2025-09-26 11:30:15,424][flp2p.graph_runner][INFO] - Train, Round 23 : loss => 1.3726902262319491,  accuracy: 0.53284
+[2025-09-26 11:30:15,425][flp2p.graph_runner][INFO] - Test, Round 23 : loss => 1.7974386618979274,  accuracy: 0.434
+[2025-09-26 11:30:15,428][flp2p.graph_runner][INFO] - Mean Distance between models : 4.202800231509738, Std between models : 0.08903826024467722
+[2025-09-26 11:30:24,943][flp2p.graph_runner][INFO] - Train, Round 24 : gradient_norm : 13.454817535825669
+[2025-09-26 11:30:29,355][flp2p.graph_runner][INFO] - Train, Round 24 : loss => 1.3129696549494054,  accuracy: 0.5637
+[2025-09-26 11:30:29,355][flp2p.graph_runner][INFO] - Test, Round 24 : loss => 1.7903885127544403,  accuracy: 0.4517
+[2025-09-26 11:30:29,358][flp2p.graph_runner][INFO] - Mean Distance between models : 4.472963767581516, Std between models : 0.0922652950539903
+[2025-09-26 11:30:38,858][flp2p.graph_runner][INFO] - Train, Round 25 : gradient_norm : 14.50920179103054
+[2025-09-26 11:30:43,291][flp2p.graph_runner][INFO] - Train, Round 25 : loss => 1.4271126179001,  accuracy: 0.54426
+[2025-09-26 11:30:43,291][flp2p.graph_runner][INFO] - Test, Round 25 : loss => 1.9641316719360649,  accuracy: 0.4356
+[2025-09-26 11:30:43,293][flp2p.graph_runner][INFO] - Mean Distance between models : 4.751539177364773, Std between models : 0.09576022139629319
+[2025-09-26 11:30:52,789][flp2p.graph_runner][INFO] - Train, Round 26 : gradient_norm : 14.016006165613101
+[2025-09-26 11:30:57,228][flp2p.graph_runner][INFO] - Train, Round 26 : loss => 1.4982870035533664,  accuracy: 0.52854
+[2025-09-26 11:30:57,228][flp2p.graph_runner][INFO] - Test, Round 26 : loss => 2.1172715099446475,  accuracy: 0.4128
+[2025-09-26 11:30:57,231][flp2p.graph_runner][INFO] - Mean Distance between models : 5.032986227671305, Std between models : 0.09713017018168446
+[2025-09-26 11:31:06,727][flp2p.graph_runner][INFO] - Train, Round 27 : gradient_norm : 16.31184772819596
+[2025-09-26 11:31:11,155][flp2p.graph_runner][INFO] - Train, Round 27 : loss => 1.821815056665034,  accuracy: 0.49302
+[2025-09-26 11:31:11,155][flp2p.graph_runner][INFO] - Test, Round 27 : loss => 2.5206174686551095,  accuracy: 0.3844
+[2025-09-26 11:31:11,158][flp2p.graph_runner][INFO] - Mean Distance between models : 5.321119096544054, Std between models : 0.09815437674978349
+[2025-09-26 11:31:20,644][flp2p.graph_runner][INFO] - Train, Round 28 : gradient_norm : 16.81789215968463
+[2025-09-26 11:31:25,098][flp2p.graph_runner][INFO] - Train, Round 28 : loss => 1.2424279578690287,  accuracy: 0.6012
+[2025-09-26 11:31:25,098][flp2p.graph_runner][INFO] - Test, Round 28 : loss => 2.0196602853007612,  accuracy: 0.4431
+[2025-09-26 11:31:25,102][flp2p.graph_runner][INFO] - Mean Distance between models : 5.6134854740566675, Std between models : 0.0994210875290227
+[2025-09-26 11:31:34,671][flp2p.graph_runner][INFO] - Train, Round 29 : gradient_norm : 16.655215122814283
+[2025-09-26 11:31:39,093][flp2p.graph_runner][INFO] - Train, Round 29 : loss => 1.4827030948068525,  accuracy: 0.56222
+[2025-09-26 11:31:39,093][flp2p.graph_runner][INFO] - Test, Round 29 : loss => 2.330340727868676,  accuracy: 0.4182
+[2025-09-26 11:31:39,097][flp2p.graph_runner][INFO] - Mean Distance between models : 5.910270033942329, Std between models : 0.10169358390846231
+[2025-09-26 11:31:48,590][flp2p.graph_runner][INFO] - Train, Round 30 : gradient_norm : 14.70966782446266
+[2025-09-26 11:31:52,994][flp2p.graph_runner][INFO] - Train, Round 30 : loss => 1.2378769532411913,  accuracy: 0.61142
+[2025-09-26 11:31:52,994][flp2p.graph_runner][INFO] - Test, Round 30 : loss => 2.2020113741882144,  accuracy: 0.4349
+[2025-09-26 11:31:52,997][flp2p.graph_runner][INFO] - Mean Distance between models : 6.208491579691569, Std between models : 0.10101867333181291
+[2025-09-26 11:32:02,535][flp2p.graph_runner][INFO] - Train, Round 31 : gradient_norm : 18.840697628447977
+[2025-09-26 11:32:06,977][flp2p.graph_runner][INFO] - Train, Round 31 : loss => 2.139270515004291,  accuracy: 0.48898
+[2025-09-26 11:32:06,978][flp2p.graph_runner][INFO] - Test, Round 31 : loss => 3.23609214848876,  accuracy: 0.3642
+[2025-09-26 11:32:06,980][flp2p.graph_runner][INFO] - Mean Distance between models : 6.508131864335802, Std between models : 0.10012726334063879
+[2025-09-26 11:32:16,489][flp2p.graph_runner][INFO] - Train, Round 32 : gradient_norm : 17.589437160080053
+[2025-09-26 11:32:20,960][flp2p.graph_runner][INFO] - Train, Round 32 : loss => 1.6543340154086488,  accuracy: 0.55946
+[2025-09-26 11:32:20,960][flp2p.graph_runner][INFO] - Test, Round 32 : loss => 2.8612102466195823,  accuracy: 0.3991
+[2025-09-26 11:32:20,963][flp2p.graph_runner][INFO] - Mean Distance between models : 6.800729677412245, Std between models : 0.09865664921249288
+[2025-09-26 11:32:30,434][flp2p.graph_runner][INFO] - Train, Round 33 : gradient_norm : 17.503944395107663
+[2025-09-26 11:32:34,840][flp2p.graph_runner][INFO] - Train, Round 33 : loss => 1.7377582155828233,  accuracy: 0.62868
+[2025-09-26 11:32:34,840][flp2p.graph_runner][INFO] - Test, Round 33 : loss => 3.0934463763579725,  accuracy: 0.4241
+[2025-09-26 11:32:34,845][flp2p.graph_runner][INFO] - Mean Distance between models : 7.0850069681803385, Std between models : 0.09564270066243742
+[2025-09-26 11:32:44,408][flp2p.graph_runner][INFO] - Train, Round 34 : gradient_norm : 16.832592336454717
+[2025-09-26 11:32:48,815][flp2p.graph_runner][INFO] - Train, Round 34 : loss => 1.490502952473073,  accuracy: 0.6293
+[2025-09-26 11:32:48,815][flp2p.graph_runner][INFO] - Test, Round 34 : loss => 2.965057762416452,  accuracy: 0.4285
+[2025-09-26 11:32:48,819][flp2p.graph_runner][INFO] - Mean Distance between models : 7.364347139994304, Std between models : 0.09371304573604823
+[2025-09-26 11:32:58,308][flp2p.graph_runner][INFO] - Train, Round 35 : gradient_norm : 14.038553203312418
+[2025-09-26 11:33:02,712][flp2p.graph_runner][INFO] - Train, Round 35 : loss => 1.209016030951391,  accuracy: 0.66156
+[2025-09-26 11:33:02,712][flp2p.graph_runner][INFO] - Test, Round 35 : loss => 2.8782994569718836,  accuracy: 0.4379
+[2025-09-26 11:33:02,716][flp2p.graph_runner][INFO] - Mean Distance between models : 7.6277741432189945, Std between models : 0.0920600549473775
+[2025-09-26 11:33:12,264][flp2p.graph_runner][INFO] - Train, Round 36 : gradient_norm : 13.032818828650708
+[2025-09-26 11:33:16,693][flp2p.graph_runner][INFO] - Train, Round 36 : loss => 1.0186999871760982,  accuracy: 0.7461
+[2025-09-26 11:33:16,693][flp2p.graph_runner][INFO] - Test, Round 36 : loss => 2.8123903539627793,  accuracy: 0.464
+[2025-09-26 11:33:16,697][flp2p.graph_runner][INFO] - Mean Distance between models : 7.8722115728590225, Std between models : 0.09054862368500109
+[2025-09-26 11:33:26,178][flp2p.graph_runner][INFO] - Train, Round 37 : gradient_norm : 13.234950853276866
+[2025-09-26 11:33:30,566][flp2p.graph_runner][INFO] - Train, Round 37 : loss => 1.0493269386878117,  accuracy: 0.74742
+[2025-09-26 11:33:30,566][flp2p.graph_runner][INFO] - Test, Round 37 : loss => 2.9887691196374595,  accuracy: 0.4588
+[2025-09-26 11:33:30,570][flp2p.graph_runner][INFO] - Mean Distance between models : 8.103040462070041, Std between models : 0.09060066686380036
+[2025-09-26 11:33:40,052][flp2p.graph_runner][INFO] - Train, Round 38 : gradient_norm : 8.957451597271195
+[2025-09-26 11:33:44,449][flp2p.graph_runner][INFO] - Train, Round 38 : loss => 0.48405548217175876,  accuracy: 0.84012
+[2025-09-26 11:33:44,450][flp2p.graph_runner][INFO] - Test, Round 38 : loss => 2.571666204801202,  accuracy: 0.493
+[2025-09-26 11:33:44,454][flp2p.graph_runner][INFO] - Mean Distance between models : 8.312649938795301, Std between models : 0.0884466394879169
+[2025-09-26 11:33:54,022][flp2p.graph_runner][INFO] - Train, Round 39 : gradient_norm : 11.406356192997738
+[2025-09-26 11:33:58,440][flp2p.graph_runner][INFO] - Train, Round 39 : loss => 0.7201417620659253,  accuracy: 0.81902
+[2025-09-26 11:33:58,440][flp2p.graph_runner][INFO] - Test, Round 39 : loss => 2.9773217521592974,  accuracy: 0.4765
+[2025-09-26 11:33:58,447][flp2p.graph_runner][INFO] - Mean Distance between models : 8.49476538764106, Std between models : 0.08545388327183152
+[2025-09-26 11:34:07,981][flp2p.graph_runner][INFO] - Train, Round 40 : gradient_norm : 5.271631875931357
+[2025-09-26 11:34:12,412][flp2p.graph_runner][INFO] - Train, Round 40 : loss => 0.21323337635096115,  accuracy: 0.93978
+[2025-09-26 11:34:12,413][flp2p.graph_runner][INFO] - Test, Round 40 : loss => 2.496795855475217,  accuracy: 0.5191
+[2025-09-26 11:34:12,416][flp2p.graph_runner][INFO] - Mean Distance between models : 8.655602582295735, Std between models : 0.08211077088236607
+[2025-09-26 11:34:21,958][flp2p.graph_runner][INFO] - Train, Round 41 : gradient_norm : 5.706201851515854
+[2025-09-26 11:34:26,329][flp2p.graph_runner][INFO] - Train, Round 41 : loss => 0.19800954832683634,  accuracy: 0.94112
+[2025-09-26 11:34:26,329][flp2p.graph_runner][INFO] - Test, Round 41 : loss => 2.6152753397375346,  accuracy: 0.5141
+[2025-09-26 11:34:26,333][flp2p.graph_runner][INFO] - Mean Distance between models : 8.7856814066569, Std between models : 0.08170080031744509
+[2025-09-26 11:34:35,928][flp2p.graph_runner][INFO] - Train, Round 42 : gradient_norm : 5.071403559963002
+[2025-09-26 11:34:40,373][flp2p.graph_runner][INFO] - Train, Round 42 : loss => 0.196259588573741,  accuracy: 0.95162
+[2025-09-26 11:34:40,373][flp2p.graph_runner][INFO] - Test, Round 42 : loss => 2.730061367946118,  accuracy: 0.5192
+[2025-09-26 11:34:40,375][flp2p.graph_runner][INFO] - Mean Distance between models : 8.896004846360949, Std between models : 0.0828882990596209
+[2025-09-26 11:34:49,886][flp2p.graph_runner][INFO] - Train, Round 43 : gradient_norm : 3.660145479959253
+[2025-09-26 11:34:54,370][flp2p.graph_runner][INFO] - Train, Round 43 : loss => 0.056830713848430144,  accuracy: 0.9912
+[2025-09-26 11:34:54,370][flp2p.graph_runner][INFO] - Test, Round 43 : loss => 2.6185918316185472,  accuracy: 0.5284
+[2025-09-26 11:34:54,373][flp2p.graph_runner][INFO] - Mean Distance between models : 8.988618575202095, Std between models : 0.08542787834461651
+[2025-09-26 11:35:03,873][flp2p.graph_runner][INFO] - Train, Round 44 : gradient_norm : 3.2514951788201074
+[2025-09-26 11:35:08,282][flp2p.graph_runner][INFO] - Train, Round 44 : loss => 0.062050872309062685,  accuracy: 0.98634
+[2025-09-26 11:35:08,282][flp2p.graph_runner][INFO] - Test, Round 44 : loss => 2.744039117591083,  accuracy: 0.5303
+[2025-09-26 11:35:08,285][flp2p.graph_runner][INFO] - Mean Distance between models : 9.062172275119357, Std between models : 0.0868707371603401
+[2025-09-26 11:35:17,832][flp2p.graph_runner][INFO] - Train, Round 45 : gradient_norm : 2.8004404713093622
+[2025-09-26 11:35:22,254][flp2p.graph_runner][INFO] - Train, Round 45 : loss => 0.039369360586227496,  accuracy: 0.99334
+[2025-09-26 11:35:22,254][flp2p.graph_runner][INFO] - Test, Round 45 : loss => 2.752542154736072,  accuracy: 0.5288
+[2025-09-26 11:35:22,258][flp2p.graph_runner][INFO] - Mean Distance between models : 9.125694974263508, Std between models : 0.08898762816207507
+[2025-09-26 11:35:31,770][flp2p.graph_runner][INFO] - Train, Round 46 : gradient_norm : 3.008094117971011
+[2025-09-26 11:35:36,163][flp2p.graph_runner][INFO] - Train, Round 46 : loss => 0.060532384081684716,  accuracy: 0.98772
+[2025-09-26 11:35:36,163][flp2p.graph_runner][INFO] - Test, Round 46 : loss => 2.8843435455597937,  accuracy: 0.5308
+[2025-09-26 11:35:36,166][flp2p.graph_runner][INFO] - Mean Distance between models : 9.179238912794325, Std between models : 0.08993591301736732
+[2025-09-26 11:35:45,741][flp2p.graph_runner][INFO] - Train, Round 47 : gradient_norm : 1.9229129492030375
+[2025-09-26 11:35:50,138][flp2p.graph_runner][INFO] - Train, Round 47 : loss => 0.018891859377286383,  accuracy: 0.99986
+[2025-09-26 11:35:50,138][flp2p.graph_runner][INFO] - Test, Round 47 : loss => 2.8433498842895033,  accuracy: 0.5349
+[2025-09-26 11:35:50,144][flp2p.graph_runner][INFO] - Mean Distance between models : 9.227279239230686, Std between models : 0.09146402499002243
+[2025-09-26 11:35:59,650][flp2p.graph_runner][INFO] - Train, Round 48 : gradient_norm : 1.9459234818962023
+[2025-09-26 11:36:04,087][flp2p.graph_runner][INFO] - Train, Round 48 : loss => 0.019296324850484447,  accuracy: 0.99896
+[2025-09-26 11:36:04,087][flp2p.graph_runner][INFO] - Test, Round 48 : loss => 2.9282569406725467,  accuracy: 0.533
+[2025-09-26 11:36:04,091][flp2p.graph_runner][INFO] - Mean Distance between models : 9.268072891235352, Std between models : 0.09252004787284904
+[2025-09-26 11:36:13,656][flp2p.graph_runner][INFO] - Train, Round 49 : gradient_norm : 1.6885908268991738
+[2025-09-26 11:36:18,145][flp2p.graph_runner][INFO] - Train, Round 49 : loss => 0.015713427391174376,  accuracy: 0.99958
+[2025-09-26 11:36:18,145][flp2p.graph_runner][INFO] - Test, Round 49 : loss => 2.9673183094635607,  accuracy: 0.5333
+[2025-09-26 11:36:18,149][flp2p.graph_runner][INFO] - Mean Distance between models : 9.304472817314995, Std between models : 0.09362061284731604
+[2025-09-26 11:36:27,762][flp2p.graph_runner][INFO] - Train, Round 50 : gradient_norm : 1.4226786019808781
+[2025-09-26 11:36:32,226][flp2p.graph_runner][INFO] - Train, Round 50 : loss => 0.011949143745594575,  accuracy: 0.99998
+[2025-09-26 11:36:32,226][flp2p.graph_runner][INFO] - Test, Round 50 : loss => 3.006379093667865,  accuracy: 0.5364
+[2025-09-26 11:36:32,230][flp2p.graph_runner][INFO] - Mean Distance between models : 9.337001270718044, Std between models : 0.0943564070243576
+[2025-09-26 11:36:41,716][flp2p.graph_runner][INFO] - Train, Round 51 : gradient_norm : 1.116992461530531
+[2025-09-26 11:36:46,126][flp2p.graph_runner][INFO] - Train, Round 51 : loss => 0.009664360733844244,  accuracy: 1.0
+[2025-09-26 11:36:46,126][flp2p.graph_runner][INFO] - Test, Round 51 : loss => 3.036441072743386,  accuracy: 0.5379
+[2025-09-26 11:36:46,130][flp2p.graph_runner][INFO] - Mean Distance between models : 9.36617997487386, Std between models : 0.09488345340343964
+[2025-09-26 11:36:55,607][flp2p.graph_runner][INFO] - Train, Round 52 : gradient_norm : 1.1277920728626671
+[2025-09-26 11:36:59,976][flp2p.graph_runner][INFO] - Train, Round 52 : loss => 0.009223782635128857,  accuracy: 1.0
+[2025-09-26 11:36:59,977][flp2p.graph_runner][INFO] - Test, Round 52 : loss => 3.0888164166413246,  accuracy: 0.5361
+[2025-09-26 11:36:59,980][flp2p.graph_runner][INFO] - Mean Distance between models : 9.392813894483778, Std between models : 0.09547639679095156
+[2025-09-26 11:37:09,515][flp2p.graph_runner][INFO] - Train, Round 53 : gradient_norm : 1.438151148011376
+[2025-09-26 11:37:13,953][flp2p.graph_runner][INFO] - Train, Round 53 : loss => 0.009594453504615569,  accuracy: 1.0
+[2025-09-26 11:37:13,953][flp2p.graph_runner][INFO] - Test, Round 53 : loss => 3.143102402326465,  accuracy: 0.5334
+[2025-09-26 11:37:13,958][flp2p.graph_runner][INFO] - Mean Distance between models : 9.417163552178277, Std between models : 0.09597370559693937
+[2025-09-26 11:37:23,503][flp2p.graph_runner][INFO] - Train, Round 54 : gradient_norm : 1.1517270206547399
+[2025-09-26 11:37:27,910][flp2p.graph_runner][INFO] - Train, Round 54 : loss => 0.007104405247653492,  accuracy: 1.0
+[2025-09-26 11:37:27,910][flp2p.graph_runner][INFO] - Test, Round 54 : loss => 3.1476199557982385,  accuracy: 0.5344
+[2025-09-26 11:37:27,913][flp2p.graph_runner][INFO] - Mean Distance between models : 9.439735560946994, Std between models : 0.09647243859923374
+[2025-09-26 11:37:37,457][flp2p.graph_runner][INFO] - Train, Round 55 : gradient_norm : 0.8669823778245018
+[2025-09-26 11:37:41,878][flp2p.graph_runner][INFO] - Train, Round 55 : loss => 0.006700351961617229,  accuracy: 1.0
+[2025-09-26 11:37:41,878][flp2p.graph_runner][INFO] - Test, Round 55 : loss => 3.1886538609184325,  accuracy: 0.537
+[2025-09-26 11:37:41,881][flp2p.graph_runner][INFO] - Mean Distance between models : 9.46043915218777, Std between models : 0.09688621448987567
+[2025-09-26 11:37:51,407][flp2p.graph_runner][INFO] - Train, Round 56 : gradient_norm : 0.9482922174790076
+[2025-09-26 11:37:55,834][flp2p.graph_runner][INFO] - Train, Round 56 : loss => 0.006094692409910921,  accuracy: 1.0
+[2025-09-26 11:37:55,834][flp2p.graph_runner][INFO] - Test, Round 56 : loss => 3.211032309063524,  accuracy: 0.5364
+[2025-09-26 11:37:55,838][flp2p.graph_runner][INFO] - Mean Distance between models : 9.479833920796713, Std between models : 0.09730886041161926
+[2025-09-26 11:38:05,396][flp2p.graph_runner][INFO] - Train, Round 57 : gradient_norm : 1.0633862555013294
+[2025-09-26 11:38:09,748][flp2p.graph_runner][INFO] - Train, Round 57 : loss => 0.006022590002092191,  accuracy: 1.0
+[2025-09-26 11:38:09,749][flp2p.graph_runner][INFO] - Test, Round 57 : loss => 3.25867041438669,  accuracy: 0.5354
+[2025-09-26 11:38:09,754][flp2p.graph_runner][INFO] - Mean Distance between models : 9.497886318630643, Std between models : 0.0976112608495294
+[2025-09-26 11:38:19,230][flp2p.graph_runner][INFO] - Train, Round 58 : gradient_norm : 1.0261164025023815
+[2025-09-26 11:38:23,591][flp2p.graph_runner][INFO] - Train, Round 58 : loss => 0.005720419981487424,  accuracy: 1.0
+[2025-09-26 11:38:23,591][flp2p.graph_runner][INFO] - Test, Round 58 : loss => 3.271866390478611,  accuracy: 0.5374
+[2025-09-26 11:38:23,595][flp2p.graph_runner][INFO] - Mean Distance between models : 9.51483031378852, Std between models : 0.09796224955825711
+[2025-09-26 11:38:33,083][flp2p.graph_runner][INFO] - Train, Round 59 : gradient_norm : 0.7541085615649096
+[2025-09-26 11:38:37,480][flp2p.graph_runner][INFO] - Train, Round 59 : loss => 0.004920380980165416,  accuracy: 1.0
+[2025-09-26 11:38:37,480][flp2p.graph_runner][INFO] - Test, Round 59 : loss => 3.3017201071098445,  accuracy: 0.5358
+[2025-09-26 11:38:37,482][flp2p.graph_runner][INFO] - Mean Distance between models : 9.530736520555283, Std between models : 0.09822348236546231
+[2025-09-26 11:38:47,023][flp2p.graph_runner][INFO] - Train, Round 60 : gradient_norm : 0.910116361606249
+[2025-09-26 11:38:51,453][flp2p.graph_runner][INFO] - Train, Round 60 : loss => 0.005114620300510875,  accuracy: 1.0
+[2025-09-26 11:38:51,453][flp2p.graph_runner][INFO] - Test, Round 60 : loss => 3.333949886959791,  accuracy: 0.5346
+[2025-09-26 11:38:51,455][flp2p.graph_runner][INFO] - Mean Distance between models : 9.545690155029297, Std between models : 0.09847404219179996
+[2025-09-26 11:39:01,059][flp2p.graph_runner][INFO] - Train, Round 61 : gradient_norm : 0.6882115203853656
+[2025-09-26 11:39:05,525][flp2p.graph_runner][INFO] - Train, Round 61 : loss => 0.004261330049927051,  accuracy: 1.0
+[2025-09-26 11:39:05,525][flp2p.graph_runner][INFO] - Test, Round 61 : loss => 3.3383338237583637,  accuracy: 0.5341
+[2025-09-26 11:39:05,529][flp2p.graph_runner][INFO] - Mean Distance between models : 9.55991342332628, Std between models : 0.09873529572353826
+[2025-09-26 11:39:15,115][flp2p.graph_runner][INFO] - Train, Round 62 : gradient_norm : 0.48372572981455403
+[2025-09-26 11:39:19,441][flp2p.graph_runner][INFO] - Train, Round 62 : loss => 0.0040037071625584186,  accuracy: 1.0
+[2025-09-26 11:39:19,441][flp2p.graph_runner][INFO] - Test, Round 62 : loss => 3.3665271085590125,  accuracy: 0.5359
+[2025-09-26 11:39:19,445][flp2p.graph_runner][INFO] - Mean Distance between models : 9.573193656073677, Std between models : 0.09897616796954856
+[2025-09-26 11:39:28,946][flp2p.graph_runner][INFO] - Train, Round 63 : gradient_norm : 0.592341154316069
+[2025-09-26 11:39:33,374][flp2p.graph_runner][INFO] - Train, Round 63 : loss => 0.003920056494660205,  accuracy: 1.0
+[2025-09-26 11:39:33,374][flp2p.graph_runner][INFO] - Test, Round 63 : loss => 3.3917925685569643,  accuracy: 0.5344
+[2025-09-26 11:39:33,378][flp2p.graph_runner][INFO] - Mean Distance between models : 9.585828081766765, Std between models : 0.09910923444452953
+[2025-09-26 11:39:42,928][flp2p.graph_runner][INFO] - Train, Round 64 : gradient_norm : 0.5550002276329946
+[2025-09-26 11:39:47,364][flp2p.graph_runner][INFO] - Train, Round 64 : loss => 0.0035669775572133877,  accuracy: 1.0
+[2025-09-26 11:39:47,364][flp2p.graph_runner][INFO] - Test, Round 64 : loss => 3.407712915097177,  accuracy: 0.5367
+[2025-09-26 11:39:47,367][flp2p.graph_runner][INFO] - Mean Distance between models : 9.597903823852539, Std between models : 0.09931680207178575
+[2025-09-26 11:39:56,873][flp2p.graph_runner][INFO] - Train, Round 65 : gradient_norm : 0.7424679369276342
+[2025-09-26 11:40:01,320][flp2p.graph_runner][INFO] - Train, Round 65 : loss => 0.0036536800003127206,  accuracy: 1.0
+[2025-09-26 11:40:01,321][flp2p.graph_runner][INFO] - Test, Round 65 : loss => 3.437502853785455,  accuracy: 0.5349
+[2025-09-26 11:40:01,327][flp2p.graph_runner][INFO] - Mean Distance between models : 9.609389029608833, Std between models : 0.0994536824676392
+[2025-09-26 11:40:10,870][flp2p.graph_runner][INFO] - Train, Round 66 : gradient_norm : 0.44466326169607295
+[2025-09-26 11:40:15,335][flp2p.graph_runner][INFO] - Train, Round 66 : loss => 0.003310669316391495,  accuracy: 1.0
+[2025-09-26 11:40:15,335][flp2p.graph_runner][INFO] - Test, Round 66 : loss => 3.4485554796755316,  accuracy: 0.5351
+[2025-09-26 11:40:15,342][flp2p.graph_runner][INFO] - Mean Distance between models : 9.620342021518283, Std between models : 0.09961296692145143
+[2025-09-26 11:40:24,870][flp2p.graph_runner][INFO] - Train, Round 67 : gradient_norm : 0.4686188324830002
+[2025-09-26 11:40:29,266][flp2p.graph_runner][INFO] - Train, Round 67 : loss => 0.00312717171250312,  accuracy: 1.0
+[2025-09-26 11:40:29,266][flp2p.graph_runner][INFO] - Test, Round 67 : loss => 3.4636996776774525,  accuracy: 0.535
+[2025-09-26 11:40:29,271][flp2p.graph_runner][INFO] - Mean Distance between models : 9.630771806504992, Std between models : 0.09976413600159405
+[2025-09-26 11:40:38,813][flp2p.graph_runner][INFO] - Train, Round 68 : gradient_norm : 0.5780182347731223
+[2025-09-26 11:40:43,236][flp2p.graph_runner][INFO] - Train, Round 68 : loss => 0.0031148966244138963,  accuracy: 1.0
+[2025-09-26 11:40:43,236][flp2p.graph_runner][INFO] - Test, Round 68 : loss => 3.4860118264749644,  accuracy: 0.5344
+[2025-09-26 11:40:43,240][flp2p.graph_runner][INFO] - Mean Distance between models : 9.640722762213812, Std between models : 0.09993306981355844
+[2025-09-26 11:40:52,774][flp2p.graph_runner][INFO] - Train, Round 69 : gradient_norm : 0.5286865103617961
+[2025-09-26 11:40:57,173][flp2p.graph_runner][INFO] - Train, Round 69 : loss => 0.0029867395092187973,  accuracy: 1.0
+[2025-09-26 11:40:57,173][flp2p.graph_runner][INFO] - Test, Round 69 : loss => 3.502630772793293,  accuracy: 0.5371
+[2025-09-26 11:40:57,175][flp2p.graph_runner][INFO] - Mean Distance between models : 9.650297673543294, Std between models : 0.10006708966675032
+[2025-09-26 11:41:06,704][flp2p.graph_runner][INFO] - Train, Round 70 : gradient_norm : 0.5266820280498582
+[2025-09-26 11:41:11,093][flp2p.graph_runner][INFO] - Train, Round 70 : loss => 0.002773626842919171,  accuracy: 1.0
+[2025-09-26 11:41:11,093][flp2p.graph_runner][INFO] - Test, Round 70 : loss => 3.5166030792340637,  accuracy: 0.5375
+[2025-09-26 11:41:11,095][flp2p.graph_runner][INFO] - Mean Distance between models : 9.659485647413465, Std between models : 0.10020398454398285
+[2025-09-26 11:41:20,618][flp2p.graph_runner][INFO] - Train, Round 71 : gradient_norm : 0.38603125225387147
+[2025-09-26 11:41:25,061][flp2p.graph_runner][INFO] - Train, Round 71 : loss => 0.0026202167374011175,  accuracy: 1.0
+[2025-09-26 11:41:25,061][flp2p.graph_runner][INFO] - Test, Round 71 : loss => 3.5318462923526766,  accuracy: 0.5347
+[2025-09-26 11:41:25,066][flp2p.graph_runner][INFO] - Mean Distance between models : 9.668260468377007, Std between models : 0.10031161521042897
+[2025-09-26 11:41:34,524][flp2p.graph_runner][INFO] - Train, Round 72 : gradient_norm : 0.41061807540048567
+[2025-09-26 11:41:38,931][flp2p.graph_runner][INFO] - Train, Round 72 : loss => 0.002581355886539751,  accuracy: 1.0
+[2025-09-26 11:41:38,931][flp2p.graph_runner][INFO] - Test, Round 72 : loss => 3.5459600488856435,  accuracy: 0.5359
+[2025-09-26 11:41:38,934][flp2p.graph_runner][INFO] - Mean Distance between models : 9.676715977986653, Std between models : 0.1004399274936092
+[2025-09-26 11:41:48,410][flp2p.graph_runner][INFO] - Train, Round 73 : gradient_norm : 0.5162670371366958
+[2025-09-26 11:41:52,855][flp2p.graph_runner][INFO] - Train, Round 73 : loss => 0.0025562365307278128,  accuracy: 1.0
+[2025-09-26 11:41:52,856][flp2p.graph_runner][INFO] - Test, Round 73 : loss => 3.566309595988691,  accuracy: 0.5359
+[2025-09-26 11:41:52,860][flp2p.graph_runner][INFO] - Mean Distance between models : 9.684825282626681, Std between models : 0.10056345507739484
+[2025-09-26 11:42:02,480][flp2p.graph_runner][INFO] - Train, Round 74 : gradient_norm : 0.5182501271639433
+[2025-09-26 11:42:06,917][flp2p.graph_runner][INFO] - Train, Round 74 : loss => 0.002404714559714746,  accuracy: 1.0
+[2025-09-26 11:42:06,917][flp2p.graph_runner][INFO] - Test, Round 74 : loss => 3.5792194859310986,  accuracy: 0.5347
+[2025-09-26 11:42:06,920][flp2p.graph_runner][INFO] - Mean Distance between models : 9.692635091145833, Std between models : 0.1006641889919928
+[2025-09-26 11:42:16,442][flp2p.graph_runner][INFO] - Train, Round 75 : gradient_norm : 0.40405860357864454
+[2025-09-26 11:42:20,842][flp2p.graph_runner][INFO] - Train, Round 75 : loss => 0.002362198432276756,  accuracy: 1.0
+[2025-09-26 11:42:20,842][flp2p.graph_runner][INFO] - Test, Round 75 : loss => 3.5912928975239398,  accuracy: 0.5344
+[2025-09-26 11:42:20,847][flp2p.graph_runner][INFO] - Mean Distance between models : 9.7002197265625, Std between models : 0.10077924636109264
+[2025-09-26 11:42:30,326][flp2p.graph_runner][INFO] - Train, Round 76 : gradient_norm : 0.38926157045483806
+[2025-09-26 11:42:34,749][flp2p.graph_runner][INFO] - Train, Round 76 : loss => 0.002231982884091573,  accuracy: 1.0
+[2025-09-26 11:42:34,749][flp2p.graph_runner][INFO] - Test, Round 76 : loss => 3.6048706751197575,  accuracy: 0.5359
+[2025-09-26 11:42:34,754][flp2p.graph_runner][INFO] - Mean Distance between models : 9.707470152113173, Std between models : 0.10087182120377523
+[2025-09-26 11:42:44,258][flp2p.graph_runner][INFO] - Train, Round 77 : gradient_norm : 0.41481591866682715
+[2025-09-26 11:42:48,631][flp2p.graph_runner][INFO] - Train, Round 77 : loss => 0.002156955291387401,  accuracy: 1.0
+[2025-09-26 11:42:48,631][flp2p.graph_runner][INFO] - Test, Round 77 : loss => 3.6202666134893895,  accuracy: 0.5349
+[2025-09-26 11:42:48,635][flp2p.graph_runner][INFO] - Mean Distance between models : 9.714534356858994, Std between models : 0.10095365235456817
+[2025-09-26 11:42:58,195][flp2p.graph_runner][INFO] - Train, Round 78 : gradient_norm : 0.43919336485395577
+[2025-09-26 11:43:02,624][flp2p.graph_runner][INFO] - Train, Round 78 : loss => 0.0021105452966021635,  accuracy: 1.0
+[2025-09-26 11:43:02,625][flp2p.graph_runner][INFO] - Test, Round 78 : loss => 3.6287640148445965,  accuracy: 0.5342
+[2025-09-26 11:43:02,629][flp2p.graph_runner][INFO] - Mean Distance between models : 9.721263779534233, Std between models : 0.10103274146941703
+[2025-09-26 11:43:12,086][flp2p.graph_runner][INFO] - Train, Round 79 : gradient_norm : 0.4246664551493959
+[2025-09-26 11:43:16,484][flp2p.graph_runner][INFO] - Train, Round 79 : loss => 0.0020423870270665076,  accuracy: 1.0
+[2025-09-26 11:43:16,484][flp2p.graph_runner][INFO] - Test, Round 79 : loss => 3.634371664710343,  accuracy: 0.5352
+[2025-09-26 11:43:16,487][flp2p.graph_runner][INFO] - Mean Distance between models : 9.727781740824382, Std between models : 0.10110447182156804
+[2025-09-26 11:43:25,972][flp2p.graph_runner][INFO] - Train, Round 80 : gradient_norm : 0.35833205968878834
+[2025-09-26 11:43:30,400][flp2p.graph_runner][INFO] - Train, Round 80 : loss => 0.001973595165447155,  accuracy: 1.0
+[2025-09-26 11:43:30,400][flp2p.graph_runner][INFO] - Test, Round 80 : loss => 3.6508419289305807,  accuracy: 0.5358
+[2025-09-26 11:43:30,403][flp2p.graph_runner][INFO] - Mean Distance between models : 9.734070248074001, Std between models : 0.10116261140783363
+[2025-09-26 11:43:39,917][flp2p.graph_runner][INFO] - Train, Round 81 : gradient_norm : 0.37138468948687675
+[2025-09-26 11:43:44,353][flp2p.graph_runner][INFO] - Train, Round 81 : loss => 0.0019239848232061802,  accuracy: 1.0
+[2025-09-26 11:43:44,354][flp2p.graph_runner][INFO] - Test, Round 81 : loss => 3.663730836607516,  accuracy: 0.534
+[2025-09-26 11:43:44,357][flp2p.graph_runner][INFO] - Mean Distance between models : 9.74020110236274, Std between models : 0.10123439345141856
+[2025-09-26 11:43:53,800][flp2p.graph_runner][INFO] - Train, Round 82 : gradient_norm : 0.3623478162286207
+[2025-09-26 11:43:58,216][flp2p.graph_runner][INFO] - Train, Round 82 : loss => 0.00186423428214444,  accuracy: 1.0
+[2025-09-26 11:43:58,217][flp2p.graph_runner][INFO] - Test, Round 82 : loss => 3.6738609560966493,  accuracy: 0.5352
+[2025-09-26 11:43:58,219][flp2p.graph_runner][INFO] - Mean Distance between models : 9.746095275878906, Std between models : 0.10130064419227369
+[2025-09-26 11:44:07,781][flp2p.graph_runner][INFO] - Train, Round 83 : gradient_norm : 0.30735290548168415
+[2025-09-26 11:44:12,179][flp2p.graph_runner][INFO] - Train, Round 83 : loss => 0.0018152009807762843,  accuracy: 1.0
+[2025-09-26 11:44:12,179][flp2p.graph_runner][INFO] - Test, Round 83 : loss => 3.685002882118523,  accuracy: 0.5353
+[2025-09-26 11:44:12,183][flp2p.graph_runner][INFO] - Mean Distance between models : 9.75182876586914, Std between models : 0.10135690780861323
+[2025-09-26 11:44:21,735][flp2p.graph_runner][INFO] - Train, Round 84 : gradient_norm : 0.3818387871304493
+[2025-09-26 11:44:26,160][flp2p.graph_runner][INFO] - Train, Round 84 : loss => 0.0017705834741097038,  accuracy: 1.0
+[2025-09-26 11:44:26,161][flp2p.graph_runner][INFO] - Test, Round 84 : loss => 3.696114732040465,  accuracy: 0.534
+[2025-09-26 11:44:26,163][flp2p.graph_runner][INFO] - Mean Distance between models : 9.757359483506944, Std between models : 0.1014245978745223
+[2025-09-26 11:44:35,760][flp2p.graph_runner][INFO] - Train, Round 85 : gradient_norm : 0.29254234145957164
+[2025-09-26 11:44:40,198][flp2p.graph_runner][INFO] - Train, Round 85 : loss => 0.0017305685428289483,  accuracy: 1.0
+[2025-09-26 11:44:40,198][flp2p.graph_runner][INFO] - Test, Round 85 : loss => 3.706185060828924,  accuracy: 0.5345
+[2025-09-26 11:44:40,202][flp2p.graph_runner][INFO] - Mean Distance between models : 9.762721972995335, Std between models : 0.1014925080974089
+[2025-09-26 11:44:49,784][flp2p.graph_runner][INFO] - Train, Round 86 : gradient_norm : 0.281340227227543
+[2025-09-26 11:44:54,184][flp2p.graph_runner][INFO] - Train, Round 86 : loss => 0.0016760694206385768,  accuracy: 1.0
+[2025-09-26 11:44:54,184][flp2p.graph_runner][INFO] - Test, Round 86 : loss => 3.7183300039589406,  accuracy: 0.5345
+[2025-09-26 11:44:54,187][flp2p.graph_runner][INFO] - Mean Distance between models : 9.767948383755154, Std between models : 0.10154274055960491
+[2025-09-26 11:45:03,722][flp2p.graph_runner][INFO] - Train, Round 87 : gradient_norm : 0.35686235042786424
+[2025-09-26 11:45:08,189][flp2p.graph_runner][INFO] - Train, Round 87 : loss => 0.0016561062582856917,  accuracy: 1.0
+[2025-09-26 11:45:08,189][flp2p.graph_runner][INFO] - Test, Round 87 : loss => 3.7278808706834914,  accuracy: 0.536
+[2025-09-26 11:45:08,192][flp2p.graph_runner][INFO] - Mean Distance between models : 9.773006545172798, Std between models : 0.10159967227918372
+[2025-09-26 11:45:17,737][flp2p.graph_runner][INFO] - Train, Round 88 : gradient_norm : 0.3188857591838133
+[2025-09-26 11:45:22,158][flp2p.graph_runner][INFO] - Train, Round 88 : loss => 0.0016008113385649705,  accuracy: 1.0
+[2025-09-26 11:45:22,158][flp2p.graph_runner][INFO] - Test, Round 88 : loss => 3.7346934790953994,  accuracy: 0.5362
+[2025-09-26 11:45:22,164][flp2p.graph_runner][INFO] - Mean Distance between models : 9.777944882710775, Std between models : 0.10166600052240399
+[2025-09-26 11:45:31,750][flp2p.graph_runner][INFO] - Train, Round 89 : gradient_norm : 0.28105638308910613
+[2025-09-26 11:45:36,194][flp2p.graph_runner][INFO] - Train, Round 89 : loss => 0.001562275489809911,  accuracy: 1.0
+[2025-09-26 11:45:36,194][flp2p.graph_runner][INFO] - Test, Round 89 : loss => 3.741714705072343,  accuracy: 0.5359
+[2025-09-26 11:45:36,197][flp2p.graph_runner][INFO] - Mean Distance between models : 9.782741800944011, Std between models : 0.10172104696794443
+[2025-09-26 11:45:45,761][flp2p.graph_runner][INFO] - Train, Round 90 : gradient_norm : 0.3295040673970558
+[2025-09-26 11:45:50,212][flp2p.graph_runner][INFO] - Train, Round 90 : loss => 0.001538578906137779,  accuracy: 1.0
+[2025-09-26 11:45:50,212][flp2p.graph_runner][INFO] - Test, Round 90 : loss => 3.7554380995437504,  accuracy: 0.5356
+[2025-09-26 11:45:50,218][flp2p.graph_runner][INFO] - Mean Distance between models : 9.787401156955296, Std between models : 0.10176369902976325
+[2025-09-26 11:45:59,752][flp2p.graph_runner][INFO] - Train, Round 91 : gradient_norm : 0.31807139246359056
+[2025-09-26 11:46:04,218][flp2p.graph_runner][INFO] - Train, Round 91 : loss => 0.0015168498762031498,  accuracy: 1.0
+[2025-09-26 11:46:04,219][flp2p.graph_runner][INFO] - Test, Round 91 : loss => 3.7611818177461624,  accuracy: 0.5351
+[2025-09-26 11:46:04,221][flp2p.graph_runner][INFO] - Mean Distance between models : 9.7919282913208, Std between models : 0.10180156079604451
+[2025-09-26 11:46:13,770][flp2p.graph_runner][INFO] - Train, Round 92 : gradient_norm : 0.3459556930496984
+[2025-09-26 11:46:18,246][flp2p.graph_runner][INFO] - Train, Round 92 : loss => 0.0014833965847899408,  accuracy: 1.0
+[2025-09-26 11:46:18,246][flp2p.graph_runner][INFO] - Test, Round 92 : loss => 3.7744663432464005,  accuracy: 0.5348
+[2025-09-26 11:46:18,250][flp2p.graph_runner][INFO] - Mean Distance between models : 9.796346092224121, Std between models : 0.10186304891798141
+[2025-09-26 11:46:27,753][flp2p.graph_runner][INFO] - Train, Round 93 : gradient_norm : 0.3693685477826393
+[2025-09-26 11:46:32,130][flp2p.graph_runner][INFO] - Train, Round 93 : loss => 0.001455698269669886,  accuracy: 1.0
+[2025-09-26 11:46:32,130][flp2p.graph_runner][INFO] - Test, Round 93 : loss => 3.7769497672110797,  accuracy: 0.5348
+[2025-09-26 11:46:32,132][flp2p.graph_runner][INFO] - Mean Distance between models : 9.800623575846354, Std between models : 0.10190690674894302
+[2025-09-26 11:46:41,599][flp2p.graph_runner][INFO] - Train, Round 94 : gradient_norm : 0.28877010351907456
+[2025-09-26 11:46:46,022][flp2p.graph_runner][INFO] - Train, Round 94 : loss => 0.001424121836206251,  accuracy: 1.0
+[2025-09-26 11:46:46,023][flp2p.graph_runner][INFO] - Test, Round 94 : loss => 3.785631167086959,  accuracy: 0.5361
+[2025-09-26 11:46:46,028][flp2p.graph_runner][INFO] - Mean Distance between models : 9.804805692036947, Std between models : 0.10193462938424071
+[2025-09-26 11:46:55,585][flp2p.graph_runner][INFO] - Train, Round 95 : gradient_norm : 0.24610190012031685
+[2025-09-26 11:47:00,016][flp2p.graph_runner][INFO] - Train, Round 95 : loss => 0.0013825194942219702,  accuracy: 1.0
+[2025-09-26 11:47:00,016][flp2p.graph_runner][INFO] - Test, Round 95 : loss => 3.7944883120819926,  accuracy: 0.5353
+[2025-09-26 11:47:00,021][flp2p.graph_runner][INFO] - Mean Distance between models : 9.808859592013889, Std between models : 0.10197594209381416
+[2025-09-26 11:47:09,551][flp2p.graph_runner][INFO] - Train, Round 96 : gradient_norm : 0.24367149884906922
+[2025-09-26 11:47:13,990][flp2p.graph_runner][INFO] - Train, Round 96 : loss => 0.0013632548314996677,  accuracy: 1.0
+[2025-09-26 11:47:13,990][flp2p.graph_runner][INFO] - Test, Round 96 : loss => 3.8055990220859646,  accuracy: 0.5349
+[2025-09-26 11:47:13,994][flp2p.graph_runner][INFO] - Mean Distance between models : 9.812812275356716, Std between models : 0.10202328068564377
+[2025-09-26 11:47:23,525][flp2p.graph_runner][INFO] - Train, Round 97 : gradient_norm : 0.28943251051575614
+[2025-09-26 11:47:27,946][flp2p.graph_runner][INFO] - Train, Round 97 : loss => 0.0013413636179646787,  accuracy: 1.0
+[2025-09-26 11:47:27,946][flp2p.graph_runner][INFO] - Test, Round 97 : loss => 3.810654866489768,  accuracy: 0.5338
+[2025-09-26 11:47:27,951][flp2p.graph_runner][INFO] - Mean Distance between models : 9.816648377312553, Std between models : 0.10205502474456564
+[2025-09-26 11:47:37,484][flp2p.graph_runner][INFO] - Train, Round 98 : gradient_norm : 0.2706508359500994
+[2025-09-26 11:47:41,904][flp2p.graph_runner][INFO] - Train, Round 98 : loss => 0.001300598983284487,  accuracy: 1.0
+[2025-09-26 11:47:41,904][flp2p.graph_runner][INFO] - Test, Round 98 : loss => 3.8179507382765414,  accuracy: 0.5343
+[2025-09-26 11:47:41,906][flp2p.graph_runner][INFO] - Mean Distance between models : 9.820407570732964, Std between models : 0.10207837595047727
+[2025-09-26 11:47:51,401][flp2p.graph_runner][INFO] - Train, Round 99 : gradient_norm : 0.21688956769688444
+[2025-09-26 11:47:55,843][flp2p.graph_runner][INFO] - Train, Round 99 : loss => 0.001281794003775355,  accuracy: 1.0
+[2025-09-26 11:47:55,843][flp2p.graph_runner][INFO] - Test, Round 99 : loss => 3.824551671847701,  accuracy: 0.5339
+[2025-09-26 11:47:55,848][flp2p.graph_runner][INFO] - Mean Distance between models : 9.824062559339735, Std between models : 0.10210979913386124
+[2025-09-26 11:48:05,442][flp2p.graph_runner][INFO] - Train, Round 100 : gradient_norm : 0.24377168793172072
+[2025-09-26 11:48:09,959][flp2p.graph_runner][INFO] - Train, Round 100 : loss => 0.0012618172322871471,  accuracy: 1.0
+[2025-09-26 11:48:09,959][flp2p.graph_runner][INFO] - Test, Round 100 : loss => 3.831410579358041,  accuracy: 0.5343
+[2025-09-26 11:48:09,963][flp2p.graph_runner][INFO] - Mean Distance between models : 9.827650366889106, Std between models : 0.10214359804613297
+[2025-09-26 11:48:19,574][flp2p.graph_runner][INFO] - Train, Round 101 : gradient_norm : 0.2532727714669148
+[2025-09-26 11:48:24,116][flp2p.graph_runner][INFO] - Train, Round 101 : loss => 0.0012403864928527111,  accuracy: 1.0
+[2025-09-26 11:48:24,116][flp2p.graph_runner][INFO] - Test, Round 101 : loss => 3.8367325991764663,  accuracy: 0.5346
+[2025-09-26 11:48:24,120][flp2p.graph_runner][INFO] - Mean Distance between models : 9.831137339274088, Std between models : 0.10217775602461561
+[2025-09-26 11:48:33,675][flp2p.graph_runner][INFO] - Train, Round 102 : gradient_norm : 0.2054388204437271
+[2025-09-26 11:48:38,087][flp2p.graph_runner][INFO] - Train, Round 102 : loss => 0.001213682579212598,  accuracy: 1.0
+[2025-09-26 11:48:38,087][flp2p.graph_runner][INFO] - Test, Round 102 : loss => 3.844394015365839,  accuracy: 0.5344
+[2025-09-26 11:48:38,091][flp2p.graph_runner][INFO] - Mean Distance between models : 9.834521717495388, Std between models : 0.10220379807060762
+[2025-09-26 11:48:47,655][flp2p.graph_runner][INFO] - Train, Round 103 : gradient_norm : 0.2890749620221404
+[2025-09-26 11:48:52,155][flp2p.graph_runner][INFO] - Train, Round 103 : loss => 0.0012103314630103688,  accuracy: 1.0
+[2025-09-26 11:48:52,155][flp2p.graph_runner][INFO] - Test, Round 103 : loss => 3.8512657572373747,  accuracy: 0.5339
+[2025-09-26 11:48:52,160][flp2p.graph_runner][INFO] - Mean Distance between models : 9.837849150763617, Std between models : 0.10222810962306163
+[2025-09-26 11:49:01,815][flp2p.graph_runner][INFO] - Train, Round 104 : gradient_norm : 0.2076740569686118
+[2025-09-26 11:49:06,237][flp2p.graph_runner][INFO] - Train, Round 104 : loss => 0.0011746958255859188,  accuracy: 1.0
+[2025-09-26 11:49:06,237][flp2p.graph_runner][INFO] - Test, Round 104 : loss => 3.8595650221556426,  accuracy: 0.5348
+[2025-09-26 11:49:06,240][flp2p.graph_runner][INFO] - Mean Distance between models : 9.84107231563992, Std between models : 0.10224721867765671
+[2025-09-26 11:49:15,893][flp2p.graph_runner][INFO] - Train, Round 105 : gradient_norm : 0.2563165644686402
+[2025-09-26 11:49:20,334][flp2p.graph_runner][INFO] - Train, Round 105 : loss => 0.0011639647147488553,  accuracy: 1.0
+[2025-09-26 11:49:20,334][flp2p.graph_runner][INFO] - Test, Round 105 : loss => 3.865798137715459,  accuracy: 0.5347
+[2025-09-26 11:49:20,336][flp2p.graph_runner][INFO] - Mean Distance between models : 9.844238217671712, Std between models : 0.10227643442790116
+[2025-09-26 11:49:29,928][flp2p.graph_runner][INFO] - Train, Round 106 : gradient_norm : 0.24541563841385536
+[2025-09-26 11:49:34,370][flp2p.graph_runner][INFO] - Train, Round 106 : loss => 0.0011403453599696956,  accuracy: 1.0
+[2025-09-26 11:49:34,371][flp2p.graph_runner][INFO] - Test, Round 106 : loss => 3.8734355075865983,  accuracy: 0.5334
+[2025-09-26 11:49:34,374][flp2p.graph_runner][INFO] - Mean Distance between models : 9.847309642367893, Std between models : 0.1023000696308942
+[2025-09-26 11:49:44,121][flp2p.graph_runner][INFO] - Train, Round 107 : gradient_norm : 0.206296653920825
+[2025-09-26 11:49:48,582][flp2p.graph_runner][INFO] - Train, Round 107 : loss => 0.00112445118691171,  accuracy: 1.0
+[2025-09-26 11:49:48,582][flp2p.graph_runner][INFO] - Test, Round 107 : loss => 3.874946317796409,  accuracy: 0.5335
+[2025-09-26 11:49:48,586][flp2p.graph_runner][INFO] - Mean Distance between models : 9.850337897406684, Std between models : 0.10232828689743412
+[2025-09-26 11:49:58,331][flp2p.graph_runner][INFO] - Train, Round 108 : gradient_norm : 0.24743868881593686
+[2025-09-26 11:50:02,762][flp2p.graph_runner][INFO] - Train, Round 108 : loss => 0.001109500158367431,  accuracy: 1.0
+[2025-09-26 11:50:02,763][flp2p.graph_runner][INFO] - Test, Round 108 : loss => 3.8835714021399617,  accuracy: 0.5351
+[2025-09-26 11:50:02,766][flp2p.graph_runner][INFO] - Mean Distance between models : 9.853301917182074, Std between models : 0.10235482887035566
+[2025-09-26 11:50:12,483][flp2p.graph_runner][INFO] - Train, Round 109 : gradient_norm : 0.24179544686673743
+[2025-09-26 11:50:16,850][flp2p.graph_runner][INFO] - Train, Round 109 : loss => 0.0010926909919362513,  accuracy: 1.0
+[2025-09-26 11:50:16,850][flp2p.graph_runner][INFO] - Test, Round 109 : loss => 3.8889235734775665,  accuracy: 0.535
+[2025-09-26 11:50:16,853][flp2p.graph_runner][INFO] - Mean Distance between models : 9.856176736619737, Std between models : 0.10237817047137748
+[2025-09-26 11:50:26,331][flp2p.graph_runner][INFO] - Train, Round 110 : gradient_norm : 0.20273099276559164
+[2025-09-26 11:50:30,756][flp2p.graph_runner][INFO] - Train, Round 110 : loss => 0.0010733400531189776,  accuracy: 1.0
+[2025-09-26 11:50:30,756][flp2p.graph_runner][INFO] - Test, Round 110 : loss => 3.8943094316124918,  accuracy: 0.534
+[2025-09-26 11:50:30,758][flp2p.graph_runner][INFO] - Mean Distance between models : 9.858988295661078, Std between models : 0.10240482359662868
+[2025-09-26 11:50:40,390][flp2p.graph_runner][INFO] - Train, Round 111 : gradient_norm : 0.23887123704612995
+[2025-09-26 11:50:44,766][flp2p.graph_runner][INFO] - Train, Round 111 : loss => 0.0010565771694041647,  accuracy: 1.0
+[2025-09-26 11:50:44,766][flp2p.graph_runner][INFO] - Test, Round 111 : loss => 3.8988123799830676,  accuracy: 0.5354
+[2025-09-26 11:50:44,768][flp2p.graph_runner][INFO] - Mean Distance between models : 9.861732355753581, Std between models : 0.1024313340748307
+[2025-09-26 11:50:54,229][flp2p.graph_runner][INFO] - Train, Round 112 : gradient_norm : 0.21650583069716922
+[2025-09-26 11:50:58,645][flp2p.graph_runner][INFO] - Train, Round 112 : loss => 0.0010502865813566441,  accuracy: 1.0
+[2025-09-26 11:50:58,645][flp2p.graph_runner][INFO] - Test, Round 112 : loss => 3.9085109237536786,  accuracy: 0.535
+[2025-09-26 11:50:58,649][flp2p.graph_runner][INFO] - Mean Distance between models : 9.864412985907661, Std between models : 0.10245095500641639
+[2025-09-26 11:51:08,207][flp2p.graph_runner][INFO] - Train, Round 113 : gradient_norm : 0.1700905290841771
+[2025-09-26 11:51:12,592][flp2p.graph_runner][INFO] - Train, Round 113 : loss => 0.0010263962794207272,  accuracy: 1.0
+[2025-09-26 11:51:12,593][flp2p.graph_runner][INFO] - Test, Round 113 : loss => 3.908510710091889,  accuracy: 0.5341
+[2025-09-26 11:51:12,595][flp2p.graph_runner][INFO] - Mean Distance between models : 9.867040167914496, Std between models : 0.10247288675807881
+[2025-09-26 11:51:22,139][flp2p.graph_runner][INFO] - Train, Round 114 : gradient_norm : 0.1838321853516321
+[2025-09-26 11:51:26,511][flp2p.graph_runner][INFO] - Train, Round 114 : loss => 0.0010177673589249574,  accuracy: 1.0
+[2025-09-26 11:51:26,511][flp2p.graph_runner][INFO] - Test, Round 114 : loss => 3.9182586742267014,  accuracy: 0.5342
+[2025-09-26 11:51:26,514][flp2p.graph_runner][INFO] - Mean Distance between models : 9.86960695054796, Std between models : 0.10249335302757243
+[2025-09-26 11:51:35,977][flp2p.graph_runner][INFO] - Train, Round 115 : gradient_norm : 0.19915601499321917
+[2025-09-26 11:51:40,384][flp2p.graph_runner][INFO] - Train, Round 115 : loss => 0.0010007933556003483,  accuracy: 1.0
+[2025-09-26 11:51:40,384][flp2p.graph_runner][INFO] - Test, Round 115 : loss => 3.9221391521036626,  accuracy: 0.5348
+[2025-09-26 11:51:40,387][flp2p.graph_runner][INFO] - Mean Distance between models : 9.872118271721734, Std between models : 0.10251556354889688
+[2025-09-26 11:51:49,949][flp2p.graph_runner][INFO] - Train, Round 116 : gradient_norm : 0.23487666458539253
+[2025-09-26 11:51:54,423][flp2p.graph_runner][INFO] - Train, Round 116 : loss => 0.00099324354518034,  accuracy: 1.0
+[2025-09-26 11:51:54,424][flp2p.graph_runner][INFO] - Test, Round 116 : loss => 3.925565748244524,  accuracy: 0.5345
+[2025-09-26 11:51:54,426][flp2p.graph_runner][INFO] - Mean Distance between models : 9.874583986070421, Std between models : 0.10253290480265974
+[2025-09-26 11:52:03,974][flp2p.graph_runner][INFO] - Train, Round 117 : gradient_norm : 0.20399180150900934
+[2025-09-26 11:52:08,374][flp2p.graph_runner][INFO] - Train, Round 117 : loss => 0.0009818356482332712,  accuracy: 1.0
+[2025-09-26 11:52:08,374][flp2p.graph_runner][INFO] - Test, Round 117 : loss => 3.9321973596945403,  accuracy: 0.5344
+[2025-09-26 11:52:08,378][flp2p.graph_runner][INFO] - Mean Distance between models : 9.87697099049886, Std between models : 0.10255230873933986
+[2025-09-26 11:52:17,977][flp2p.graph_runner][INFO] - Train, Round 118 : gradient_norm : 0.2119689239428395
+[2025-09-26 11:52:22,381][flp2p.graph_runner][INFO] - Train, Round 118 : loss => 0.0009667924692989858,  accuracy: 1.0
+[2025-09-26 11:52:22,381][flp2p.graph_runner][INFO] - Test, Round 118 : loss => 3.9354056257456542,  accuracy: 0.5341
+[2025-09-26 11:52:22,384][flp2p.graph_runner][INFO] - Mean Distance between models : 9.879328876071506, Std between models : 0.10257049767243422
+[2025-09-26 11:52:31,974][flp2p.graph_runner][INFO] - Train, Round 119 : gradient_norm : 0.19918996265042202
+[2025-09-26 11:52:36,384][flp2p.graph_runner][INFO] - Train, Round 119 : loss => 0.0009622012891311529,  accuracy: 1.0
+[2025-09-26 11:52:36,384][flp2p.graph_runner][INFO] - Test, Round 119 : loss => 3.9430593476012348,  accuracy: 0.534
+[2025-09-26 11:52:36,388][flp2p.graph_runner][INFO] - Mean Distance between models : 9.88165120018853, Std between models : 0.1025994424694588
+[2025-09-26 11:52:45,948][flp2p.graph_runner][INFO] - Train, Round 120 : gradient_norm : 0.22908200051245395
+[2025-09-26 11:52:50,366][flp2p.graph_runner][INFO] - Train, Round 120 : loss => 0.0009402765502859957,  accuracy: 1.0
+[2025-09-26 11:52:50,366][flp2p.graph_runner][INFO] - Test, Round 120 : loss => 3.9453007507488134,  accuracy: 0.5339
+[2025-09-26 11:52:50,370][flp2p.graph_runner][INFO] - Mean Distance between models : 9.883906343248155, Std between models : 0.10262024819137038
+[2025-09-26 11:52:59,917][flp2p.graph_runner][INFO] - Train, Round 121 : gradient_norm : 0.17381206187915726
+[2025-09-26 11:53:04,344][flp2p.graph_runner][INFO] - Train, Round 121 : loss => 0.0009301533017018693,  accuracy: 1.0
+[2025-09-26 11:53:04,344][flp2p.graph_runner][INFO] - Test, Round 121 : loss => 3.9530588242605327,  accuracy: 0.5345
+[2025-09-26 11:53:04,346][flp2p.graph_runner][INFO] - Mean Distance between models : 9.886124187045628, Std between models : 0.10263802040085945
+[2025-09-26 11:53:13,945][flp2p.graph_runner][INFO] - Train, Round 122 : gradient_norm : 0.16494617247140908
+[2025-09-26 11:53:18,375][flp2p.graph_runner][INFO] - Train, Round 122 : loss => 0.0009223684296085605,  accuracy: 1.0
+[2025-09-26 11:53:18,376][flp2p.graph_runner][INFO] - Test, Round 122 : loss => 3.9537175507828595,  accuracy: 0.534
+[2025-09-26 11:53:18,379][flp2p.graph_runner][INFO] - Mean Distance between models : 9.888289833068848, Std between models : 0.10265031089155327
+[2025-09-26 11:53:27,917][flp2p.graph_runner][INFO] - Train, Round 123 : gradient_norm : 0.18387963883660366
+[2025-09-26 11:53:32,316][flp2p.graph_runner][INFO] - Train, Round 123 : loss => 0.0009133741934857436,  accuracy: 1.0
+[2025-09-26 11:53:32,316][flp2p.graph_runner][INFO] - Test, Round 123 : loss => 3.9595718366473913,  accuracy: 0.5343
+[2025-09-26 11:53:32,319][flp2p.graph_runner][INFO] - Mean Distance between models : 9.890399360656739, Std between models : 0.10266357403081044
+[2025-09-26 11:53:41,782][flp2p.graph_runner][INFO] - Train, Round 124 : gradient_norm : 0.1601020350954154
+[2025-09-26 11:53:46,123][flp2p.graph_runner][INFO] - Train, Round 124 : loss => 0.0008995804377194918,  accuracy: 1.0
+[2025-09-26 11:53:46,124][flp2p.graph_runner][INFO] - Test, Round 124 : loss => 3.963697012987733,  accuracy: 0.5337
+[2025-09-26 11:53:46,126][flp2p.graph_runner][INFO] - Mean Distance between models : 9.892485555013021, Std between models : 0.10266744199656304
+[2025-09-26 11:53:55,684][flp2p.graph_runner][INFO] - Train, Round 125 : gradient_norm : 0.1781374830887737
+[2025-09-26 11:54:00,166][flp2p.graph_runner][INFO] - Train, Round 125 : loss => 0.0008868199254053091,  accuracy: 1.0
+[2025-09-26 11:54:00,166][flp2p.graph_runner][INFO] - Test, Round 125 : loss => 3.969695431628823,  accuracy: 0.5348
+[2025-09-26 11:54:00,170][flp2p.graph_runner][INFO] - Mean Distance between models : 9.89450740814209, Std between models : 0.102678977318313
+[2025-09-26 11:54:09,759][flp2p.graph_runner][INFO] - Train, Round 126 : gradient_norm : 0.20889333402219554
+[2025-09-26 11:54:14,120][flp2p.graph_runner][INFO] - Train, Round 126 : loss => 0.0008861756873614732,  accuracy: 1.0
+[2025-09-26 11:54:14,121][flp2p.graph_runner][INFO] - Test, Round 126 : loss => 3.9719949005663393,  accuracy: 0.5341
+[2025-09-26 11:54:14,123][flp2p.graph_runner][INFO] - Mean Distance between models : 9.896512667338053, Std between models : 0.10269565785989958
+[2025-09-26 11:54:23,591][flp2p.graph_runner][INFO] - Train, Round 127 : gradient_norm : 0.16905826502902055
+[2025-09-26 11:54:28,030][flp2p.graph_runner][INFO] - Train, Round 127 : loss => 0.0008709633851473963,  accuracy: 1.0
+[2025-09-26 11:54:28,030][flp2p.graph_runner][INFO] - Test, Round 127 : loss => 3.9773859952896835,  accuracy: 0.5344
+[2025-09-26 11:54:28,037][flp2p.graph_runner][INFO] - Mean Distance between models : 9.898463037278917, Std between models : 0.10270662986620782
+[2025-09-26 11:54:37,645][flp2p.graph_runner][INFO] - Train, Round 128 : gradient_norm : 0.1740557544517961
+[2025-09-26 11:54:42,014][flp2p.graph_runner][INFO] - Train, Round 128 : loss => 0.0008609336106802183,  accuracy: 1.0
+[2025-09-26 11:54:42,014][flp2p.graph_runner][INFO] - Test, Round 128 : loss => 3.9819525913387537,  accuracy: 0.535
+[2025-09-26 11:54:42,018][flp2p.graph_runner][INFO] - Mean Distance between models : 9.90037964714898, Std between models : 0.10272033041132209
+[2025-09-26 11:54:51,539][flp2p.graph_runner][INFO] - Train, Round 129 : gradient_norm : 0.1377342651758629
+[2025-09-26 11:54:55,916][flp2p.graph_runner][INFO] - Train, Round 129 : loss => 0.0008544720528806455,  accuracy: 1.0
+[2025-09-26 11:54:55,917][flp2p.graph_runner][INFO] - Test, Round 129 : loss => 3.985958545306325,  accuracy: 0.5348
+[2025-09-26 11:54:55,921][flp2p.graph_runner][INFO] - Mean Distance between models : 9.902247831556533, Std between models : 0.10273476313062314
+[2025-09-26 11:55:05,461][flp2p.graph_runner][INFO] - Train, Round 130 : gradient_norm : 0.15846504612391504
+[2025-09-26 11:55:09,822][flp2p.graph_runner][INFO] - Train, Round 130 : loss => 0.0008411141602054262,  accuracy: 1.0
+[2025-09-26 11:55:09,823][flp2p.graph_runner][INFO] - Test, Round 130 : loss => 3.988955004864931,  accuracy: 0.5333
+[2025-09-26 11:55:09,825][flp2p.graph_runner][INFO] - Mean Distance between models : 9.904083802964951, Std between models : 0.10274275482508263
+[2025-09-26 11:55:19,438][flp2p.graph_runner][INFO] - Train, Round 131 : gradient_norm : 0.15543765757619957
+[2025-09-26 11:55:23,824][flp2p.graph_runner][INFO] - Train, Round 131 : loss => 0.0008349208332910615,  accuracy: 1.0
+[2025-09-26 11:55:23,824][flp2p.graph_runner][INFO] - Test, Round 131 : loss => 3.9907340200245383,  accuracy: 0.5341
+[2025-09-26 11:55:23,830][flp2p.graph_runner][INFO] - Mean Distance between models : 9.90587084028456, Std between models : 0.10275446135074856
+[2025-09-26 11:55:33,309][flp2p.graph_runner][INFO] - Train, Round 132 : gradient_norm : 0.156385778731517
+[2025-09-26 11:55:37,717][flp2p.graph_runner][INFO] - Train, Round 132 : loss => 0.0008317117600096096,  accuracy: 1.0
+[2025-09-26 11:55:37,717][flp2p.graph_runner][INFO] - Test, Round 132 : loss => 3.996038687738776,  accuracy: 0.5336
+[2025-09-26 11:55:37,719][flp2p.graph_runner][INFO] - Mean Distance between models : 9.907628038194444, Std between models : 0.10276424817684049
+[2025-09-26 11:55:47,261][flp2p.graph_runner][INFO] - Train, Round 133 : gradient_norm : 0.14787816199242393
+[2025-09-26 11:55:51,673][flp2p.graph_runner][INFO] - Train, Round 133 : loss => 0.0008181262924556939,  accuracy: 1.0
+[2025-09-26 11:55:51,673][flp2p.graph_runner][INFO] - Test, Round 133 : loss => 4.000481682144105,  accuracy: 0.5341
+[2025-09-26 11:55:51,676][flp2p.graph_runner][INFO] - Mean Distance between models : 9.909359677632649, Std between models : 0.10276976023096043
+[2025-09-26 11:56:01,144][flp2p.graph_runner][INFO] - Train, Round 134 : gradient_norm : 0.17311116654969427
+[2025-09-26 11:56:05,552][flp2p.graph_runner][INFO] - Train, Round 134 : loss => 0.000815849191077419,  accuracy: 1.0
+[2025-09-26 11:56:05,552][flp2p.graph_runner][INFO] - Test, Round 134 : loss => 4.002343728758395,  accuracy: 0.5343
+[2025-09-26 11:56:05,555][flp2p.graph_runner][INFO] - Mean Distance between models : 9.911059421963161, Std between models : 0.10277981102594401
+[2025-09-26 11:56:15,088][flp2p.graph_runner][INFO] - Train, Round 135 : gradient_norm : 0.17479467599163848
+[2025-09-26 11:56:19,514][flp2p.graph_runner][INFO] - Train, Round 135 : loss => 0.000805843110443859,  accuracy: 1.0
+[2025-09-26 11:56:19,514][flp2p.graph_runner][INFO] - Test, Round 135 : loss => 4.009396592906118,  accuracy: 0.5331
+[2025-09-26 11:56:19,516][flp2p.graph_runner][INFO] - Mean Distance between models : 9.91272299024794, Std between models : 0.10278761662705983
+[2025-09-26 11:56:29,153][flp2p.graph_runner][INFO] - Train, Round 136 : gradient_norm : 0.15604618453407268
+[2025-09-26 11:56:33,550][flp2p.graph_runner][INFO] - Train, Round 136 : loss => 0.0008001570676046696,  accuracy: 1.0
+[2025-09-26 11:56:33,550][flp2p.graph_runner][INFO] - Test, Round 136 : loss => 4.009942112065851,  accuracy: 0.5337
+[2025-09-26 11:56:33,555][flp2p.graph_runner][INFO] - Mean Distance between models : 9.914346694946289, Std between models : 0.10279520532354261
+[2025-09-26 11:56:43,133][flp2p.graph_runner][INFO] - Train, Round 137 : gradient_norm : 0.1980435880554976
+[2025-09-26 11:56:47,539][flp2p.graph_runner][INFO] - Train, Round 137 : loss => 0.0007920036162028703,  accuracy: 1.0
+[2025-09-26 11:56:47,540][flp2p.graph_runner][INFO] - Test, Round 137 : loss => 4.01281031473428,  accuracy: 0.5333
+[2025-09-26 11:56:47,545][flp2p.graph_runner][INFO] - Mean Distance between models : 9.915954483879936, Std between models : 0.1028050529948563
+[2025-09-26 11:56:57,063][flp2p.graph_runner][INFO] - Train, Round 138 : gradient_norm : 0.16343765955200223
+[2025-09-26 11:57:01,428][flp2p.graph_runner][INFO] - Train, Round 138 : loss => 0.0007809305129958835,  accuracy: 1.0
+[2025-09-26 11:57:01,428][flp2p.graph_runner][INFO] - Test, Round 138 : loss => 4.018747199873626,  accuracy: 0.5348
+[2025-09-26 11:57:01,431][flp2p.graph_runner][INFO] - Mean Distance between models : 9.917517958747016, Std between models : 0.10280845251732026
+[2025-09-26 11:57:10,937][flp2p.graph_runner][INFO] - Train, Round 139 : gradient_norm : 0.21666827744194578
+[2025-09-26 11:57:15,368][flp2p.graph_runner][INFO] - Train, Round 139 : loss => 0.0007774106666366157,  accuracy: 1.0
+[2025-09-26 11:57:15,368][flp2p.graph_runner][INFO] - Test, Round 139 : loss => 4.019763251172006,  accuracy: 0.5347
+[2025-09-26 11:57:15,372][flp2p.graph_runner][INFO] - Mean Distance between models : 9.919055642022027, Std between models : 0.1028121971478578
+[2025-09-26 11:57:24,920][flp2p.graph_runner][INFO] - Train, Round 140 : gradient_norm : 0.1700601825772893
+[2025-09-26 11:57:29,330][flp2p.graph_runner][INFO] - Train, Round 140 : loss => 0.0007671040190307165,  accuracy: 1.0
+[2025-09-26 11:57:29,331][flp2p.graph_runner][INFO] - Test, Round 140 : loss => 4.02284232249409,  accuracy: 0.5345
+[2025-09-26 11:57:29,336][flp2p.graph_runner][INFO] - Mean Distance between models : 9.92057785458035, Std between models : 0.10281569635744897
+[2025-09-26 11:57:38,938][flp2p.graph_runner][INFO] - Train, Round 141 : gradient_norm : 0.15957366230570086
+[2025-09-26 11:57:43,346][flp2p.graph_runner][INFO] - Train, Round 141 : loss => 0.0007614394699229234,  accuracy: 1.0
+[2025-09-26 11:57:43,346][flp2p.graph_runner][INFO] - Test, Round 141 : loss => 4.027273018836975,  accuracy: 0.5344
+[2025-09-26 11:57:43,350][flp2p.graph_runner][INFO] - Mean Distance between models : 9.922066752115885, Std between models : 0.10282753395306334
+[2025-09-26 11:57:52,883][flp2p.graph_runner][INFO] - Train, Round 142 : gradient_norm : 0.1971537709591226
+[2025-09-26 11:57:57,309][flp2p.graph_runner][INFO] - Train, Round 142 : loss => 0.0007599330093502363,  accuracy: 1.0
+[2025-09-26 11:57:57,309][flp2p.graph_runner][INFO] - Test, Round 142 : loss => 4.029124761600793,  accuracy: 0.5333
+[2025-09-26 11:57:57,311][flp2p.graph_runner][INFO] - Mean Distance between models : 9.923519176907009, Std between models : 0.10284543428658578
+[2025-09-26 11:58:06,858][flp2p.graph_runner][INFO] - Train, Round 143 : gradient_norm : 0.14872794189256736
+[2025-09-26 11:58:11,285][flp2p.graph_runner][INFO] - Train, Round 143 : loss => 0.000747611835934929,  accuracy: 1.0
+[2025-09-26 11:58:11,285][flp2p.graph_runner][INFO] - Test, Round 143 : loss => 4.031620654155314,  accuracy: 0.5341
+[2025-09-26 11:58:11,290][flp2p.graph_runner][INFO] - Mean Distance between models : 9.924938689337836, Std between models : 0.1028532334400484
+[2025-09-26 11:58:20,772][flp2p.graph_runner][INFO] - Train, Round 144 : gradient_norm : 0.10515696011085854
+[2025-09-26 11:58:25,151][flp2p.graph_runner][INFO] - Train, Round 144 : loss => 0.0007378044731979837,  accuracy: 1.0
+[2025-09-26 11:58:25,151][flp2p.graph_runner][INFO] - Test, Round 144 : loss => 4.035674543754756,  accuracy: 0.5351
+[2025-09-26 11:58:25,154][flp2p.graph_runner][INFO] - Mean Distance between models : 9.92631787194146, Std between models : 0.10286071979852288
+[2025-09-26 11:58:34,731][flp2p.graph_runner][INFO] - Train, Round 145 : gradient_norm : 0.1305302665713772
+[2025-09-26 11:58:39,157][flp2p.graph_runner][INFO] - Train, Round 145 : loss => 0.0007394949649534294,  accuracy: 1.0
+[2025-09-26 11:58:39,157][flp2p.graph_runner][INFO] - Test, Round 145 : loss => 4.038170617583394,  accuracy: 0.5347
+[2025-09-26 11:58:39,161][flp2p.graph_runner][INFO] - Mean Distance between models : 9.92768931918674, Std between models : 0.10286681663676557
+[2025-09-26 11:58:48,690][flp2p.graph_runner][INFO] - Train, Round 146 : gradient_norm : 0.12074952693377153
+[2025-09-26 11:58:53,098][flp2p.graph_runner][INFO] - Train, Round 146 : loss => 0.0007297188616460896,  accuracy: 1.0
+[2025-09-26 11:58:53,098][flp2p.graph_runner][INFO] - Test, Round 146 : loss => 4.042100455878675,  accuracy: 0.535
+[2025-09-26 11:58:53,100][flp2p.graph_runner][INFO] - Mean Distance between models : 9.92903258005778, Std between models : 0.10287829741143727
+[2025-09-26 11:59:02,595][flp2p.graph_runner][INFO] - Train, Round 147 : gradient_norm : 0.12210282695404343
+[2025-09-26 11:59:07,005][flp2p.graph_runner][INFO] - Train, Round 147 : loss => 0.0007228382286185375,  accuracy: 1.0
+[2025-09-26 11:59:07,005][flp2p.graph_runner][INFO] - Test, Round 147 : loss => 4.046116409648955,  accuracy: 0.5339
+[2025-09-26 11:59:07,010][flp2p.graph_runner][INFO] - Mean Distance between models : 9.930346785651313, Std between models : 0.102884608692656
+[2025-09-26 11:59:16,583][flp2p.graph_runner][INFO] - Train, Round 148 : gradient_norm : 0.14731700899510075
+[2025-09-26 11:59:20,976][flp2p.graph_runner][INFO] - Train, Round 148 : loss => 0.0007185535347737561,  accuracy: 1.0
+[2025-09-26 11:59:20,977][flp2p.graph_runner][INFO] - Test, Round 148 : loss => 4.047858243329823,  accuracy: 0.535
+[2025-09-26 11:59:20,983][flp2p.graph_runner][INFO] - Mean Distance between models : 9.931642278035481, Std between models : 0.10287512263335567
+[2025-09-26 11:59:30,521][flp2p.graph_runner][INFO] - Train, Round 149 : gradient_norm : 0.14912886687123073
+[2025-09-26 11:59:34,964][flp2p.graph_runner][INFO] - Train, Round 149 : loss => 0.0007137400434865275,  accuracy: 1.0
+[2025-09-26 11:59:34,965][flp2p.graph_runner][INFO] - Test, Round 149 : loss => 4.049427628956735,  accuracy: 0.5342
+[2025-09-26 11:59:34,968][flp2p.graph_runner][INFO] - Mean Distance between models : 9.932913547092014, Std between models : 0.10289292699821258
+[2025-09-26 11:59:44,549][flp2p.graph_runner][INFO] - Train, Round 150 : gradient_norm : 0.12694374748469034
+[2025-09-26 11:59:48,987][flp2p.graph_runner][INFO] - Train, Round 150 : loss => 0.0007068581475737752,  accuracy: 1.0
+[2025-09-26 11:59:48,987][flp2p.graph_runner][INFO] - Test, Round 150 : loss => 4.053309447163343,  accuracy: 0.5338
+[2025-09-26 11:59:48,991][flp2p.graph_runner][INFO] - Mean Distance between models : 9.934155697292752, Std between models : 0.10289439058293481
+[2025-09-26 11:59:58,491][flp2p.graph_runner][INFO] - Train, Round 151 : gradient_norm : 0.1373319935091219
+[2025-09-26 12:00:02,875][flp2p.graph_runner][INFO] - Train, Round 151 : loss => 0.0007052974964055833,  accuracy: 1.0
+[2025-09-26 12:00:02,875][flp2p.graph_runner][INFO] - Test, Round 151 : loss => 4.0569252535223965,  accuracy: 0.5344
+[2025-09-26 12:00:02,880][flp2p.graph_runner][INFO] - Mean Distance between models : 9.93537483215332, Std between models : 0.1028971456573843
+[2025-09-26 12:00:12,397][flp2p.graph_runner][INFO] - Train, Round 152 : gradient_norm : 0.15706107440548925
+[2025-09-26 12:00:16,822][flp2p.graph_runner][INFO] - Train, Round 152 : loss => 0.0006991165707807376,  accuracy: 1.0
+[2025-09-26 12:00:16,822][flp2p.graph_runner][INFO] - Test, Round 152 : loss => 4.059712321130931,  accuracy: 0.5346
+[2025-09-26 12:00:16,827][flp2p.graph_runner][INFO] - Mean Distance between models : 9.936578369140625, Std between models : 0.1029064504454254
+[2025-09-26 12:00:26,303][flp2p.graph_runner][INFO] - Train, Round 153 : gradient_norm : 0.15792567659187398
+[2025-09-26 12:00:30,767][flp2p.graph_runner][INFO] - Train, Round 153 : loss => 0.0006920123970706334,  accuracy: 1.0
+[2025-09-26 12:00:30,767][flp2p.graph_runner][INFO] - Test, Round 153 : loss => 4.060848321633041,  accuracy: 0.5335
+[2025-09-26 12:00:30,771][flp2p.graph_runner][INFO] - Mean Distance between models : 9.937758255004884, Std between models : 0.10291403289340259
+[2025-09-26 12:00:40,279][flp2p.graph_runner][INFO] - Train, Round 154 : gradient_norm : 0.12218298368399025
+[2025-09-26 12:00:44,699][flp2p.graph_runner][INFO] - Train, Round 154 : loss => 0.0006875702428640327,  accuracy: 1.0
+[2025-09-26 12:00:44,699][flp2p.graph_runner][INFO] - Test, Round 154 : loss => 4.063712803807855,  accuracy: 0.534
+[2025-09-26 12:00:44,706][flp2p.graph_runner][INFO] - Mean Distance between models : 9.938905355665419, Std between models : 0.10291952705440119
+[2025-09-26 12:00:54,340][flp2p.graph_runner][INFO] - Train, Round 155 : gradient_norm : 0.13768121353929
+[2025-09-26 12:00:58,741][flp2p.graph_runner][INFO] - Train, Round 155 : loss => 0.000681537110911081,  accuracy: 1.0
+[2025-09-26 12:00:58,741][flp2p.graph_runner][INFO] - Test, Round 155 : loss => 4.065835978586971,  accuracy: 0.5342
+[2025-09-26 12:00:58,747][flp2p.graph_runner][INFO] - Mean Distance between models : 9.94003151787652, Std between models : 0.10292259121375993
+[2025-09-26 12:01:08,235][flp2p.graph_runner][INFO] - Train, Round 156 : gradient_norm : 0.1850943272690064
+[2025-09-26 12:01:12,627][flp2p.graph_runner][INFO] - Train, Round 156 : loss => 0.0006787345610202373,  accuracy: 1.0
+[2025-09-26 12:01:12,627][flp2p.graph_runner][INFO] - Test, Round 156 : loss => 4.069490633530915,  accuracy: 0.5338
+[2025-09-26 12:01:12,630][flp2p.graph_runner][INFO] - Mean Distance between models : 9.941143459743923, Std between models : 0.10293096819899573
+[2025-09-26 12:01:22,195][flp2p.graph_runner][INFO] - Train, Round 157 : gradient_norm : 0.14941601911756813
+[2025-09-26 12:01:26,615][flp2p.graph_runner][INFO] - Train, Round 157 : loss => 0.0006735382825976143,  accuracy: 1.0
+[2025-09-26 12:01:26,616][flp2p.graph_runner][INFO] - Test, Round 157 : loss => 4.072027298367024,  accuracy: 0.534
+[2025-09-26 12:01:26,618][flp2p.graph_runner][INFO] - Mean Distance between models : 9.942226240370008, Std between models : 0.1029393749193024
+[2025-09-26 12:01:36,104][flp2p.graph_runner][INFO] - Train, Round 158 : gradient_norm : 0.15549791867839396
+[2025-09-26 12:01:40,557][flp2p.graph_runner][INFO] - Train, Round 158 : loss => 0.0006691985162375849,  accuracy: 1.0
+[2025-09-26 12:01:40,557][flp2p.graph_runner][INFO] - Test, Round 158 : loss => 4.073208888004721,  accuracy: 0.534
+[2025-09-26 12:01:40,561][flp2p.graph_runner][INFO] - Mean Distance between models : 9.943289290534125, Std between models : 0.10293966156438925
+[2025-09-26 12:01:50,073][flp2p.graph_runner][INFO] - Train, Round 159 : gradient_norm : 0.1208767485064374
+[2025-09-26 12:01:54,540][flp2p.graph_runner][INFO] - Train, Round 159 : loss => 0.00066303557788517,  accuracy: 1.0
+[2025-09-26 12:01:54,540][flp2p.graph_runner][INFO] - Test, Round 159 : loss => 4.075357687407732,  accuracy: 0.5337
+[2025-09-26 12:01:54,542][flp2p.graph_runner][INFO] - Mean Distance between models : 9.9443359375, Std between models : 0.10294362607441875
+[2025-09-26 12:02:04,029][flp2p.graph_runner][INFO] - Train, Round 160 : gradient_norm : 0.13447737364330656
+[2025-09-26 12:02:08,452][flp2p.graph_runner][INFO] - Train, Round 160 : loss => 0.0006605216450444009,  accuracy: 1.0
+[2025-09-26 12:02:08,453][flp2p.graph_runner][INFO] - Test, Round 160 : loss => 4.078466728670895,  accuracy: 0.5342
+[2025-09-26 12:02:08,455][flp2p.graph_runner][INFO] - Mean Distance between models : 9.945360713534885, Std between models : 0.10294717919017568
+[2025-09-26 12:02:17,974][flp2p.graph_runner][INFO] - Train, Round 161 : gradient_norm : 0.1495374602323708
+[2025-09-26 12:02:22,395][flp2p.graph_runner][INFO] - Train, Round 161 : loss => 0.0006539947184206492,  accuracy: 1.0
+[2025-09-26 12:02:22,395][flp2p.graph_runner][INFO] - Test, Round 161 : loss => 4.082237737089396,  accuracy: 0.5346
+[2025-09-26 12:02:22,397][flp2p.graph_runner][INFO] - Mean Distance between models : 9.946371290418837, Std between models : 0.10294491960654623
+[2025-09-26 12:02:32,022][flp2p.graph_runner][INFO] - Train, Round 162 : gradient_norm : 0.15416278896660768
+[2025-09-26 12:02:36,456][flp2p.graph_runner][INFO] - Train, Round 162 : loss => 0.0006524276939556709,  accuracy: 1.0
+[2025-09-26 12:02:36,456][flp2p.graph_runner][INFO] - Test, Round 162 : loss => 4.082665641888976,  accuracy: 0.5338
+[2025-09-26 12:02:36,462][flp2p.graph_runner][INFO] - Mean Distance between models : 9.947364616394044, Std between models : 0.10295012416700361
+[2025-09-26 12:02:46,025][flp2p.graph_runner][INFO] - Train, Round 163 : gradient_norm : 0.13354213693884542
+[2025-09-26 12:02:50,416][flp2p.graph_runner][INFO] - Train, Round 163 : loss => 0.0006469983417434689,  accuracy: 1.0
+[2025-09-26 12:02:50,416][flp2p.graph_runner][INFO] - Test, Round 163 : loss => 4.084181522512436,  accuracy: 0.5347
+[2025-09-26 12:02:50,419][flp2p.graph_runner][INFO] - Mean Distance between models : 9.948337745666503, Std between models : 0.1029551096229453
+[2025-09-26 12:02:59,941][flp2p.graph_runner][INFO] - Train, Round 164 : gradient_norm : 0.11331966349607536
+[2025-09-26 12:03:04,406][flp2p.graph_runner][INFO] - Train, Round 164 : loss => 0.0006424334677174994,  accuracy: 1.0
+[2025-09-26 12:03:04,407][flp2p.graph_runner][INFO] - Test, Round 164 : loss => 4.0880806962266565,  accuracy: 0.5341
+[2025-09-26 12:03:04,410][flp2p.graph_runner][INFO] - Mean Distance between models : 9.949292543199327, Std between models : 0.1029554630511331
+[2025-09-26 12:03:13,940][flp2p.graph_runner][INFO] - Train, Round 165 : gradient_norm : 0.136346067339255
+[2025-09-26 12:03:18,336][flp2p.graph_runner][INFO] - Train, Round 165 : loss => 0.0006383394063936687,  accuracy: 1.0
+[2025-09-26 12:03:18,336][flp2p.graph_runner][INFO] - Test, Round 165 : loss => 4.088634223818779,  accuracy: 0.5339
+[2025-09-26 12:03:18,338][flp2p.graph_runner][INFO] - Mean Distance between models : 9.950221951802572, Std between models : 0.10295546353348396
+[2025-09-26 12:03:27,869][flp2p.graph_runner][INFO] - Train, Round 166 : gradient_norm : 0.1398875225664713
+[2025-09-26 12:03:32,305][flp2p.graph_runner][INFO] - Train, Round 166 : loss => 0.0006367973340424721,  accuracy: 1.0
+[2025-09-26 12:03:32,305][flp2p.graph_runner][INFO] - Test, Round 166 : loss => 4.090578573232889,  accuracy: 0.5342
+[2025-09-26 12:03:32,310][flp2p.graph_runner][INFO] - Mean Distance between models : 9.951130019293892, Std between models : 0.10296283834881367
+[2025-09-26 12:03:41,884][flp2p.graph_runner][INFO] - Train, Round 167 : gradient_norm : 0.14136719976466777
+[2025-09-26 12:03:46,303][flp2p.graph_runner][INFO] - Train, Round 167 : loss => 0.0006298982086805097,  accuracy: 1.0
+[2025-09-26 12:03:46,303][flp2p.graph_runner][INFO] - Test, Round 167 : loss => 4.093077219040691,  accuracy: 0.5333
+[2025-09-26 12:03:46,307][flp2p.graph_runner][INFO] - Mean Distance between models : 9.952034611172147, Std between models : 0.102962255313557
+[2025-09-26 12:03:55,839][flp2p.graph_runner][INFO] - Train, Round 168 : gradient_norm : 0.1211810854528014
+[2025-09-26 12:04:00,227][flp2p.graph_runner][INFO] - Train, Round 168 : loss => 0.000625258320682797,  accuracy: 1.0
+[2025-09-26 12:04:00,227][flp2p.graph_runner][INFO] - Test, Round 168 : loss => 4.095206725500524,  accuracy: 0.534
+[2025-09-26 12:04:00,233][flp2p.graph_runner][INFO] - Mean Distance between models : 9.952899593777127, Std between models : 0.10296269677946561
+[2025-09-26 12:04:09,723][flp2p.graph_runner][INFO] - Train, Round 169 : gradient_norm : 0.11584424211988545
+[2025-09-26 12:04:14,124][flp2p.graph_runner][INFO] - Train, Round 169 : loss => 0.0006237722735828424,  accuracy: 1.0
+[2025-09-26 12:04:14,124][flp2p.graph_runner][INFO] - Test, Round 169 : loss => 4.09767625028938,  accuracy: 0.5342
+[2025-09-26 12:04:14,127][flp2p.graph_runner][INFO] - Mean Distance between models : 9.953770467970106, Std between models : 0.1029676681564535
+[2025-09-26 12:04:23,777][flp2p.graph_runner][INFO] - Train, Round 170 : gradient_norm : 0.14618521592490147
+[2025-09-26 12:04:28,223][flp2p.graph_runner][INFO] - Train, Round 170 : loss => 0.0006206162997058745,  accuracy: 1.0
+[2025-09-26 12:04:28,224][flp2p.graph_runner][INFO] - Test, Round 170 : loss => 4.0984458806067705,  accuracy: 0.5334
+[2025-09-26 12:04:28,227][flp2p.graph_runner][INFO] - Mean Distance between models : 9.954632335238987, Std between models : 0.10296758074375847
+[2025-09-26 12:04:37,763][flp2p.graph_runner][INFO] - Train, Round 171 : gradient_norm : 0.144041118538953
+[2025-09-26 12:04:42,157][flp2p.graph_runner][INFO] - Train, Round 171 : loss => 0.0006154216306513954,  accuracy: 1.0
+[2025-09-26 12:04:42,158][flp2p.graph_runner][INFO] - Test, Round 171 : loss => 4.101696740078926,  accuracy: 0.5342
+[2025-09-26 12:04:42,163][flp2p.graph_runner][INFO] - Mean Distance between models : 9.955454529656304, Std between models : 0.10296385828309461
+[2025-09-26 12:04:51,700][flp2p.graph_runner][INFO] - Train, Round 172 : gradient_norm : 0.14342345218993036
+[2025-09-26 12:04:56,112][flp2p.graph_runner][INFO] - Train, Round 172 : loss => 0.0006134948792132031,  accuracy: 1.0
+[2025-09-26 12:04:56,112][flp2p.graph_runner][INFO] - Test, Round 172 : loss => 4.10129867297858,  accuracy: 0.5338
+[2025-09-26 12:04:56,116][flp2p.graph_runner][INFO] - Mean Distance between models : 9.956274244520399, Std between models : 0.10297448406374926
+[2025-09-26 12:05:05,649][flp2p.graph_runner][INFO] - Train, Round 173 : gradient_norm : 0.1300565151377438
+[2025-09-26 12:05:10,061][flp2p.graph_runner][INFO] - Train, Round 173 : loss => 0.0006095042965401413,  accuracy: 1.0
+[2025-09-26 12:05:10,061][flp2p.graph_runner][INFO] - Test, Round 173 : loss => 4.104831877334416,  accuracy: 0.5336
+[2025-09-26 12:05:10,065][flp2p.graph_runner][INFO] - Mean Distance between models : 9.957076496548122, Std between models : 0.1029739597444538
+[2025-09-26 12:05:19,611][flp2p.graph_runner][INFO] - Train, Round 174 : gradient_norm : 0.12826834379665436
+[2025-09-26 12:05:24,092][flp2p.graph_runner][INFO] - Train, Round 174 : loss => 0.0006054383006294647,  accuracy: 1.0
+[2025-09-26 12:05:24,092][flp2p.graph_runner][INFO] - Test, Round 174 : loss => 4.10608828073591,  accuracy: 0.5341
+[2025-09-26 12:05:24,096][flp2p.graph_runner][INFO] - Mean Distance between models : 9.957868088616266, Std between models : 0.10296877158002748
+[2025-09-26 12:05:33,632][flp2p.graph_runner][INFO] - Train, Round 175 : gradient_norm : 0.11352266726594802
+[2025-09-26 12:05:37,991][flp2p.graph_runner][INFO] - Train, Round 175 : loss => 0.0006016816885307831,  accuracy: 1.0
+[2025-09-26 12:05:37,991][flp2p.graph_runner][INFO] - Test, Round 175 : loss => 4.108764836528898,  accuracy: 0.533
+[2025-09-26 12:05:37,994][flp2p.graph_runner][INFO] - Mean Distance between models : 9.958631727430555, Std between models : 0.10296045022795695
+[2025-09-26 12:05:47,597][flp2p.graph_runner][INFO] - Train, Round 176 : gradient_norm : 0.1410067118192794
+[2025-09-26 12:05:52,008][flp2p.graph_runner][INFO] - Train, Round 176 : loss => 0.0006011022490602506,  accuracy: 1.0
+[2025-09-26 12:05:52,008][flp2p.graph_runner][INFO] - Test, Round 176 : loss => 4.110835574258864,  accuracy: 0.5337
+[2025-09-26 12:05:52,013][flp2p.graph_runner][INFO] - Mean Distance between models : 9.959388690524632, Std between models : 0.10296445229942387
+[2025-09-26 12:06:01,484][flp2p.graph_runner][INFO] - Train, Round 177 : gradient_norm : 0.11002570228371131
+[2025-09-26 12:06:05,931][flp2p.graph_runner][INFO] - Train, Round 177 : loss => 0.0005938950806334497,  accuracy: 1.0
+[2025-09-26 12:06:05,931][flp2p.graph_runner][INFO] - Test, Round 177 : loss => 4.113326948180795,  accuracy: 0.5354
+[2025-09-26 12:06:05,933][flp2p.graph_runner][INFO] - Mean Distance between models : 9.960133298238118, Std between models : 0.10296761483411153
+[2025-09-26 12:06:15,493][flp2p.graph_runner][INFO] - Train, Round 178 : gradient_norm : 0.12487498443313076
+[2025-09-26 12:06:19,842][flp2p.graph_runner][INFO] - Train, Round 178 : loss => 0.0005909672924103746,  accuracy: 1.0
+[2025-09-26 12:06:19,842][flp2p.graph_runner][INFO] - Test, Round 178 : loss => 4.115145808917284,  accuracy: 0.5336
+[2025-09-26 12:06:19,846][flp2p.graph_runner][INFO] - Mean Distance between models : 9.960870170593262, Std between models : 0.10296503037953902
+[2025-09-26 12:06:29,415][flp2p.graph_runner][INFO] - Train, Round 179 : gradient_norm : 0.10222885989937372
+[2025-09-26 12:06:33,822][flp2p.graph_runner][INFO] - Train, Round 179 : loss => 0.00058820773451368,  accuracy: 1.0
+[2025-09-26 12:06:33,823][flp2p.graph_runner][INFO] - Test, Round 179 : loss => 4.116064026722312,  accuracy: 0.5345
+[2025-09-26 12:06:33,827][flp2p.graph_runner][INFO] - Mean Distance between models : 9.961589346991644, Std between models : 0.10296357872364384
+[2025-09-26 12:06:43,364][flp2p.graph_runner][INFO] - Train, Round 180 : gradient_norm : 0.11357306890147963
+[2025-09-26 12:06:47,759][flp2p.graph_runner][INFO] - Train, Round 180 : loss => 0.0005862278286131877,  accuracy: 1.0
+[2025-09-26 12:06:47,759][flp2p.graph_runner][INFO] - Test, Round 180 : loss => 4.116721548566222,  accuracy: 0.5347
+[2025-09-26 12:06:47,762][flp2p.graph_runner][INFO] - Mean Distance between models : 9.962291844685872, Std between models : 0.10296657553070337
+[2025-09-26 12:06:57,282][flp2p.graph_runner][INFO] - Train, Round 181 : gradient_norm : 0.10892959642539979
+[2025-09-26 12:07:01,693][flp2p.graph_runner][INFO] - Train, Round 181 : loss => 0.0005830130542413319,  accuracy: 1.0
+[2025-09-26 12:07:01,693][flp2p.graph_runner][INFO] - Test, Round 181 : loss => 4.119340728239715,  accuracy: 0.5347
+[2025-09-26 12:07:01,698][flp2p.graph_runner][INFO] - Mean Distance between models : 9.962981012132433, Std between models : 0.10296917327174239
+[2025-09-26 12:07:11,238][flp2p.graph_runner][INFO] - Train, Round 182 : gradient_norm : 0.11760967792459624
+[2025-09-26 12:07:15,627][flp2p.graph_runner][INFO] - Train, Round 182 : loss => 0.0005801264177477341,  accuracy: 1.0
+[2025-09-26 12:07:15,627][flp2p.graph_runner][INFO] - Test, Round 182 : loss => 4.121314939203859,  accuracy: 0.5337
+[2025-09-26 12:07:15,629][flp2p.graph_runner][INFO] - Mean Distance between models : 9.963663164774577, Std between models : 0.10296919651751518
+[2025-09-26 12:07:25,159][flp2p.graph_runner][INFO] - Train, Round 183 : gradient_norm : 0.12094577844506571
+[2025-09-26 12:07:29,539][flp2p.graph_runner][INFO] - Train, Round 183 : loss => 0.0005788374659045352,  accuracy: 1.0
+[2025-09-26 12:07:29,540][flp2p.graph_runner][INFO] - Test, Round 183 : loss => 4.122069650524855,  accuracy: 0.5343
+[2025-09-26 12:07:29,546][flp2p.graph_runner][INFO] - Mean Distance between models : 9.964321115281846, Std between models : 0.10297083994245868
+[2025-09-26 12:07:39,066][flp2p.graph_runner][INFO] - Train, Round 184 : gradient_norm : 0.09772522960988164
+[2025-09-26 12:07:43,523][flp2p.graph_runner][INFO] - Train, Round 184 : loss => 0.0005784642614079403,  accuracy: 1.0
+[2025-09-26 12:07:43,523][flp2p.graph_runner][INFO] - Test, Round 184 : loss => 4.122172005394101,  accuracy: 0.5349
+[2025-09-26 12:07:43,527][flp2p.graph_runner][INFO] - Mean Distance between models : 9.964962175157336, Std between models : 0.1029679572135592
+[2025-09-26 12:07:53,054][flp2p.graph_runner][INFO] - Train, Round 185 : gradient_norm : 0.12634293338733588
+[2025-09-26 12:07:57,473][flp2p.graph_runner][INFO] - Train, Round 185 : loss => 0.0005733518681085162,  accuracy: 1.0
+[2025-09-26 12:07:57,473][flp2p.graph_runner][INFO] - Test, Round 185 : loss => 4.124356370270252,  accuracy: 0.5333
+[2025-09-26 12:07:57,476][flp2p.graph_runner][INFO] - Mean Distance between models : 9.965606668260362, Std between models : 0.1029679062624999
+[2025-09-26 12:08:07,009][flp2p.graph_runner][INFO] - Train, Round 186 : gradient_norm : 0.11703828608517138
+[2025-09-26 12:08:11,439][flp2p.graph_runner][INFO] - Train, Round 186 : loss => 0.0005704170024417387,  accuracy: 1.0
+[2025-09-26 12:08:11,439][flp2p.graph_runner][INFO] - Test, Round 186 : loss => 4.126489404936135,  accuracy: 0.5333
+[2025-09-26 12:08:11,441][flp2p.graph_runner][INFO] - Mean Distance between models : 9.966222551133898, Std between models : 0.10296490362850813
+[2025-09-26 12:08:20,999][flp2p.graph_runner][INFO] - Train, Round 187 : gradient_norm : 0.1126795667387773
+[2025-09-26 12:08:25,390][flp2p.graph_runner][INFO] - Train, Round 187 : loss => 0.0005664814112721235,  accuracy: 1.0
+[2025-09-26 12:08:25,390][flp2p.graph_runner][INFO] - Test, Round 187 : loss => 4.128464936718345,  accuracy: 0.534
+[2025-09-26 12:08:25,392][flp2p.graph_runner][INFO] - Mean Distance between models : 9.966841125488282, Std between models : 0.10296844172315815
+[2025-09-26 12:08:34,891][flp2p.graph_runner][INFO] - Train, Round 188 : gradient_norm : 0.11994472683725602
+[2025-09-26 12:08:39,294][flp2p.graph_runner][INFO] - Train, Round 188 : loss => 0.0005644620617975398,  accuracy: 1.0
+[2025-09-26 12:08:39,294][flp2p.graph_runner][INFO] - Test, Round 188 : loss => 4.130405822385848,  accuracy: 0.5339
+[2025-09-26 12:08:39,296][flp2p.graph_runner][INFO] - Mean Distance between models : 9.967444059583876, Std between models : 0.10296688510784369
+[2025-09-26 12:08:48,934][flp2p.graph_runner][INFO] - Train, Round 189 : gradient_norm : 0.12129147549865024
+[2025-09-26 12:08:53,385][flp2p.graph_runner][INFO] - Train, Round 189 : loss => 0.0005619365964165913,  accuracy: 1.0
+[2025-09-26 12:08:53,386][flp2p.graph_runner][INFO] - Test, Round 189 : loss => 4.132323305134475,  accuracy: 0.5344
+[2025-09-26 12:08:53,388][flp2p.graph_runner][INFO] - Mean Distance between models : 9.96803510453966, Std between models : 0.10297377570820666
+[2025-09-26 12:09:03,003][flp2p.graph_runner][INFO] - Train, Round 190 : gradient_norm : 0.11518022169211332
+[2025-09-26 12:09:07,431][flp2p.graph_runner][INFO] - Train, Round 190 : loss => 0.0005602439536117724,  accuracy: 1.0
+[2025-09-26 12:09:07,432][flp2p.graph_runner][INFO] - Test, Round 190 : loss => 4.131225100728869,  accuracy: 0.534
+[2025-09-26 12:09:07,434][flp2p.graph_runner][INFO] - Mean Distance between models : 9.968607902526855, Std between models : 0.10297079212216133
+[2025-09-26 12:09:17,005][flp2p.graph_runner][INFO] - Train, Round 191 : gradient_norm : 0.10607490761510181
+[2025-09-26 12:09:21,413][flp2p.graph_runner][INFO] - Train, Round 191 : loss => 0.0005581046201515636,  accuracy: 1.0
+[2025-09-26 12:09:21,413][flp2p.graph_runner][INFO] - Test, Round 191 : loss => 4.134099937328696,  accuracy: 0.5346
+[2025-09-26 12:09:21,416][flp2p.graph_runner][INFO] - Mean Distance between models : 9.96916881137424, Std between models : 0.10297280049574796
+[2025-09-26 12:09:30,920][flp2p.graph_runner][INFO] - Train, Round 192 : gradient_norm : 0.11390912654304022
+[2025-09-26 12:09:35,331][flp2p.graph_runner][INFO] - Train, Round 192 : loss => 0.0005548812107929424,  accuracy: 1.0
+[2025-09-26 12:09:35,331][flp2p.graph_runner][INFO] - Test, Round 192 : loss => 4.1352136514037845,  accuracy: 0.534
+[2025-09-26 12:09:35,333][flp2p.graph_runner][INFO] - Mean Distance between models : 9.96972696516249, Std between models : 0.10296768399451987
+[2025-09-26 12:09:44,884][flp2p.graph_runner][INFO] - Train, Round 193 : gradient_norm : 0.10980119851133785
+[2025-09-26 12:09:49,280][flp2p.graph_runner][INFO] - Train, Round 193 : loss => 0.0005501123636303752,  accuracy: 1.0
+[2025-09-26 12:09:49,280][flp2p.graph_runner][INFO] - Test, Round 193 : loss => 4.136182276037335,  accuracy: 0.5336
+[2025-09-26 12:09:49,282][flp2p.graph_runner][INFO] - Mean Distance between models : 9.970271089341905, Std between models : 0.1029636733022787
+[2025-09-26 12:09:58,918][flp2p.graph_runner][INFO] - Train, Round 194 : gradient_norm : 0.11821626509550179
+[2025-09-26 12:10:03,350][flp2p.graph_runner][INFO] - Train, Round 194 : loss => 0.0005495527416027057,  accuracy: 1.0
+[2025-09-26 12:10:03,350][flp2p.graph_runner][INFO] - Test, Round 194 : loss => 4.137758589185775,  accuracy: 0.5342
+[2025-09-26 12:10:03,353][flp2p.graph_runner][INFO] - Mean Distance between models : 9.970810423956976, Std between models : 0.10296088443186104
+[2025-09-26 12:10:12,901][flp2p.graph_runner][INFO] - Train, Round 195 : gradient_norm : 0.1269298856963466
+[2025-09-26 12:10:17,282][flp2p.graph_runner][INFO] - Train, Round 195 : loss => 0.0005451896149057989,  accuracy: 1.0
+[2025-09-26 12:10:17,282][flp2p.graph_runner][INFO] - Test, Round 195 : loss => 4.1407035226494076,  accuracy: 0.5331
+[2025-09-26 12:10:17,287][flp2p.graph_runner][INFO] - Mean Distance between models : 9.971322123209635, Std between models : 0.10296649810859093
+[2025-09-26 12:10:26,811][flp2p.graph_runner][INFO] - Train, Round 196 : gradient_norm : 0.10663547518445637
+[2025-09-26 12:10:31,274][flp2p.graph_runner][INFO] - Train, Round 196 : loss => 0.0005433138176434839,  accuracy: 1.0
+[2025-09-26 12:10:31,274][flp2p.graph_runner][INFO] - Test, Round 196 : loss => 4.140165674938261,  accuracy: 0.5329
+[2025-09-26 12:10:31,278][flp2p.graph_runner][INFO] - Mean Distance between models : 9.971831152174207, Std between models : 0.10296631219411091
+[2025-09-26 12:10:40,791][flp2p.graph_runner][INFO] - Train, Round 197 : gradient_norm : 0.11583209610943854
+[2025-09-26 12:10:45,206][flp2p.graph_runner][INFO] - Train, Round 197 : loss => 0.0005415163190056911,  accuracy: 1.0
+[2025-09-26 12:10:45,206][flp2p.graph_runner][INFO] - Test, Round 197 : loss => 4.142901845882833,  accuracy: 0.5339
+[2025-09-26 12:10:45,208][flp2p.graph_runner][INFO] - Mean Distance between models : 9.972333187527127, Std between models : 0.10296809551987224
+[2025-09-26 12:10:54,831][flp2p.graph_runner][INFO] - Train, Round 198 : gradient_norm : 0.09785076863261896
+[2025-09-26 12:10:59,246][flp2p.graph_runner][INFO] - Train, Round 198 : loss => 0.0005402934720925398,  accuracy: 1.0
+[2025-09-26 12:10:59,246][flp2p.graph_runner][INFO] - Test, Round 198 : loss => 4.142236468686163,  accuracy: 0.5343
+[2025-09-26 12:10:59,251][flp2p.graph_runner][INFO] - Mean Distance between models : 9.972818989223905, Std between models : 0.10296817531793848
+[2025-09-26 12:11:08,724][flp2p.graph_runner][INFO] - Train, Round 199 : gradient_norm : 0.10122655405063705
+[2025-09-26 12:11:13,135][flp2p.graph_runner][INFO] - Train, Round 199 : loss => 0.0005354649504452143,  accuracy: 1.0
+[2025-09-26 12:11:13,136][flp2p.graph_runner][INFO] - Test, Round 199 : loss => 4.144276035061479,  accuracy: 0.5345
+[2025-09-26 12:11:13,138][flp2p.graph_runner][INFO] - Mean Distance between models : 9.973295974731446, Std between models : 0.10296928053521828
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 001: Loss=2.2939, Accuracy=0.130160
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 002: Loss=2.2730, Accuracy=0.173580
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 003: Loss=2.2220, Accuracy=0.205000
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 004: Loss=2.0973, Accuracy=0.240500
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 005: Loss=2.0076, Accuracy=0.262680
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 006: Loss=1.9571, Accuracy=0.290060
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 007: Loss=1.8702, Accuracy=0.316200
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 008: Loss=1.8482, Accuracy=0.330620
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 009: Loss=1.7895, Accuracy=0.357040
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 010: Loss=1.6969, Accuracy=0.378580
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 011: Loss=1.6904, Accuracy=0.391180
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 012: Loss=1.6303, Accuracy=0.404920
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 013: Loss=1.5847, Accuracy=0.426120
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 014: Loss=1.6245, Accuracy=0.428120
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 015: Loss=1.5847, Accuracy=0.435300
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 016: Loss=1.6650, Accuracy=0.424700
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 017: Loss=1.4665, Accuracy=0.480340
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 018: Loss=1.6043, Accuracy=0.443700
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 019: Loss=1.5684, Accuracy=0.468060
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 020: Loss=1.4208, Accuracy=0.495220
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 021: Loss=1.3908, Accuracy=0.511020
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 022: Loss=1.4010, Accuracy=0.508640
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 023: Loss=1.5178, Accuracy=0.490600
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 024: Loss=1.3727, Accuracy=0.532840
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 025: Loss=1.3130, Accuracy=0.563700
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 026: Loss=1.4271, Accuracy=0.544260
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 027: Loss=1.4983, Accuracy=0.528540
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 028: Loss=1.8218, Accuracy=0.493020
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 029: Loss=1.2424, Accuracy=0.601200
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 030: Loss=1.4827, Accuracy=0.562220
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 031: Loss=1.2379, Accuracy=0.611420
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 032: Loss=2.1393, Accuracy=0.488980
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 033: Loss=1.6543, Accuracy=0.559460
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 034: Loss=1.7378, Accuracy=0.628680
+[2025-09-26 12:11:13,139][__main__][INFO] - Train, Round 035: Loss=1.4905, Accuracy=0.629300
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 036: Loss=1.2090, Accuracy=0.661560
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 037: Loss=1.0187, Accuracy=0.746100
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 038: Loss=1.0493, Accuracy=0.747420
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 039: Loss=0.4841, Accuracy=0.840120
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 040: Loss=0.7201, Accuracy=0.819020
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 041: Loss=0.2132, Accuracy=0.939780
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 042: Loss=0.1980, Accuracy=0.941120
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 043: Loss=0.1963, Accuracy=0.951620
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 044: Loss=0.0568, Accuracy=0.991200
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 045: Loss=0.0621, Accuracy=0.986340
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 046: Loss=0.0394, Accuracy=0.993340
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 047: Loss=0.0605, Accuracy=0.987720
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 048: Loss=0.0189, Accuracy=0.999860
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 049: Loss=0.0193, Accuracy=0.998960
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 050: Loss=0.0157, Accuracy=0.999580
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 051: Loss=0.0119, Accuracy=0.999980
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 052: Loss=0.0097, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 053: Loss=0.0092, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 054: Loss=0.0096, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 055: Loss=0.0071, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 056: Loss=0.0067, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 057: Loss=0.0061, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 058: Loss=0.0060, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 059: Loss=0.0057, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 060: Loss=0.0049, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 061: Loss=0.0051, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 062: Loss=0.0043, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 063: Loss=0.0040, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 064: Loss=0.0039, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 065: Loss=0.0036, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 066: Loss=0.0037, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 067: Loss=0.0033, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 068: Loss=0.0031, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 069: Loss=0.0031, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 070: Loss=0.0030, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 071: Loss=0.0028, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 072: Loss=0.0026, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 073: Loss=0.0026, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 074: Loss=0.0026, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 075: Loss=0.0024, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 076: Loss=0.0024, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 077: Loss=0.0022, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 078: Loss=0.0022, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 079: Loss=0.0021, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 080: Loss=0.0020, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 081: Loss=0.0020, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 082: Loss=0.0019, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 083: Loss=0.0019, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 084: Loss=0.0018, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 085: Loss=0.0018, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 086: Loss=0.0017, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 087: Loss=0.0017, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 088: Loss=0.0017, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 089: Loss=0.0016, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 090: Loss=0.0016, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 091: Loss=0.0015, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 092: Loss=0.0015, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 093: Loss=0.0015, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 094: Loss=0.0015, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 095: Loss=0.0014, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 096: Loss=0.0014, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 097: Loss=0.0014, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 098: Loss=0.0013, Accuracy=1.000000
+[2025-09-26 12:11:13,140][__main__][INFO] - Train, Round 099: Loss=0.0013, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 100: Loss=0.0013, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 101: Loss=0.0013, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 102: Loss=0.0012, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 103: Loss=0.0012, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 104: Loss=0.0012, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 105: Loss=0.0012, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 106: Loss=0.0012, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 107: Loss=0.0011, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 108: Loss=0.0011, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 109: Loss=0.0011, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 110: Loss=0.0011, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 111: Loss=0.0011, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 112: Loss=0.0011, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 113: Loss=0.0011, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 114: Loss=0.0010, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 115: Loss=0.0010, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 116: Loss=0.0010, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 117: Loss=0.0010, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 118: Loss=0.0010, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 119: Loss=0.0010, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 120: Loss=0.0010, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 121: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 122: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 123: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 124: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 125: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 126: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 127: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 128: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 129: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 130: Loss=0.0009, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 131: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 132: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 133: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 134: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 135: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 136: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 137: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 138: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 139: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 140: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 141: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 142: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 143: Loss=0.0008, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 144: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 145: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 146: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 147: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 148: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 149: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,141][__main__][INFO] - Train, Round 150: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 151: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 152: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 153: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 154: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 155: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 156: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 157: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 158: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 159: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 160: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 161: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 162: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 163: Loss=0.0007, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 164: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 165: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 166: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 167: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 168: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 169: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 170: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 171: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 172: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 173: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 174: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 175: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 176: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 177: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 178: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 179: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 180: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 181: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 182: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 183: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 184: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 185: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 186: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 187: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 188: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 189: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 190: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 191: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 192: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 193: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 194: Loss=0.0006, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 195: Loss=0.0005, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 196: Loss=0.0005, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 197: Loss=0.0005, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 198: Loss=0.0005, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 199: Loss=0.0005, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Train, Round 200: Loss=0.0005, Accuracy=1.000000
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 001: Loss=2.2940, Accuracy=0.133600
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 002: Loss=2.2735, Accuracy=0.177500
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 003: Loss=2.2226, Accuracy=0.210100
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 004: Loss=2.1007, Accuracy=0.244800
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 005: Loss=2.0112, Accuracy=0.264500
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 006: Loss=1.9672, Accuracy=0.287400
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 007: Loss=1.8826, Accuracy=0.316200
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 008: Loss=1.8698, Accuracy=0.326900
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 009: Loss=1.8117, Accuracy=0.345300
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 010: Loss=1.7414, Accuracy=0.370000
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 011: Loss=1.7399, Accuracy=0.375300
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 012: Loss=1.6959, Accuracy=0.387800
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 013: Loss=1.6752, Accuracy=0.397900
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 014: Loss=1.7124, Accuracy=0.397800
+[2025-09-26 12:11:13,142][__main__][INFO] - Test, Round 015: Loss=1.7116, Accuracy=0.396800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 016: Loss=1.8003, Accuracy=0.385700
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 017: Loss=1.6279, Accuracy=0.430500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 018: Loss=1.7963, Accuracy=0.396500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 019: Loss=1.7740, Accuracy=0.408800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 020: Loss=1.6674, Accuracy=0.435200
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 021: Loss=1.6782, Accuracy=0.437500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 022: Loss=1.7172, Accuracy=0.435500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 023: Loss=1.8785, Accuracy=0.415500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 024: Loss=1.7974, Accuracy=0.434000
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 025: Loss=1.7904, Accuracy=0.451700
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 026: Loss=1.9641, Accuracy=0.435600
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 027: Loss=2.1173, Accuracy=0.412800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 028: Loss=2.5206, Accuracy=0.384400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 029: Loss=2.0197, Accuracy=0.443100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 030: Loss=2.3303, Accuracy=0.418200
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 031: Loss=2.2020, Accuracy=0.434900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 032: Loss=3.2361, Accuracy=0.364200
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 033: Loss=2.8612, Accuracy=0.399100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 034: Loss=3.0934, Accuracy=0.424100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 035: Loss=2.9651, Accuracy=0.428500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 036: Loss=2.8783, Accuracy=0.437900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 037: Loss=2.8124, Accuracy=0.464000
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 038: Loss=2.9888, Accuracy=0.458800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 039: Loss=2.5717, Accuracy=0.493000
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 040: Loss=2.9773, Accuracy=0.476500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 041: Loss=2.4968, Accuracy=0.519100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 042: Loss=2.6153, Accuracy=0.514100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 043: Loss=2.7301, Accuracy=0.519200
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 044: Loss=2.6186, Accuracy=0.528400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 045: Loss=2.7440, Accuracy=0.530300
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 046: Loss=2.7525, Accuracy=0.528800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 047: Loss=2.8843, Accuracy=0.530800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 048: Loss=2.8433, Accuracy=0.534900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 049: Loss=2.9283, Accuracy=0.533000
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 050: Loss=2.9673, Accuracy=0.533300
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 051: Loss=3.0064, Accuracy=0.536400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 052: Loss=3.0364, Accuracy=0.537900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 053: Loss=3.0888, Accuracy=0.536100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 054: Loss=3.1431, Accuracy=0.533400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 055: Loss=3.1476, Accuracy=0.534400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 056: Loss=3.1887, Accuracy=0.537000
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 057: Loss=3.2110, Accuracy=0.536400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 058: Loss=3.2587, Accuracy=0.535400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 059: Loss=3.2719, Accuracy=0.537400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 060: Loss=3.3017, Accuracy=0.535800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 061: Loss=3.3339, Accuracy=0.534600
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 062: Loss=3.3383, Accuracy=0.534100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 063: Loss=3.3665, Accuracy=0.535900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 064: Loss=3.3918, Accuracy=0.534400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 065: Loss=3.4077, Accuracy=0.536700
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 066: Loss=3.4375, Accuracy=0.534900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 067: Loss=3.4486, Accuracy=0.535100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 068: Loss=3.4637, Accuracy=0.535000
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 069: Loss=3.4860, Accuracy=0.534400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 070: Loss=3.5026, Accuracy=0.537100
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 071: Loss=3.5166, Accuracy=0.537500
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 072: Loss=3.5318, Accuracy=0.534700
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 073: Loss=3.5460, Accuracy=0.535900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 074: Loss=3.5663, Accuracy=0.535900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 075: Loss=3.5792, Accuracy=0.534700
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 076: Loss=3.5913, Accuracy=0.534400
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 077: Loss=3.6049, Accuracy=0.535900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 078: Loss=3.6203, Accuracy=0.534900
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 079: Loss=3.6288, Accuracy=0.534200
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 080: Loss=3.6344, Accuracy=0.535200
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 081: Loss=3.6508, Accuracy=0.535800
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 082: Loss=3.6637, Accuracy=0.534000
+[2025-09-26 12:11:13,143][__main__][INFO] - Test, Round 083: Loss=3.6739, Accuracy=0.535200
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 084: Loss=3.6850, Accuracy=0.535300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 085: Loss=3.6961, Accuracy=0.534000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 086: Loss=3.7062, Accuracy=0.534500
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 087: Loss=3.7183, Accuracy=0.534500
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 088: Loss=3.7279, Accuracy=0.536000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 089: Loss=3.7347, Accuracy=0.536200
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 090: Loss=3.7417, Accuracy=0.535900
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 091: Loss=3.7554, Accuracy=0.535600
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 092: Loss=3.7612, Accuracy=0.535100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 093: Loss=3.7745, Accuracy=0.534800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 094: Loss=3.7769, Accuracy=0.534800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 095: Loss=3.7856, Accuracy=0.536100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 096: Loss=3.7945, Accuracy=0.535300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 097: Loss=3.8056, Accuracy=0.534900
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 098: Loss=3.8107, Accuracy=0.533800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 099: Loss=3.8180, Accuracy=0.534300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 100: Loss=3.8246, Accuracy=0.533900
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 101: Loss=3.8314, Accuracy=0.534300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 102: Loss=3.8367, Accuracy=0.534600
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 103: Loss=3.8444, Accuracy=0.534400
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 104: Loss=3.8513, Accuracy=0.533900
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 105: Loss=3.8596, Accuracy=0.534800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 106: Loss=3.8658, Accuracy=0.534700
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 107: Loss=3.8734, Accuracy=0.533400
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 108: Loss=3.8749, Accuracy=0.533500
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 109: Loss=3.8836, Accuracy=0.535100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 110: Loss=3.8889, Accuracy=0.535000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 111: Loss=3.8943, Accuracy=0.534000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 112: Loss=3.8988, Accuracy=0.535400
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 113: Loss=3.9085, Accuracy=0.535000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 114: Loss=3.9085, Accuracy=0.534100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 115: Loss=3.9183, Accuracy=0.534200
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 116: Loss=3.9221, Accuracy=0.534800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 117: Loss=3.9256, Accuracy=0.534500
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 118: Loss=3.9322, Accuracy=0.534400
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 119: Loss=3.9354, Accuracy=0.534100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 120: Loss=3.9431, Accuracy=0.534000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 121: Loss=3.9453, Accuracy=0.533900
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 122: Loss=3.9531, Accuracy=0.534500
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 123: Loss=3.9537, Accuracy=0.534000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 124: Loss=3.9596, Accuracy=0.534300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 125: Loss=3.9637, Accuracy=0.533700
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 126: Loss=3.9697, Accuracy=0.534800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 127: Loss=3.9720, Accuracy=0.534100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 128: Loss=3.9774, Accuracy=0.534400
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 129: Loss=3.9820, Accuracy=0.535000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 130: Loss=3.9860, Accuracy=0.534800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 131: Loss=3.9890, Accuracy=0.533300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 132: Loss=3.9907, Accuracy=0.534100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 133: Loss=3.9960, Accuracy=0.533600
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 134: Loss=4.0005, Accuracy=0.534100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 135: Loss=4.0023, Accuracy=0.534300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 136: Loss=4.0094, Accuracy=0.533100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 137: Loss=4.0099, Accuracy=0.533700
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 138: Loss=4.0128, Accuracy=0.533300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 139: Loss=4.0187, Accuracy=0.534800
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 140: Loss=4.0198, Accuracy=0.534700
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 141: Loss=4.0228, Accuracy=0.534500
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 142: Loss=4.0273, Accuracy=0.534400
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 143: Loss=4.0291, Accuracy=0.533300
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 144: Loss=4.0316, Accuracy=0.534100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 145: Loss=4.0357, Accuracy=0.535100
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 146: Loss=4.0382, Accuracy=0.534700
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 147: Loss=4.0421, Accuracy=0.535000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 148: Loss=4.0461, Accuracy=0.533900
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 149: Loss=4.0479, Accuracy=0.535000
+[2025-09-26 12:11:13,144][__main__][INFO] - Test, Round 150: Loss=4.0494, Accuracy=0.534200
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 151: Loss=4.0533, Accuracy=0.533800
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 152: Loss=4.0569, Accuracy=0.534400
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 153: Loss=4.0597, Accuracy=0.534600
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 154: Loss=4.0608, Accuracy=0.533500
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 155: Loss=4.0637, Accuracy=0.534000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 156: Loss=4.0658, Accuracy=0.534200
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 157: Loss=4.0695, Accuracy=0.533800
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 158: Loss=4.0720, Accuracy=0.534000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 159: Loss=4.0732, Accuracy=0.534000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 160: Loss=4.0754, Accuracy=0.533700
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 161: Loss=4.0785, Accuracy=0.534200
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 162: Loss=4.0822, Accuracy=0.534600
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 163: Loss=4.0827, Accuracy=0.533800
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 164: Loss=4.0842, Accuracy=0.534700
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 165: Loss=4.0881, Accuracy=0.534100
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 166: Loss=4.0886, Accuracy=0.533900
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 167: Loss=4.0906, Accuracy=0.534200
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 168: Loss=4.0931, Accuracy=0.533300
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 169: Loss=4.0952, Accuracy=0.534000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 170: Loss=4.0977, Accuracy=0.534200
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 171: Loss=4.0984, Accuracy=0.533400
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 172: Loss=4.1017, Accuracy=0.534200
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 173: Loss=4.1013, Accuracy=0.533800
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 174: Loss=4.1048, Accuracy=0.533600
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 175: Loss=4.1061, Accuracy=0.534100
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 176: Loss=4.1088, Accuracy=0.533000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 177: Loss=4.1108, Accuracy=0.533700
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 178: Loss=4.1133, Accuracy=0.535400
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 179: Loss=4.1151, Accuracy=0.533600
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 180: Loss=4.1161, Accuracy=0.534500
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 181: Loss=4.1167, Accuracy=0.534700
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 182: Loss=4.1193, Accuracy=0.534700
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 183: Loss=4.1213, Accuracy=0.533700
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 184: Loss=4.1221, Accuracy=0.534300
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 185: Loss=4.1222, Accuracy=0.534900
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 186: Loss=4.1244, Accuracy=0.533300
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 187: Loss=4.1265, Accuracy=0.533300
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 188: Loss=4.1285, Accuracy=0.534000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 189: Loss=4.1304, Accuracy=0.533900
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 190: Loss=4.1323, Accuracy=0.534400
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 191: Loss=4.1312, Accuracy=0.534000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 192: Loss=4.1341, Accuracy=0.534600
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 193: Loss=4.1352, Accuracy=0.534000
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 194: Loss=4.1362, Accuracy=0.533600
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 195: Loss=4.1378, Accuracy=0.534200
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 196: Loss=4.1407, Accuracy=0.533100
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 197: Loss=4.1402, Accuracy=0.532900
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 198: Loss=4.1429, Accuracy=0.533900
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 199: Loss=4.1422, Accuracy=0.534300
+[2025-09-26 12:11:13,145][__main__][INFO] - Test, Round 200: Loss=4.1443, Accuracy=0.534500

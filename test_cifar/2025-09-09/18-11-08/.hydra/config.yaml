@@ -1,0 +1,32 @@
+data:
+  name: cifar10
+  root: ./data
+  batch_size: 10
+  num_workers: 2
+model:
+  name: lenet5
+  latent_dimension: 400
+  num_classes: 10
+  in_channels: 3
+  batch_norm: false
+partition:
+  name: dirichlet
+  num_clients: 100
+  strategy: dirichlet
+  dirichlet_alpha: 0.5
+client:
+  learning_rate: 0.01
+  weight_decay: 0.0001
+  momentum: 0.5
+train:
+  rounds: 100
+  local_epochs: 3
+  progress: true
+  participation_rate: 1
+graph:
+  name: random
+  topology: random
+  er_p: 1
+seed: 42
+use_cuda: true
+run_name: test_cifar

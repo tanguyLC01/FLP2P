@@ -1,0 +1,32 @@
+data:
+  name: cifar10
+  root: ./data
+  batch_size: 64
+  num_workers: 4
+model:
+  name: lenet5
+  latent_dimension: 400
+  num_classes: 10
+  in_channels: 3
+  batch_norm: false
+partition:
+  name: iid
+  num_clients: 100
+  strategy: iid
+client:
+  learning_rate: 0.01
+  weight_decay: 0.0005
+  momentum: 0
+train:
+  rounds: 200
+  local_epochs: 1
+  progress: true
+  participation_rate: 1
+graph:
+  name: random
+  topology: random
+  er_p: 1
+seed: 42
+use_cuda: true
+run_name: test_cifar10_noponderationpersample
+consensus_lr: 0.1

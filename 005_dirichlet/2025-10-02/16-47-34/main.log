@@ -1,0 +1,253 @@
+[2025-10-02 16:47:36,872][flp2p.graph_runner][INFO] - Data split check on random client
+[2025-10-02 16:47:37,005][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:47:43,924][flp2p.graph_runner][INFO] - Train, Round 0 : gradient_norm : 3.04197948600918
+[2025-10-02 16:48:11,365][flp2p.graph_runner][INFO] - Train, Round 0 : loss => 1.7985439037208757,  accuracy: 0.3275
+[2025-10-02 16:48:11,365][flp2p.graph_runner][INFO] - Test, Round 0 : loss => 2.9311239740651125,  accuracy: 0.10106, std: 0.029010340736106498
+[2025-10-02 16:48:11,407][flp2p.graph_runner][INFO] - Mean Distance between models : 0.34872386529325294, Std between models : 0.4564493887459794
+[2025-10-02 16:48:11,417][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:48:19,061][flp2p.graph_runner][INFO] - Train, Round 1 : gradient_norm : 2.869080207462211
+[2025-10-02 16:48:46,784][flp2p.graph_runner][INFO] - Train, Round 1 : loss => 1.1963807409505924,  accuracy: 0.59526
+[2025-10-02 16:48:46,785][flp2p.graph_runner][INFO] - Test, Round 1 : loss => 3.4908081068354795,  accuracy: 0.1011025, std: 0.029028078661821125
+[2025-10-02 16:48:46,823][flp2p.graph_runner][INFO] - Mean Distance between models : 0.6266874891872971, Std between models : 0.5077676313991419
+[2025-10-02 16:48:46,824][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:48:54,585][flp2p.graph_runner][INFO] - Train, Round 2 : gradient_norm : 1.9701068735151244
+[2025-10-02 16:49:22,253][flp2p.graph_runner][INFO] - Train, Round 2 : loss => 0.9657073227694596,  accuracy: 0.6809
+[2025-10-02 16:49:22,253][flp2p.graph_runner][INFO] - Test, Round 2 : loss => 3.6411858301253828,  accuracy: 0.1020675, std: 0.0294062297885159
+[2025-10-02 16:49:22,278][flp2p.graph_runner][INFO] - Mean Distance between models : 0.725712124667823, Std between models : 0.5039272181724944
+[2025-10-02 16:49:22,279][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:49:30,030][flp2p.graph_runner][INFO] - Train, Round 3 : gradient_norm : 2.2848657022481955
+[2025-10-02 16:49:57,861][flp2p.graph_runner][INFO] - Train, Round 3 : loss => 0.8026606683220221,  accuracy: 0.7394
+[2025-10-02 16:49:57,861][flp2p.graph_runner][INFO] - Test, Round 3 : loss => 3.9098213133538597,  accuracy: 0.1036325, std: 0.030120454272958355
+[2025-10-02 16:49:57,901][flp2p.graph_runner][INFO] - Mean Distance between models : 0.8258789714497442, Std between models : 0.4857421202225348
+[2025-10-02 16:49:57,901][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:50:05,229][flp2p.graph_runner][INFO] - Train, Round 4 : gradient_norm : 1.9579566164685276
+[2025-10-02 16:50:33,044][flp2p.graph_runner][INFO] - Train, Round 4 : loss => 0.6890901598716609,  accuracy: 0.77008
+[2025-10-02 16:50:33,045][flp2p.graph_runner][INFO] - Test, Round 4 : loss => 4.0972219865033574,  accuracy: 0.1030275, std: 0.02969785407592346
+[2025-10-02 16:50:33,081][flp2p.graph_runner][INFO] - Mean Distance between models : 0.8969306396959253, Std between models : 0.47284070069417417
+[2025-10-02 16:50:33,082][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:50:39,982][flp2p.graph_runner][INFO] - Train, Round 5 : gradient_norm : 1.8966164968187773
+[2025-10-02 16:51:07,751][flp2p.graph_runner][INFO] - Train, Round 5 : loss => 0.6731135728432931,  accuracy: 0.77342
+[2025-10-02 16:51:07,751][flp2p.graph_runner][INFO] - Test, Round 5 : loss => 4.197263246243166,  accuracy: 0.1047275, std: 0.03040956303321529
+[2025-10-02 16:51:07,782][flp2p.graph_runner][INFO] - Mean Distance between models : 0.9260800170903214, Std between models : 0.47247498256548986
+[2025-10-02 16:51:07,783][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:51:15,838][flp2p.graph_runner][INFO] - Train, Round 6 : gradient_norm : 1.7858079329049978
+[2025-10-02 16:51:43,592][flp2p.graph_runner][INFO] - Train, Round 6 : loss => 0.5872176699741108,  accuracy: 0.81326
+[2025-10-02 16:51:43,592][flp2p.graph_runner][INFO] - Test, Round 6 : loss => 4.372493175678192,  accuracy: 0.10677, std: 0.03112485489618536
+[2025-10-02 16:51:43,617][flp2p.graph_runner][INFO] - Mean Distance between models : 0.9922662383291679, Std between models : 0.4612607048639505
+[2025-10-02 16:51:43,618][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:51:50,758][flp2p.graph_runner][INFO] - Train, Round 7 : gradient_norm : 2.17987871690831
+[2025-10-02 16:52:18,541][flp2p.graph_runner][INFO] - Train, Round 7 : loss => 0.5606592496137327,  accuracy: 0.81906
+[2025-10-02 16:52:18,541][flp2p.graph_runner][INFO] - Test, Round 7 : loss => 4.456538975238798,  accuracy: 0.10653, std: 0.030993561184895727
+[2025-10-02 16:52:18,567][flp2p.graph_runner][INFO] - Mean Distance between models : 1.0253558948027113, Std between models : 0.4630048816559112
+[2025-10-02 16:52:18,568][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:52:26,406][flp2p.graph_runner][INFO] - Train, Round 8 : gradient_norm : 1.9122654909099799
+[2025-10-02 16:52:54,067][flp2p.graph_runner][INFO] - Train, Round 8 : loss => 0.531067848235109,  accuracy: 0.83616
+[2025-10-02 16:52:54,068][flp2p.graph_runner][INFO] - Test, Round 8 : loss => 4.551907480180641,  accuracy: 0.1081425, std: 0.031132606607600234
+[2025-10-02 16:52:54,094][flp2p.graph_runner][INFO] - Mean Distance between models : 1.062157210121409, Std between models : 0.4649419226101687
+[2025-10-02 16:52:54,094][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:53:02,048][flp2p.graph_runner][INFO] - Train, Round 9 : gradient_norm : 1.9284080715429792
+[2025-10-02 16:53:29,707][flp2p.graph_runner][INFO] - Train, Round 9 : loss => 0.5106135896301848,  accuracy: 0.84198
+[2025-10-02 16:53:29,708][flp2p.graph_runner][INFO] - Test, Round 9 : loss => 4.594665561815735,  accuracy: 0.1089075, std: 0.03135194864551634
+[2025-10-02 16:53:29,731][flp2p.graph_runner][INFO] - Mean Distance between models : 1.095383284974079, Std between models : 0.4737166933135284
+[2025-10-02 16:53:29,731][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:53:37,604][flp2p.graph_runner][INFO] - Train, Round 10 : gradient_norm : 1.7681893436582243
+[2025-10-02 16:54:05,351][flp2p.graph_runner][INFO] - Train, Round 10 : loss => 0.4973109320021546,  accuracy: 0.84196
+[2025-10-02 16:54:05,352][flp2p.graph_runner][INFO] - Test, Round 10 : loss => 4.720539661691448,  accuracy: 0.1082975, std: 0.031107289079930184
+[2025-10-02 16:54:05,374][flp2p.graph_runner][INFO] - Mean Distance between models : 1.122904129123363, Std between models : 0.466966140013473
+[2025-10-02 16:54:05,375][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:54:11,989][flp2p.graph_runner][INFO] - Train, Round 11 : gradient_norm : 2.0750787396343346
+[2025-10-02 16:54:39,728][flp2p.graph_runner][INFO] - Train, Round 11 : loss => 0.48823302190636353,  accuracy: 0.84414
+[2025-10-02 16:54:39,729][flp2p.graph_runner][INFO] - Test, Round 11 : loss => 4.741530544666727,  accuracy: 0.1084825, std: 0.031101931297486875
+[2025-10-02 16:54:39,781][flp2p.graph_runner][INFO] - Mean Distance between models : 1.1416357738921084, Std between models : 0.4663298698242117
+[2025-10-02 16:54:39,781][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:54:46,041][flp2p.graph_runner][INFO] - Train, Round 12 : gradient_norm : 2.0185522352231766
+[2025-10-02 16:55:13,770][flp2p.graph_runner][INFO] - Train, Round 12 : loss => 0.48734732675881753,  accuracy: 0.84422
+[2025-10-02 16:55:13,770][flp2p.graph_runner][INFO] - Test, Round 12 : loss => 4.796956619221694,  accuracy: 0.10897, std: 0.03129861083179252
+[2025-10-02 16:55:13,799][flp2p.graph_runner][INFO] - Mean Distance between models : 1.1566100031304627, Std between models : 0.45842748905671715
+[2025-10-02 16:55:13,800][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:55:20,675][flp2p.graph_runner][INFO] - Train, Round 13 : gradient_norm : 2.5446396107102527
+[2025-10-02 16:55:48,584][flp2p.graph_runner][INFO] - Train, Round 13 : loss => 0.47368714659893457,  accuracy: 0.84826
+[2025-10-02 16:55:48,584][flp2p.graph_runner][INFO] - Test, Round 13 : loss => 4.818936432205189,  accuracy: 0.110255, std: 0.031730896655507546
+[2025-10-02 16:55:48,617][flp2p.graph_runner][INFO] - Mean Distance between models : 1.1816905049153437, Std between models : 0.4640190008523086
+[2025-10-02 16:55:48,618][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:55:55,596][flp2p.graph_runner][INFO] - Train, Round 14 : gradient_norm : 2.381376162743706
+[2025-10-02 16:56:23,365][flp2p.graph_runner][INFO] - Train, Round 14 : loss => 0.45767246054446825,  accuracy: 0.85088
+[2025-10-02 16:56:23,365][flp2p.graph_runner][INFO] - Test, Round 14 : loss => 4.904916508410388,  accuracy: 0.11096, std: 0.03199219259340619
+[2025-10-02 16:56:23,384][flp2p.graph_runner][INFO] - Mean Distance between models : 1.215207973614526, Std between models : 0.47022347653301166
+[2025-10-02 16:56:23,384][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:56:30,903][flp2p.graph_runner][INFO] - Train, Round 15 : gradient_norm : 1.7491828696286416
+[2025-10-02 16:56:59,040][flp2p.graph_runner][INFO] - Train, Round 15 : loss => 0.4471579990764412,  accuracy: 0.85504
+[2025-10-02 16:56:59,040][flp2p.graph_runner][INFO] - Test, Round 15 : loss => 5.006539548696226,  accuracy: 0.1116525, std: 0.032204337986070974
+[2025-10-02 16:56:59,083][flp2p.graph_runner][INFO] - Mean Distance between models : 1.2465637607810398, Std between models : 0.4842854323166194
+[2025-10-02 16:56:59,083][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:57:05,732][flp2p.graph_runner][INFO] - Train, Round 16 : gradient_norm : 2.182864537022029
+[2025-10-02 16:57:34,053][flp2p.graph_runner][INFO] - Train, Round 16 : loss => 0.4364441976534024,  accuracy: 0.8586
+[2025-10-02 16:57:34,053][flp2p.graph_runner][INFO] - Test, Round 16 : loss => 5.042378327003711,  accuracy: 0.1118025, std: 0.032223262842953904
+[2025-10-02 16:57:34,075][flp2p.graph_runner][INFO] - Mean Distance between models : 1.2653824777867742, Std between models : 0.4891612272666223
+[2025-10-02 16:57:34,076][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:57:41,083][flp2p.graph_runner][INFO] - Train, Round 17 : gradient_norm : 1.5498613430403936
+[2025-10-02 16:58:09,251][flp2p.graph_runner][INFO] - Train, Round 17 : loss => 0.4348924845296287,  accuracy: 0.85998
+[2025-10-02 16:58:09,251][flp2p.graph_runner][INFO] - Test, Round 17 : loss => 5.081597305634979,  accuracy: 0.1125475, std: 0.03236725260076726
+[2025-10-02 16:58:09,291][flp2p.graph_runner][INFO] - Mean Distance between models : 1.2804943943563372, Std between models : 0.49547129356757025
+[2025-10-02 16:58:09,292][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:58:16,407][flp2p.graph_runner][INFO] - Train, Round 18 : gradient_norm : 1.9591080555282507
+[2025-10-02 16:58:45,630][flp2p.graph_runner][INFO] - Train, Round 18 : loss => 0.4202627781393957,  accuracy: 0.86214
+[2025-10-02 16:58:45,630][flp2p.graph_runner][INFO] - Test, Round 18 : loss => 5.119228128528899,  accuracy: 0.1127125, std: 0.03240049902200581
+[2025-10-02 16:58:45,670][flp2p.graph_runner][INFO] - Mean Distance between models : 1.3045362205053561, Std between models : 0.49554320522874745
+[2025-10-02 16:58:45,670][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 16:58:53,069][flp2p.graph_runner][INFO] - Train, Round 19 : gradient_norm : 2.6958965619766873
+[2025-10-02 16:59:22,364][flp2p.graph_runner][INFO] - Train, Round 19 : loss => 0.4104278719522132,  accuracy: 0.86316
+[2025-10-02 16:59:22,364][flp2p.graph_runner][INFO] - Test, Round 19 : loss => 5.165879692697222,  accuracy: 0.11322, std: 0.03259619057113883
+[2025-10-02 16:59:22,409][flp2p.graph_runner][INFO] - Mean Distance between models : 1.3306678813929933, Std between models : 0.4999887045403778
+[2025-10-02 16:59:22,409][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 16:59:29,644][flp2p.graph_runner][INFO] - Train, Round 20 : gradient_norm : 2.3930272807965074
+[2025-10-02 16:59:58,925][flp2p.graph_runner][INFO] - Train, Round 20 : loss => 0.39987826417325967,  accuracy: 0.86446
+[2025-10-02 16:59:58,925][flp2p.graph_runner][INFO] - Test, Round 20 : loss => 5.255706539541293,  accuracy: 0.11351, std: 0.03258128673020901
+[2025-10-02 16:59:58,970][flp2p.graph_runner][INFO] - Mean Distance between models : 1.355380300950641, Std between models : 0.5037915607633128
+[2025-10-02 16:59:58,970][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:00:06,524][flp2p.graph_runner][INFO] - Train, Round 21 : gradient_norm : 1.4344817876967773
+[2025-10-02 17:00:36,073][flp2p.graph_runner][INFO] - Train, Round 21 : loss => 0.3927623403272856,  accuracy: 0.8649
+[2025-10-02 17:00:36,073][flp2p.graph_runner][INFO] - Test, Round 21 : loss => 5.301518980636719,  accuracy: 0.113445, std: 0.032591878354639114
+[2025-10-02 17:00:36,113][flp2p.graph_runner][INFO] - Mean Distance between models : 1.3771978402152085, Std between models : 0.5145198169573659
+[2025-10-02 17:00:36,114][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:00:44,397][flp2p.graph_runner][INFO] - Train, Round 22 : gradient_norm : 0.98466713345148
+[2025-10-02 17:01:13,951][flp2p.graph_runner][INFO] - Train, Round 22 : loss => 0.3843465834972594,  accuracy: 0.87054
+[2025-10-02 17:01:13,951][flp2p.graph_runner][INFO] - Test, Round 22 : loss => 5.30299717039819,  accuracy: 0.114505, std: 0.032789631481839554
+[2025-10-02 17:01:14,002][flp2p.graph_runner][INFO] - Mean Distance between models : 1.3965899729193785, Std between models : 0.527366690111698
+[2025-10-02 17:01:14,003][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:01:21,045][flp2p.graph_runner][INFO] - Train, Round 23 : gradient_norm : 1.8105609091276005
+[2025-10-02 17:01:50,544][flp2p.graph_runner][INFO] - Train, Round 23 : loss => 0.37976998970146175,  accuracy: 0.87172
+[2025-10-02 17:01:50,545][flp2p.graph_runner][INFO] - Test, Round 23 : loss => 5.345202556233497,  accuracy: 0.11433, std: 0.03278377304631582
+[2025-10-02 17:01:50,591][flp2p.graph_runner][INFO] - Mean Distance between models : 1.4117723712745385, Std between models : 0.5349931084002435
+[2025-10-02 17:01:50,592][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:01:56,846][flp2p.graph_runner][INFO] - Train, Round 24 : gradient_norm : 2.1951518042484914
+[2025-10-02 17:02:26,339][flp2p.graph_runner][INFO] - Train, Round 24 : loss => 0.37722082607038954,  accuracy: 0.8713
+[2025-10-02 17:02:26,339][flp2p.graph_runner][INFO] - Test, Round 24 : loss => 5.375163261677808,  accuracy: 0.114375, std: 0.0328354943001258
+[2025-10-02 17:02:26,385][flp2p.graph_runner][INFO] - Mean Distance between models : 1.422925237294, Std between models : 0.5304845306513692
+[2025-10-02 17:02:26,386][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:02:33,452][flp2p.graph_runner][INFO] - Train, Round 25 : gradient_norm : 1.7873524456384369
+[2025-10-02 17:03:03,098][flp2p.graph_runner][INFO] - Train, Round 25 : loss => 0.3760958704513852,  accuracy: 0.86852
+[2025-10-02 17:03:03,098][flp2p.graph_runner][INFO] - Test, Round 25 : loss => 5.4096305852862665,  accuracy: 0.113345, std: 0.032665671389998624
+[2025-10-02 17:03:03,187][flp2p.graph_runner][INFO] - Mean Distance between models : 1.4401246569095514, Std between models : 0.5364958588791582
+[2025-10-02 17:03:03,188][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:03:11,157][flp2p.graph_runner][INFO] - Train, Round 26 : gradient_norm : 1.1844051701904026
+[2025-10-02 17:03:40,688][flp2p.graph_runner][INFO] - Train, Round 26 : loss => 0.37108174536788696,  accuracy: 0.8713
+[2025-10-02 17:03:40,688][flp2p.graph_runner][INFO] - Test, Round 26 : loss => 5.445062893325356,  accuracy: 0.1143025, std: 0.03285623128589918
+[2025-10-02 17:03:40,758][flp2p.graph_runner][INFO] - Mean Distance between models : 1.4554755149265894, Std between models : 0.5393468677797145
+[2025-10-02 17:03:40,759][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:03:47,488][flp2p.graph_runner][INFO] - Train, Round 27 : gradient_norm : 1.4820472504044084
+[2025-10-02 17:04:16,924][flp2p.graph_runner][INFO] - Train, Round 27 : loss => 0.36833823941787136,  accuracy: 0.8722
+[2025-10-02 17:04:16,924][flp2p.graph_runner][INFO] - Test, Round 27 : loss => 5.475456813338457,  accuracy: 0.11413, std: 0.03278222271429812
+[2025-10-02 17:04:16,981][flp2p.graph_runner][INFO] - Mean Distance between models : 1.4648488537575572, Std between models : 0.541935104621818
+[2025-10-02 17:04:16,981][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:04:23,978][flp2p.graph_runner][INFO] - Train, Round 28 : gradient_norm : 1.5384337428143549
+[2025-10-02 17:04:53,686][flp2p.graph_runner][INFO] - Train, Round 28 : loss => 0.36612689116897057,  accuracy: 0.87248
+[2025-10-02 17:04:53,686][flp2p.graph_runner][INFO] - Test, Round 28 : loss => 5.48499482870102,  accuracy: 0.1145925, std: 0.03293322882268758
+[2025-10-02 17:04:53,735][flp2p.graph_runner][INFO] - Mean Distance between models : 1.4765015506830352, Std between models : 0.5473327869752668
+[2025-10-02 17:04:53,735][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:05:00,444][flp2p.graph_runner][INFO] - Train, Round 29 : gradient_norm : 1.824282369614251
+[2025-10-02 17:05:30,086][flp2p.graph_runner][INFO] - Train, Round 29 : loss => 0.3620580364707403,  accuracy: 0.87402
+[2025-10-02 17:05:30,086][flp2p.graph_runner][INFO] - Test, Round 29 : loss => 5.5327098339226595,  accuracy: 0.11472, std: 0.032950326987897634
+[2025-10-02 17:05:30,144][flp2p.graph_runner][INFO] - Mean Distance between models : 1.4932555929447213, Std between models : 0.5489526561515005
+[2025-10-02 17:05:30,145][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:05:37,817][flp2p.graph_runner][INFO] - Train, Round 30 : gradient_norm : 1.1781634693920213
+[2025-10-02 17:06:07,392][flp2p.graph_runner][INFO] - Train, Round 30 : loss => 0.3560962186642894,  accuracy: 0.87618
+[2025-10-02 17:06:07,392][flp2p.graph_runner][INFO] - Test, Round 30 : loss => 5.553587014697918,  accuracy: 0.11688, std: 0.03372654495418816
+[2025-10-02 17:06:07,453][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5105941272651155, Std between models : 0.5517357994167921
+[2025-10-02 17:06:07,453][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:06:14,792][flp2p.graph_runner][INFO] - Train, Round 31 : gradient_norm : 1.5303158795366112
+[2025-10-02 17:06:44,248][flp2p.graph_runner][INFO] - Train, Round 31 : loss => 0.3537032512514104,  accuracy: 0.87662
+[2025-10-02 17:06:44,248][flp2p.graph_runner][INFO] - Test, Round 31 : loss => 5.585942511497789,  accuracy: 0.11708, std: 0.03377879121833514
+[2025-10-02 17:06:44,317][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5189100061805967, Std between models : 0.5511777835059971
+[2025-10-02 17:06:44,318][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:06:51,159][flp2p.graph_runner][INFO] - Train, Round 32 : gradient_norm : 1.6853763824222274
+[2025-10-02 17:07:20,665][flp2p.graph_runner][INFO] - Train, Round 32 : loss => 0.34449102415428745,  accuracy: 0.88228
+[2025-10-02 17:07:20,665][flp2p.graph_runner][INFO] - Test, Round 32 : loss => 5.619474970724931,  accuracy: 0.1180225, std: 0.034000364284813185
+[2025-10-02 17:07:20,705][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5318580709636593, Std between models : 0.5586581230408008
+[2025-10-02 17:07:20,706][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:07:28,828][flp2p.graph_runner][INFO] - Train, Round 33 : gradient_norm : 1.0453165049919895
+[2025-10-02 17:07:58,443][flp2p.graph_runner][INFO] - Train, Round 33 : loss => 0.343141550160849,  accuracy: 0.88412
+[2025-10-02 17:07:58,443][flp2p.graph_runner][INFO] - Test, Round 33 : loss => 5.663234055345985,  accuracy: 0.118015, std: 0.03395890248561257
+[2025-10-02 17:07:58,491][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5488419243110678, Std between models : 0.5671770842583096
+[2025-10-02 17:07:58,492][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:08:04,679][flp2p.graph_runner][INFO] - Train, Round 34 : gradient_norm : 1.7772796819966183
+[2025-10-02 17:08:34,364][flp2p.graph_runner][INFO] - Train, Round 34 : loss => 0.33785905177856884,  accuracy: 0.88438
+[2025-10-02 17:08:34,365][flp2p.graph_runner][INFO] - Test, Round 34 : loss => 5.710612491969091,  accuracy: 0.117495, std: 0.03376897453168922
+[2025-10-02 17:08:34,406][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5614840000342483, Std between models : 0.5657199248663597
+[2025-10-02 17:08:34,406][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:08:41,915][flp2p.graph_runner][INFO] - Train, Round 35 : gradient_norm : 1.2931306241021847
+[2025-10-02 17:09:11,318][flp2p.graph_runner][INFO] - Train, Round 35 : loss => 0.33246287718492035,  accuracy: 0.8858
+[2025-10-02 17:09:11,318][flp2p.graph_runner][INFO] - Test, Round 35 : loss => 5.727624067910919,  accuracy: 0.11849, std: 0.03403138702245142
+[2025-10-02 17:09:11,368][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5776198266265102, Std between models : 0.5751004910331016
+[2025-10-02 17:09:11,368][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:09:18,278][flp2p.graph_runner][INFO] - Train, Round 36 : gradient_norm : 1.3063507125240381
+[2025-10-02 17:09:47,710][flp2p.graph_runner][INFO] - Train, Round 36 : loss => 0.32948948914200865,  accuracy: 0.88636
+[2025-10-02 17:09:47,710][flp2p.graph_runner][INFO] - Test, Round 36 : loss => 5.730152207954675,  accuracy: 0.118755, std: 0.034053713265773236
+[2025-10-02 17:09:47,789][flp2p.graph_runner][INFO] - Mean Distance between models : 1.5901445928435678, Std between models : 0.5776161211097157
+[2025-10-02 17:09:47,790][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:09:54,906][flp2p.graph_runner][INFO] - Train, Round 37 : gradient_norm : 1.459314544851884
+[2025-10-02 17:10:24,408][flp2p.graph_runner][INFO] - Train, Round 37 : loss => 0.33155996510515084,  accuracy: 0.88676
+[2025-10-02 17:10:24,408][flp2p.graph_runner][INFO] - Test, Round 37 : loss => 5.7528821092881985,  accuracy: 0.119115, std: 0.03417282149918036
+[2025-10-02 17:10:24,452][flp2p.graph_runner][INFO] - Mean Distance between models : 1.601226231465355, Std between models : 0.5849300881362451
+[2025-10-02 17:10:24,452][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:10:31,973][flp2p.graph_runner][INFO] - Train, Round 38 : gradient_norm : 1.0665625265699783
+[2025-10-02 17:11:01,160][flp2p.graph_runner][INFO] - Train, Round 38 : loss => 0.3252515282429734,  accuracy: 0.88776
+[2025-10-02 17:11:01,160][flp2p.graph_runner][INFO] - Test, Round 38 : loss => 5.7834363004584235,  accuracy: 0.1191325, std: 0.03417116938291831
+[2025-10-02 17:11:01,190][flp2p.graph_runner][INFO] - Mean Distance between models : 1.6143324630478253, Std between models : 0.5930231541733815
+[2025-10-02 17:11:01,191][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:11:07,077][flp2p.graph_runner][INFO] - Train, Round 39 : gradient_norm : 1.8987603400589859
+[2025-10-02 17:11:36,645][flp2p.graph_runner][INFO] - Train, Round 39 : loss => 0.32375544192998973,  accuracy: 0.88918
+[2025-10-02 17:11:36,645][flp2p.graph_runner][INFO] - Test, Round 39 : loss => 5.8000687981866745,  accuracy: 0.1192475, std: 0.034175982489534955
+[2025-10-02 17:11:36,674][flp2p.graph_runner][INFO] - Mean Distance between models : 1.626932325739509, Std between models : 0.5995497479978059
+[2025-10-02 17:11:36,674][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:11:44,363][flp2p.graph_runner][INFO] - Train, Round 40 : gradient_norm : 1.292660078988197
+[2025-10-02 17:12:14,211][flp2p.graph_runner][INFO] - Train, Round 40 : loss => 0.31889524168137123,  accuracy: 0.89062
+[2025-10-02 17:12:14,211][flp2p.graph_runner][INFO] - Test, Round 40 : loss => 5.809617599180552,  accuracy: 0.12069, std: 0.03463982614978747
+[2025-10-02 17:12:14,266][flp2p.graph_runner][INFO] - Mean Distance between models : 1.6391383121028924, Std between models : 0.6054531907192767
+[2025-10-02 17:12:14,267][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:12:22,230][flp2p.graph_runner][INFO] - Train, Round 41 : gradient_norm : 1.0061966059023577
+[2025-10-02 17:12:51,851][flp2p.graph_runner][INFO] - Train, Round 41 : loss => 0.31611893067697017,  accuracy: 0.89276
+[2025-10-02 17:12:51,851][flp2p.graph_runner][INFO] - Test, Round 41 : loss => 5.834696924572538,  accuracy: 0.1223525, std: 0.03529889737516377
+[2025-10-02 17:12:51,922][flp2p.graph_runner][INFO] - Mean Distance between models : 1.6530908550302952, Std between models : 0.6127501600174903
+[2025-10-02 17:12:51,922][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:12:58,444][flp2p.graph_runner][INFO] - Train, Round 42 : gradient_norm : 1.0918013282478976
+[2025-10-02 17:13:27,875][flp2p.graph_runner][INFO] - Train, Round 42 : loss => 0.31393717757183737,  accuracy: 0.89474
+[2025-10-02 17:13:27,875][flp2p.graph_runner][INFO] - Test, Round 42 : loss => 5.859536927179167,  accuracy: 0.1227875, std: 0.035377824473758895
+[2025-10-02 17:13:27,911][flp2p.graph_runner][INFO] - Mean Distance between models : 1.6650212953583552, Std between models : 0.6162545601133758
+[2025-10-02 17:13:27,912][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:13:35,755][flp2p.graph_runner][INFO] - Train, Round 43 : gradient_norm : 1.0436739898412368
+[2025-10-02 17:14:05,385][flp2p.graph_runner][INFO] - Train, Round 43 : loss => 0.3118311803889619,  accuracy: 0.89406
+[2025-10-02 17:14:05,385][flp2p.graph_runner][INFO] - Test, Round 43 : loss => 5.8921668795263695,  accuracy: 0.12245, std: 0.03521438464316642
+[2025-10-02 17:14:05,413][flp2p.graph_runner][INFO] - Mean Distance between models : 1.6770395023318438, Std between models : 0.6235012476823798
+[2025-10-02 17:14:05,413][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:14:12,865][flp2p.graph_runner][INFO] - Train, Round 44 : gradient_norm : 0.9092214290399127
+[2025-10-02 17:14:42,548][flp2p.graph_runner][INFO] - Train, Round 44 : loss => 0.30905407418358766,  accuracy: 0.89558
+[2025-10-02 17:14:42,548][flp2p.graph_runner][INFO] - Test, Round 44 : loss => 5.89880651975893,  accuracy: 0.1229475, std: 0.03528548378887335
+[2025-10-02 17:14:42,596][flp2p.graph_runner][INFO] - Mean Distance between models : 1.689265331778771, Std between models : 0.6323600307598767
+[2025-10-02 17:14:42,596][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:14:50,768][flp2p.graph_runner][INFO] - Train, Round 45 : gradient_norm : 1.2014935950421262
+[2025-10-02 17:15:20,149][flp2p.graph_runner][INFO] - Train, Round 45 : loss => 0.3045256539327859,  accuracy: 0.89728
+[2025-10-02 17:15:20,149][flp2p.graph_runner][INFO] - Test, Round 45 : loss => 5.908837964504387,  accuracy: 0.1233275, std: 0.03539620284631531
+[2025-10-02 17:15:20,195][flp2p.graph_runner][INFO] - Mean Distance between models : 1.7035725785562625, Std between models : 0.6428073840790797
+[2025-10-02 17:15:20,195][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:15:28,685][flp2p.graph_runner][INFO] - Train, Round 46 : gradient_norm : 0.8236587629601874
+[2025-10-02 17:15:58,311][flp2p.graph_runner][INFO] - Train, Round 46 : loss => 0.30056834401826454,  accuracy: 0.9006
+[2025-10-02 17:15:58,311][flp2p.graph_runner][INFO] - Test, Round 46 : loss => 5.909420196835402,  accuracy: 0.12599, std: 0.03635660769980472
+[2025-10-02 17:15:58,357][flp2p.graph_runner][INFO] - Mean Distance between models : 1.7205143262751592, Std between models : 0.6542418427215991
+[2025-10-02 17:15:58,357][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:16:07,415][flp2p.graph_runner][INFO] - Train, Round 47 : gradient_norm : 0.8892742207854354
+[2025-10-02 17:16:37,427][flp2p.graph_runner][INFO] - Train, Round 47 : loss => 0.30061303179159415,  accuracy: 0.8989
+[2025-10-02 17:16:37,427][flp2p.graph_runner][INFO] - Test, Round 47 : loss => 5.9418010064371085,  accuracy: 0.125015, std: 0.03592944546037197
+[2025-10-02 17:16:37,472][flp2p.graph_runner][INFO] - Mean Distance between models : 1.7385742002763809, Std between models : 0.6700458929900739
+[2025-10-02 17:16:37,472][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:16:45,092][flp2p.graph_runner][INFO] - Train, Round 48 : gradient_norm : 1.0177325618185955
+[2025-10-02 17:17:14,985][flp2p.graph_runner][INFO] - Train, Round 48 : loss => 0.2993568156296212,  accuracy: 0.8987
+[2025-10-02 17:17:14,985][flp2p.graph_runner][INFO] - Test, Round 48 : loss => 5.9667654533674765,  accuracy: 0.125375, std: 0.0359256690917163
+[2025-10-02 17:17:15,014][flp2p.graph_runner][INFO] - Mean Distance between models : 1.7550428046343418, Std between models : 0.6821088212429481
+[2025-10-02 17:17:15,014][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.4 
+[2025-10-02 17:17:22,038][flp2p.graph_runner][INFO] - Train, Round 49 : gradient_norm : 1.257288859457369
+[2025-10-02 17:17:51,731][flp2p.graph_runner][INFO] - Train, Round 49 : loss => 0.2983000044291336,  accuracy: 0.89998
+[2025-10-02 17:17:51,732][flp2p.graph_runner][INFO] - Test, Round 49 : loss => 5.956200535434065,  accuracy: 0.1263975, std: 0.03618337793016981
+[2025-10-02 17:17:51,788][flp2p.graph_runner][INFO] - Mean Distance between models : 1.7645455652227005, Std between models : 0.6867015129133232
+[2025-10-02 17:17:51,789][flp2p.graph_runner][INFO] - Fraction of activated nodes : 0.425 
+[2025-10-02 17:18:00,102][flp2p.graph_runner][INFO] - Train, Round 50 : gradient_norm : 1.262627336687418

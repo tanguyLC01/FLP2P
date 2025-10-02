@@ -1,0 +1,7 @@
+- client.learning_rate=0.005
+- partition.dirichlet_alpha=0.1
+- partition.num_clients=80
+- consensus_lr=0.005
+- mixing_matrix=metropolis_hasting
+- old_gradients=False
+- run_name=01_dirichlet

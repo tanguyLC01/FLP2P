@@ -1,0 +1,4 @@
+[2025-09-25 15:45:11,509][flp2p.graph_runner][INFO] - Data split check on random client
+[2025-09-25 15:45:16,841][flp2p.graph_runner][INFO] - Train, Round 0 : gradient_norm : 4.1744720060086715
+[2025-09-25 15:45:22,722][flp2p.graph_runner][INFO] - Train, Round 0 : loss => 0.7064558402867988,  accuracy: 0.6017142857142858
+[2025-09-25 15:45:22,722][flp2p.graph_runner][INFO] - Test, Round 0 : loss => 0.7088609094953494,  accuracy: 0.6070305801657616

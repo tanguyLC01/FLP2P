@@ -1,0 +1,2 @@
+[2025-09-23 11:38:48,974][flp2p.graph_runner][INFO] - Train, Round 0 : loss => 2.3005699628591536,  accuracy: 0.11818
+[2025-09-23 11:38:48,975][flp2p.graph_runner][INFO] - Test, Round 0 : loss => 2.3008934488654136,  accuracy: 0.1182

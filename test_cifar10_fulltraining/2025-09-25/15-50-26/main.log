@@ -1,0 +1,18 @@
+[2025-09-25 15:50:38,098][flp2p.graph_runner][INFO] - Data split check on random client
+[2025-09-25 15:50:43,402][flp2p.graph_runner][INFO] - Train, Round 0 : gradient_norm : 13.151196532742633
+[2025-09-25 15:50:49,152][flp2p.graph_runner][INFO] - Train, Round 0 : loss => 1.3821972472497561,  accuracy: 0.46777142857142856
+[2025-09-25 15:50:49,152][flp2p.graph_runner][INFO] - Test, Round 0 : loss => 1.3841363481706506,  accuracy: 0.46756216061731926
+[2025-09-25 15:50:49,965][flp2p.graph_runner][INFO] - Mean Distance between models : 21.02951117167569, Std between models : 22.373688838305263
+[2025-09-25 15:50:55,346][flp2p.graph_runner][INFO] - Train, Round 1 : gradient_norm : 11.711578113152589
+[2025-09-25 15:51:01,796][flp2p.graph_runner][INFO] - Train, Round 1 : loss => 1.619885379546567,  accuracy: 0.44726315789473686
+[2025-09-25 15:51:01,797][flp2p.graph_runner][INFO] - Test, Round 1 : loss => 1.6199744413797788,  accuracy: 0.44637223974763407
+[2025-09-25 15:51:02,611][flp2p.graph_runner][INFO] - Mean Distance between models : 31.589304033493754, Std between models : 26.944065458401212
+[2025-09-25 15:51:08,379][flp2p.graph_runner][INFO] - Train, Round 2 : gradient_norm : 10.648627760881057
+[2025-09-25 15:51:15,338][flp2p.graph_runner][INFO] - Train, Round 2 : loss => 1.6927724392153323,  accuracy: 0.42085
+[2025-09-25 15:51:15,338][flp2p.graph_runner][INFO] - Test, Round 2 : loss => 1.6950792122447071,  accuracy: 0.4151886085435923
+[2025-09-25 15:51:16,150][flp2p.graph_runner][INFO] - Mean Distance between models : 42.62018417524569, Std between models : 32.817954260041084
+[2025-09-25 15:51:21,621][flp2p.graph_runner][INFO] - Train, Round 3 : gradient_norm : 12.365571027139492
+[2025-09-25 15:51:28,353][flp2p.graph_runner][INFO] - Train, Round 3 : loss => 1.7620368716735884,  accuracy: 0.4976842105263158
+[2025-09-25 15:51:28,354][flp2p.graph_runner][INFO] - Test, Round 3 : loss => 1.7675564000865456,  accuracy: 0.49697607152248224
+[2025-09-25 15:51:29,174][flp2p.graph_runner][INFO] - Mean Distance between models : 48.24272017958188, Std between models : 36.32466257589525
+[2025-09-25 15:51:34,391][flp2p.graph_runner][INFO] - Train, Round 4 : gradient_norm : 11.354171142126772

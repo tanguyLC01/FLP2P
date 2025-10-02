@@ -1,0 +1,2 @@
+[2025-09-25 17:17:17,362][flp2p.graph_runner][INFO] - Data split check on random client
+[2025-09-25 17:17:22,860][flp2p.graph_runner][INFO] - Train, Round 0 : gradient_norm : 9.857696057968923

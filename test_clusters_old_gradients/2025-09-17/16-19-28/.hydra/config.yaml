@@ -1,0 +1,31 @@
+data:
+  name: cifar10
+  root: ./data
+  batch_size: 64
+  num_workers: 4
+model:
+  name: lenet5
+  latent_dimension: 1600
+  num_classes: 10
+  in_channels: 3
+  batch_norm: false
+partition:
+  name: iid
+  num_clients: 100
+  strategy: iid
+client:
+  learning_rate: 0.01
+  weight_decay: 0.0001
+  momentum: 0.9
+train:
+  rounds: 300
+  local_epochs: 3
+  progress: true
+  participation_rate: 0.5
+graph:
+  name: two_clusters
+  topology: two_clusters
+seed: 42
+use_cuda: true
+run_name: test_clusters_old_gradients
+consensus_lr: 0.1
