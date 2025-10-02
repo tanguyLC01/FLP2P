@@ -16,6 +16,13 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
 
     net = Network(notebook=False, width="700px", height="700px", bgcolor="#222222", font_color="white")
     net.from_nx(graph_no_self_loops)
+    for u, v, data in graph_no_self_loops.edges(data=True):
+        if "probability_selection" in data:
+            for edge in net.edges:
+                if edge["from"] == u and edge["to"] == v:
+                    edge["label"] = str(data["probability_selection"])
+                    break
+            
     html_path = path if path.endswith(".html") else path + ".html"
     net.save_graph(html_path)
 
@@ -44,14 +51,18 @@ def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: i
         for node in cluster1_nodes:
             if node != center1:
                 graph.add_edge(center1, node)
+                graph[center1][node]["probability_selection"] = 1/(len(cluster1_nodes) - 1)
 
         # Connect each node in cluster 2 to center2 (except center2 itself)
         for node in cluster2_nodes:
             if node != center2:
                 graph.add_edge(center2, node)
+                graph[center2][node]["probability_selection"] = 1/(len(cluster1_nodes) - 1)
 
         # Connect the two centers
         graph.add_edge(center1, center2)
+        graph[center1][center2]["probability_selection"] = 1
+        
     elif cfg.topology == 'random_geometric':
         graph = nx.random_geometric_graph(num_clients, radius=cfg.radius, seed=seed)
         

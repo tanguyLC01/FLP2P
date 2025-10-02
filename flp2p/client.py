@@ -43,7 +43,6 @@ class FLClient:
         """
         for neighbor_id, gradients in neighbor_gradients.items():
             self.neighbor_gradients[neighbor_id] = gradients.copy()
-        del neighbor_gradients
             
     def _optimizer(self) -> torch.optim.Optimizer:
         return torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay, momentum=self.momentum)
@@ -55,8 +54,6 @@ class FLClient:
         self.model.train()
         correct = 0
         total = 0
-        gradient = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
-        batch_count = 0
 
         for _ in range(local_epochs):
             for inputs, targets in self.train_loader:
@@ -71,11 +68,11 @@ class FLClient:
                 with torch.no_grad():
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
-                batch_count += 1
 
         num_samples = len(self.train_loader.dataset)
         
         # Compute average gradient
+        gradient = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
         for name, param in self.model.named_parameters():
             if param.grad is not None and param.requires_grad:
                 gradient[name] = param.grad.detach().clone()
@@ -147,7 +144,6 @@ class FLClient:
         aggregated_gradient = self.aggregate_gradients_weighted(
             gradients_dict=self.neighbor_gradients,
             weights=neighbor_weights)
-
         with torch.no_grad():
             for name, param in self.model.named_parameters():
                 if name in aggregated_gradient and param.requires_grad:

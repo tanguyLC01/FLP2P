@@ -1,15 +1,19 @@
 defaults:
   - data: cifar10
   - model: lenet5
-  - partition: iid
+  - partition: dirichlet
   - client: default
   - train: default
-  - graph: random
+  - graph: two_clusters
+  - _self_
 
 seed: 42
 use_cuda: true
-run_name: test_cifar10_noponderationsample
-consensus_lr: 0.1
+mixing_matrix: metropolis_hasting
+run_name: two_clusters_experiment
+consensus_lr: 1e-3
+old_gradients: false
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+same_distrib_test_set: False

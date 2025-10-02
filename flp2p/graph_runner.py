@@ -11,7 +11,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
-GOSSIPING = Literal['metropolis_hasting', 'maximum_degree']
+GOSSIPING = Literal['metropolis_hasting', 'maximum_degree', 'average', 'probability']
 
 def compute_consensus_distance(node_params):
     """Check how far apart node parameters are"""
@@ -50,40 +50,44 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
     """
     nodes = list(graph.nodes())
     n_nodes = len(nodes)
-    node_to_idx = {node: i for i, node in enumerate(nodes)}
     
     W = np.zeros((n_nodes, n_nodes))
     
-    if mixing_matrix == 'metropolis_hasting':
+    if mixing_matrix == 'metropolis_hasting' or mixing_matrix == 'probability':
         # First pass: compute edge weights
         for node in nodes:
-            i = node_to_idx[node]
             sum_neighbor_weights = 0
             
             for neighbor in graph.neighbors(node):
-                j = node_to_idx[neighbor]
                 # Metropolis-Hastings weight
                 weight = 1 / (1 + max(graph.degree[node], graph.degree[neighbor]))
-                W[i, j] = weight
+                W[node, neighbor] = weight
                 sum_neighbor_weights += weight
             
             # Self-weight (diagonal)
-            W[i, i] = 1 - sum_neighbor_weights
+            W[node, node] = 1 - sum_neighbor_weights
             
+        if mixing_matrix == 'probability':  
+            for u, v, data in graph.edges(data=True):
+                p = data.get('probability_selection', 1.0)
+                W[u, v] *= 1/p
+                W[v, u] *= 1/p
+                for i in range(W.shape[0]):
+                    off_diag_sum = np.sum(W[i, :])
+                    W[i, i] = 1 - off_diag_sum
+                
     elif mixing_matrix == 'maximum_degree':
         max_degree = max(dict(graph.degree()).values())
         
         for node in nodes:
-            i = node_to_idx[node]
             
             # Edge weights
             for neighbor in graph.neighbors(node):
-                j = node_to_idx[neighbor]
-                W[i, j] = 1 / max_degree
+                W[node, neighbor] = 1 / max_degree
             
             # Self-weight
-            W[i, i] = 1 - graph.degree[node] / max_degree
-    
+            W[node, node] = 1 - graph.degree[node] / max_degree
+
     return W
 
 def validate_weight_matrix(W):
@@ -98,6 +102,8 @@ def validate_weight_matrix(W):
     # Check non-negativity
     print(f"All weights non-negative: {np.all(W >= 0)}")
     
+    #Check Symmetry
+    print(f'W is symmetric: {np.all(W == W.T)}')
     # Check sparsity
     non_zero = np.count_nonzero(W)
     total = W.size
@@ -120,7 +126,7 @@ def run_rounds(
     metrics = {"train":
                                 {"loss": [], "accuracy": []},
                     "test":
-                                {"loss": [], "accuracy": []},
+                                {"loss": [], "accuracy": [], 'std accuracy': []},
             }
     
     log.info("Data split check on random client")
@@ -134,12 +140,14 @@ def run_rounds(
 
         # For each edge, decide if it is active this round (bidirectional selection)
         edges = np.array(list(graph.edges()))
+        #probs = [data.get('probability_selection', 0) for _, _, data in graph.edges(data=True)]
+        #idxs = [idx for idx in range(len(edges)) if np.random.random() < probs[idx]]
         idxs = np.random.choice(len(edges), int(participation_rate * len(edges)), replace=False)
         active_edges = edges[idxs]
-        print(active_edges.flatten())
+        
         # Local training (only for clients with a vertex in active_edges)
         active_nodes = set(active_edges.flatten())
-        print(f"Fraction of activated nodes : {len(active_nodes)/len(clients)} ")
+        log.info(f"Fraction of activated nodes : {len(active_nodes)/len(clients)} ")
         train_gradient_norm = 0
         gradients_per_client = {}
         for idx, client in enumerate(clients):
@@ -148,41 +156,40 @@ def run_rounds(
                 gradients_per_client[idx] = gradients
                 train_gradient_norm += gradient_norm
 
-        # train_results = {
-        # 'gradient_norm': train_gradient_norm / max(1, len(active_nodes))
-        # }
+        train_results = {
+        'gradient_norm': train_gradient_norm / max(1, len(active_nodes))
+        }
 
-        # log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
+        log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
         # metrics['train'].append(train_results)
+        
+        ################# GET NEIGHBOR GRADIENT ##################
+        for active_node in active_nodes:
+            neighbors_activated = [v for u, v in edges if u == active_node and v in active_nodes] + [u for u, v in edges if v == active_node and u in active_nodes]
+            neighbor_gradients = {}
+            for n in neighbors_activated:
+                neighbor_gradients[n] = gradients_per_client[n]
+            neighbor_gradients[int(active_node)] = gradients_per_client[int(active_node)]
 
-        ################ OLD GRADIENTS PART ########################
-        if old_gradients:
-            for active_node in active_nodes:
-                neighbors = list(graph.neighbors(active_node))
-                neighbor_gradients = {n: gradients_per_client[n] for n in neighbors if n in gradients_per_client}
-                neighbor_gradients[int(active_node)] = gradients_per_client[int(active_node)]
+            ################ OLD GRADIENTS PART ########################
+            if old_gradients:
                 clients[int(active_node)].store_neighbor_gradients(neighbor_gradients)
-                
 
-        # # ################## ONLY ACTUALIZE WITH NEW GRADIENTS ########################
-        else:
-            for active_node in active_nodes:
-                neighbors = list(graph.neighbors(active_node))
-                neighbor_gradients = {n: gradients_per_client[n] for n in neighbors if n in gradients_per_client}
-                neighbor_gradients[int(active_node)] = gradients_per_client[int(active_node)]
+            ################## ONLY ACTUALIZE WITH NEW GRADIENTS ########################
+            else:
                 clients[int(active_node)].neighbor_gradients = neighbor_gradients
-        ################# MODEL AVERGAE ##################
-        # for active_node in active_nodes:
-        #     neighbors = list(graph.neighbors(active_node))
-        #     neighbors_weights = {n: clients[int(n)].get_state() for n in neighbors if n in gradients_per_client}
-        #     neighbors_weights[int(active_node)] = clients[int(active_node)].get_state()
-        #     clients[int(active_node)].neighbors_weights = neighbors_weights
-
+                
+        ################# AGGREGATION ##################
         # Apply aggregated shared states
-        for node in active_nodes:
-            clients[node].update_state(W[node, :], consensus_lr=consensus_lr)
-
-        # Evaluate (average across clients)
+        for active_node in active_nodes:
+            clients[active_node].update_state(W[active_node, :], consensus_lr=consensus_lr)
+            
+            ### Average of nodes used #####
+            # neighbors_activated = [v for u, v in edges if u == active_node] + [u for u, v in edges if v == active_node] + [active_node]
+            # weights = {int(n): 1/len(neighbor_gradients) for n in neighbors_activated}
+            # clients[active_node].update_state(weights, consensus_lr=consensus_lr)
+            
+        #Evaluate (average across clients)
         with torch.no_grad():
             total_test_samples = 0
             total_train_samples = 0
@@ -190,14 +197,14 @@ def run_rounds(
             test_weighted_acc = 0.0
             train_weighted_loss = 0.0
             train_weighted_acc = 0.0
-
-            for node in active_nodes:
-                client = clients[int(node)]
+            accuracies = []
+            for client in clients:
                 ###### TEST METRICS #######
                 test_loss, test_acc = client.evaluate()
                 test_num_samples = len(client.test_loader.dataset)
                 test_weighted_loss += test_loss * test_num_samples
                 test_weighted_acc += test_acc * test_num_samples
+                accuracies.append(test_weighted_acc)
                 total_test_samples += test_num_samples
 
                 ###### TRAIN METRICS #######
@@ -210,6 +217,7 @@ def run_rounds(
 
             test_avg_loss = test_weighted_loss / total_test_samples
             test_avg_acc = test_weighted_acc / total_test_samples
+            test_std_acc = np.std(np.array(accuracies)/total_test_samples)
             train_avg_loss = train_weighted_loss / total_train_samples
             train_avg_acc = train_weighted_acc / total_train_samples
 
@@ -217,16 +225,18 @@ def run_rounds(
             metrics['train']['accuracy'].append(train_avg_acc)
             metrics['test']['loss'].append(test_avg_loss)
             metrics['test']['accuracy'].append(test_avg_acc)
+            metrics['test']['std accuracy'].append(test_std_acc)
 
             log.info(f"Train, Round {rnd} : loss => {train_avg_loss},  accuracy: {train_avg_acc}")
-            log.info(f"Test, Round {rnd} : loss => {test_avg_loss},  accuracy: {test_avg_acc}")
+            log.info(f"Test, Round {rnd} : loss => {test_avg_loss},  accuracy: {test_avg_acc}, std: {test_std_acc}")
 
-        if rnd >= 5 and max(metrics['test']['accuracy'][-5:]) - min(metrics['test']['accuracy'][-5:]) <= 1e-4:
+        if rnd >= 5 and max(metrics['test']['accuracy'][-10:]) - min(metrics['test']['accuracy'][-10:]) <= 1e-4:
             return metrics
 
         if lr_decay != 0:
             for node in active_nodes:
                 clients[node].learning_rate *= lr_decay
+            consensus_lr *= lr_decay
                 
         full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
         log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')

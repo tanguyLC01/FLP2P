@@ -1,0 +1,3 @@
+name: resnet18
+num_classes: 10
+pretrained: False

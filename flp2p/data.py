@@ -89,7 +89,7 @@ def pathology_partition(labels: np.ndarray, num_clients: int, num_classes_per_cl
             rand_set.append(class_to_indices[label].pop(idx))
         dict_users[cid] = np.concatenate(rand_set)
     
-    return [np.array(sorted(idxs), dtype=np.int64) for idxs in dict_users.values()]
+    return [np.array(idxs, dtype=np.int64) for idxs in dict_users.values()]
 
 
 def match_test_partition(
@@ -179,7 +179,10 @@ def build_client_loaders(
     else:
         raise ValueError(f"Unknown partition strategy: {config.partition.strategy}")
 
-    test_parts = match_test_partition(train_parts, train_labels=labels, test_labels=np.array(test_dataset.targets))
+    if config.same_distrib_test_set is True:
+        test_parts = match_test_partition(train_parts, train_labels=labels, test_labels=np.array(test_dataset.targets))
+    else:
+        test_parts =  [np.arange(len(test_dataset.targets)) for _ in range(config.partition.num_clients)]
     plot_partition_distribution(train_parts, labels, path_to_save=save_plot_path, title="train_data_distribution")
     plot_partition_distribution(test_parts, np.array(test_dataset.targets), path_to_save=save_plot_path, title="test_data_distribution")
     
