@@ -54,6 +54,7 @@ class FLClient:
         self.model.train()
         correct = 0
         total = 0
+        gradient = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
 
         for _ in range(local_epochs):
             for inputs, targets in self.train_loader:
@@ -65,17 +66,17 @@ class FLClient:
                 loss.backward()
                 optimizer.step()
                 total += targets.size(0)
+                for name, param in self.model.named_parameters():
+                    if param.grad is not None and param.requires_grad:
+                        gradient[name] += param.grad.detach().clone()
                 with torch.no_grad():
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
 
         num_samples = len(self.train_loader.dataset)
-        
-        # Compute average gradient
-        gradient = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
-        for name, param in self.model.named_parameters():
-            if param.grad is not None and param.requires_grad:
-                gradient[name] = param.grad.detach().clone()
+        for name in gradient:
+            gradient[name] /= len(self.train_loader)
+            
         # Optionally, compute average gradient norm
         avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in gradient.values()) ** 0.5
         

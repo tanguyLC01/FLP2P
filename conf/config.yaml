@@ -7,13 +7,19 @@ defaults:
   - graph: two_clusters
   - _self_
 
+
+
 seed: 42
 use_cuda: true
 mixing_matrix: metropolis_hasting
-run_name: two_clusters_experiment
+run_name: 01_dirichlet
 consensus_lr: 1e-3
 old_gradients: false
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: ./${run_name}/${now:%Y-%m-%d}/
+    subdir: ${now:%H-%M-%S}
 same_distrib_test_set: False
+

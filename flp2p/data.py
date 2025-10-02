@@ -43,16 +43,33 @@ def iid_partition(num_clients: int, labels: np.ndarray) -> List[np.ndarray]:
 
 
 
-def dirichlet_partition(labels: np.ndarray, num_clients: int, alpha: float) -> List[np.ndarray]:
+def dirichlet_partition(labels: np.ndarray, num_clients: int, alpha: float, min_partition_size: int = 10) -> List[np.ndarray]:
     num_classes = labels.max() + 1
     class_indices = [np.where(labels == y)[0] for y in range(num_classes)]
     client_indices: List[List[int]] = [[] for _ in range(num_clients)]
 
     for y in range(num_classes):
         np.random.shuffle(class_indices[y])
-        proportions = np.random.dirichlet(alpha=[alpha] * num_clients)
-        splits = (np.cumsum(proportions) * len(class_indices[y])).astype(int)[:-1]
-        shards = np.split(class_indices[y], splits)
+        class_size = len(class_indices[y])
+
+        # Keep sampling proportions until all partitions >= min_partition_size (if possible)
+        trial = 0
+        while True:
+            proportions = np.random.dirichlet(alpha=[alpha] * num_clients)
+            splits = (np.cumsum(proportions) * class_size).astype(int)[:-1]
+            shards = np.split(class_indices[y], splits)
+
+            # Check if all shards are large enough
+            if all(len(shard) >= min_partition_size or len(shard) == 0 for shard in shards):
+                break  # valid split found
+        
+            if trial == 10:
+                 raise ValueError(
+                    "The max number of attempts (10) was reached. "
+                    "Please update the values of alpha and try again."
+                    )
+            trial += 1
+        # Assign shards to clients
         for client_id, shard in enumerate(shards):
             client_indices[client_id].extend(shard.tolist())
 
@@ -173,7 +190,7 @@ def build_client_loaders(
     if config.partition.strategy == "iid":
         train_parts = iid_partition(num_clients=config.partition.num_clients, labels=labels)
     elif config.partition.strategy == "dirichlet":
-        train_parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha)
+        train_parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha, min_partition_size=config.partition.min_partition_size)
     elif config.partition.strategy == "pathological":
         train_parts = pathology_partition(labels=labels, num_clients=config.partition.num_clients, num_classes_per_client=config.partition.num_classes_per_client)
     else:
@@ -192,7 +209,7 @@ def build_client_loaders(
         test_subset = Subset(test_dataset, indices=idxs_test.tolist())
         
         # Use the full test set for all clients by default
-        train_loader = DataLoader(train_subset, batch_size=config.get("batch_size", 64), shuffle=True, num_workers=config.get("num_workers", 2))
-        test_loader = DataLoader(test_subset, batch_size=config.get("batch_size", 64), shuffle=False, num_workers=config.get("num_workers", 2))
+        train_loader = DataLoader(train_subset, batch_size=min(len(train_subset), config.get("batch_size", 64)), shuffle=True, num_workers=config.get("num_workers", 2))
+        test_loader = DataLoader(test_subset, batch_size=min(len(test_subset), config.get("batch_size", 64)), shuffle=False, num_workers=config.get("num_workers", 2))
         loaders.append((train_loader, test_loader))
     return loaders 
