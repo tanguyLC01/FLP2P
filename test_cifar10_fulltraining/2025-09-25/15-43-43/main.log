@@ -1,9 +1,0 @@
-[2025-09-25 15:43:53,751][flp2p.graph_runner][INFO] - Data split check on random client
-[2025-09-25 15:44:08,654][flp2p.graph_runner][INFO] - Train, Round 0 : gradient_norm : 3.7049596524044097
-[2025-09-25 15:44:14,389][flp2p.graph_runner][INFO] - Train, Round 0 : loss => 0.6884905706308158,  accuracy: 0.7045714285714286
-[2025-09-25 15:44:14,389][flp2p.graph_runner][INFO] - Test, Round 0 : loss => 0.7341335838540103,  accuracy: 0.6879108316661904
-[2025-09-25 15:44:15,198][flp2p.graph_runner][INFO] - Mean Distance between models : 54.344377002812394, Std between models : 57.277147481430426
-[2025-09-25 15:44:31,079][flp2p.graph_runner][INFO] - Train, Round 1 : gradient_norm : 3.8624517478583256
-[2025-09-25 15:44:37,570][flp2p.graph_runner][INFO] - Train, Round 1 : loss => 0.601573305369943,  accuracy: 0.7503157894736842
-[2025-09-25 15:44:37,571][flp2p.graph_runner][INFO] - Test, Round 1 : loss => 0.7564652480114522,  accuracy: 0.6884858044164038
-[2025-09-25 15:44:38,386][flp2p.graph_runner][INFO] - Mean Distance between models : 84.1855649606146, Std between models : 71.21432123040863
