@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt
 from collections import defaultdict
-
+from joblib.externals.loky.backend.context import get_context
 
 def get_mnist_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
     transform = transforms.Compose([
@@ -209,7 +209,8 @@ def build_client_loaders(
         test_subset = Subset(test_dataset, indices=idxs_test.tolist())
         
         # Use the full test set for all clients by default
-        train_loader = DataLoader(train_subset, batch_size=min(len(train_subset), config.get("batch_size", 64)), shuffle=True, num_workers=config.get("num_workers", 2))
-        test_loader = DataLoader(test_subset, batch_size=min(len(test_subset), config.get("batch_size", 64)), shuffle=False, num_workers=config.get("num_workers", 2))
+        ####### WARNING : if using Joblib, it is not possible to set num_workers > 0 see : 
+        train_loader = DataLoader(train_subset, batch_size=min(len(train_subset), config.get("batch_size", 64)), shuffle=True, num_workers=config.data.get("num_workers", 2))
+        test_loader = DataLoader(test_subset, batch_size=min(len(test_subset), config.get("batch_size", 64)), shuffle=False, num_workers=config.data.get("num_workers", 2))
         loaders.append((train_loader, test_loader))
     return loaders 

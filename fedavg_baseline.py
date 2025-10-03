@@ -11,6 +11,8 @@ from flp2p.networks.lenet5 import LeNet5
 from flp2p.networks.resnet18 import make_resnet18
 from flp2p.client import FLClient
 import logging
+from main import print_metrics
+
 """
 This file implements a simplified classical FedAvg simulation
 using the flp2p framework style. In this example, each client
@@ -171,6 +173,8 @@ def simulate_fedavg(cfg: DictConfig) -> None:
             for client in clients:
                 client.learning_rate *= cfg.train.lr_decay
 
+    print_metrics(metrics['train'], 'Train')
+    print_metrics(metrics['test'], 'Test')
 
 if __name__ == "__main__":
     simulate_fedavg()

@@ -6,20 +6,21 @@ defaults:
   - train: default
   - graph: two_clusters
   - _self_
+  #- override hydra/launcher: joblib
 
 
 
 seed: 42
 use_cuda: true
 mixing_matrix: metropolis_hasting
-run_name: 01_dirichlet
-consensus_lr: 1e-3
+run_name: fedavg_dirichlet
+consensus_lr: 5e-3
 old_gradients: false
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
   sweep:
-    dir: ./${run_name}/${now:%Y-%m-%d}/
-    subdir: ${now:%H-%M-%S}
+    dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${mixing_matrix}-${old_gradients}
 same_distrib_test_set: False
 
