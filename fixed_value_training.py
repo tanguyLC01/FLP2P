@@ -70,11 +70,15 @@ def run_fixed(cfg: DictConfig) -> None:
     if cfg.mixing_matrix != 'matcha':
         W = compute_weight_matrix(graph, cfg.mixing_matrix)
         W = list()
+        border_nodes = [n for n in graph.nodes if graph.degree[n] == 1]
         for _ in range(cfg.train.rounds):
             temp = W.copy()
             if np.random.random() > cfg.main_link_activation:
                 temp[center_node_1, center_node_2] = 0
-            
+            for border_node in border_nodes:
+                if np.random.random() > cfg.border_link_activation:
+                    temp[border_node, center_node_1] = 0
+                    temp[border_node, center_node_2] = 0
     else:
         W = list()
         n_nodes = len(graph.nodes)
