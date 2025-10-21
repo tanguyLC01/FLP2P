@@ -11,6 +11,10 @@ import numpy as np
 import torch
 from flp2p.utils import build_topology, compute_weight_matrix
 from hydra import compose, initialize
+import logging
+
+
+log = logging.getLogger(__name__)
 
 with initialize(version_base=None, config_path="conf", job_name="test_app"):
     cfg = compose(config_name="config")
@@ -69,3 +73,33 @@ for round in range(1, cfg.train.rounds):
         # Update each client model
         for i in range(N):
             set_flat_params(clients[i].model, new_params[i])
+            
+        max_degree_nodes = sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2]
+        center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]
+    
+        param_vectors = []
+        for client in clients:
+            # move each tensor to CPU before flattening
+            state = client.model.state_dict()
+            flat = torch.cat([p.detach().cpu().flatten() for p in state.values()])
+            param_vectors.append(flat)
+
+        param_vectors = torch.stack(param_vectors, dim=0)  # shape [n_clients, d] on CPU
+        mean_model = param_vectors.mean(dim=0)
+
+        # Overall consensus (mean disagreement)
+        consensus_distance = torch.mean(torch.norm(param_vectors - mean_model, dim=1)).item()
+
+        # Inter-cluster consensus distances
+        inter_cluster = torch.norm(param_vectors[center_node_1] - param_vectors[center_node_2]).item()
+        
+        neighbor_center_1 = list(graph.neighbors(center_node_1))[0]
+        neighbor_center_2 = list(graph.neighbors(center_node_2))[0]
+        cluster_1_consensus_distance = torch.norm(param_vectors[center_node_1] - param_vectors[neighbor_center_1]).item()
+        cluster_2_consensus_distance = torch.norm(param_vectors[center_node_2] - param_vectors[neighbor_center_2]).item()
+
+        log.info(f"Overall consensus distance : {consensus_distance:.6f}")
+        log.info(f"Cluster 1 consensus distance : {cluster_1_consensus_distance:.6f}")
+        log.info(f"Cluster 2 consensus distance : {cluster_2_consensus_distance:.6f}")
+        log.info(f"Inter-cluster distance : {inter_cluster:.6f}")
+
