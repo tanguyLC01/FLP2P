@@ -218,3 +218,17 @@ def build_client_loaders(
         test_loader = DataLoader(test_subset, batch_size=min(len(test_subset), config.get("batch_size", 64)), shuffle=False, num_workers=config.data.get("num_workers", 2))
         loaders.append((train_loader, test_loader))
     return loaders 
+
+
+def verify_data_split(client):
+    # Sample a few examples from train and test
+    train_batch = next(iter(client.train_loader))
+    test_batch = next(iter(client.test_loader))
+    
+    print(f"Train batch shape: {train_batch[0].shape}")
+    print(f"Test batch shape: {test_batch[0].shape}")
+    
+    # Check if there's overlap (shouldn't be any)
+    train_hash = hash(train_batch[0].flatten().sum().item())
+    test_hash = hash(test_batch[0].flatten().sum().item())
+    print(f"Different data: {train_hash != test_hash}")
