@@ -1,0 +1,6 @@
+name: unbalanced_cluster
+alpha_two_set: 0.1
+intra_cluster_alpha: 5
+strategy: unbalanced_cluster
+num_clients: 10
+min_partition_size: 1

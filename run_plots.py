@@ -40,7 +40,6 @@ def main(log_path: str) -> None:
         test_rounds, test_losses, test_accuracies = [], [], []
 
         for match in train_pattern.finditer(log_data):
-            print(match)
             rounds.append(int(match.group(1)))
             train_losses.append(float(match.group(2)))
             train_accuracies.append(float(match.group(3)))

@@ -1,7 +1,7 @@
 defaults:
   - data: cifar10
   - model: resnet18
-  - partition: dirichlet
+  - partition: unbalanced_cluster
   - client: default
   - train: default
   - graph: two_clusters
@@ -13,7 +13,7 @@ defaults:
 seed: 42
 use_cuda: true
 mixing_matrix: metropolis_hasting
-run_name: main_link_activation
+run_name: unbalanced_cluster
 consensus_lr: 1e-3
 old_gradients: false
 hydra:
@@ -24,5 +24,5 @@ hydra:
     subdir: ${mixing_matrix}-${old_gradients}-${model.name}
 same_distrib_test_set: True
 decrease_consensus: True
-main_link_activation: 0.4
-gossip_epochs: 1
+main_link_activation: 1
+

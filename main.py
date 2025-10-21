@@ -22,12 +22,20 @@ log = logging.getLogger(__name__)
 def print_metrics(metrics: Dict[str, List[float]], mode: str) -> None:
     losses = metrics['loss']
     accuracies = metrics['accuracy']
-    rounds = len(metrics[list(metrics.keys())[0]])
-    for r, (loss, acc) in enumerate(zip(losses, accuracies)):
-        res = f"{mode}, Round {r+1:03d}: "
-        res += f'Loss={loss:.4f}, '
-        res += f'Accuracy={acc:4f}'
-        log.info(res)
+    if mode == "Test":
+        std_accuracies = metrics["std accuracy"]
+        for r, (loss, acc, std_acc) in enumerate(zip(losses, accuracies, std_accuracies)):
+            res = f"{mode}, Round {r+1:03d}: "
+            res += f'Loss={loss:.4f}, '
+            res += f'Accuracy={acc:4f}, '
+            res += f'Std Accuracy={std_acc:4f}'
+            log.info(res)
+    if mode == "Train":
+        for r, (loss, acc) in enumerate(zip(losses, accuracies)):
+            res = f"{mode}, Round {r+1:03d}: "
+            res += f'Loss={loss:.4f}, '
+            res += f'Accuracy={acc:4f}'
+            log.info(res)
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
 def main(cfg: DictConfig) -> None:
@@ -97,7 +105,8 @@ def main(cfg: DictConfig) -> None:
         participation_rate=cfg.train.participation_rate,
         consensus_lr=cfg.consensus_lr,
         lr_decay=cfg.train.lr_decay,
-        old_gradients=cfg.old_gradients
+        old_gradients=cfg.old_gradients,
+        main_link_activation=cfg.main_link_activation
     )
 
     print_metrics(metrics['train'], 'Train')

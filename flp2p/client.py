@@ -30,19 +30,20 @@ class FLClient:
         self.weight_decay = config.get("weight_decay", 0.0)
         self.momentum = config.get("momentum", 0.0)
         # Store gradients of neighbors from the previous round
-        self.neighbor_gradients: Dict[int, Dict[str, torch.Tensor]] = {}
+        self.neighbor_state: Dict[int, Dict[str, torch.Tensor]] = {}
         
         self.total_neighbors_samples = 0
         
         
-    def store_neighbor_gradients(self, neighbor_gradients: Dict[int, Dict[str, torch.Tensor]]) -> None:
+    def store_neighbor_models(self, neighbor_state: Dict[int, Dict[str, torch.Tensor]]) -> None:
         """
         Store all the gradients of neighbors from the new round.
         Args:
-            neighbor_gradients: Dict mapping neighbor IDs to their gradients dict (param_name -> tensor)
+            neighbor_state: Dict mapping neighbor IDs to their gradients dict (param_name -> tensor)
         """
-        for neighbor_id, gradients in neighbor_gradients.items():
-            self.neighbor_gradients[neighbor_id] = gradients.copy()
+        for neighbor_id, models in neighbor_state.items():
+            self.neighbor_state[neighbor_id] = models.copy()
+
             
     def _optimizer(self) -> torch.optim.Optimizer:
         return torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay, momentum=self.momentum)
@@ -110,65 +111,29 @@ class FLClient:
                 total_norm += param_norm.item() ** 2
         total_norm = total_norm ** 0.5
         return total_norm
-    
-    def aggregate_gradients_weighted(self, gradients_dict:  Dict[int, Dict[str, torch.Tensor]], weights: List[float]) -> Dict[str, torch.Tensor]:
-        """
-        Aggregate gradients weighted by the adjacency matrix (weights).
-        Args:
-            gradients_list: List of gradients dicts (param_name -> tensor) from neighbors.
-            weights: List of weights (same order as gradients_list) from adjacency matrix.
-        Returns:
-            Dict of aggregated gradients (param_name -> tensor).
-        """
-        #if not gradients_dict or not weights or len(gradients_dict) != len(weights):
-        #    return {}
-        agg: Dict[str, torch.Tensor] = {}
-        param_names = list(gradients_dict.values())[0].keys()
-        for name in param_names:
-            weighted_grads = []
-            for idx in gradients_dict:
-                weighted_grads.append(gradients_dict[idx][name].float() * weights[idx])
-            if weighted_grads:
-                agg[name] = sum(weighted_grads)
-        return agg
 
-    def update_state(self, neighbor_weights: List[float], consensus_lr: int = 0.1) -> None:
+    def update_state(self, neighbor_weights: List[float], consensus_lr: float = 0.1) -> None:
         """
         Update the model state using the aggregated gradient.
         Args:
             aneighbor_weights: List of weights corresponding to the stored neighbor gradients.
             alpha: Learning rate to use for the update. If None, use self.learning_rate.
         """
-        if not self.neighbor_gradients:
-            return
-        
-        aggregated_gradient = self.aggregate_gradients_weighted(
-            gradients_dict=self.neighbor_gradients,
-            weights=neighbor_weights)
-        with torch.no_grad():
-            for name, param in self.model.named_parameters():
-                if name in aggregated_gradient and param.requires_grad:
-                    grad = aggregated_gradient[name].to(param.device).type_as(param)
-                    param.data -= consensus_lr * grad
-        
-    def get_gradient(self) -> Dict[str, torch.Tensor]:
-        """
-        Return the current gradients of the model parameters as a dict.
-        Returns:
-            Dict mapping parameter names to their gradients (torch.Tensor).
-            Only parameters with gradients are included.
-        """
-        # Compute gradients from a single batch (sampled from train_loader)
-        gradients = {}
-        for name, param in self.model.named_parameters():
-            gradients[name] = param.grad.clone().detach().cpu()
-        return gradients
+        if not hasattr(self, "neighbor_states"): return
+        aggregated = {k: 0.0 for k in self.model.state_dict()}
+        for j, state in self.neighbor_states.items():
+            for k in aggregated:
+                aggregated[k] += neighbor_weights[j] * state[k]
+
+        self.model.load_state_dict({k: v.to(self.device) for k, v in aggregated.items()})
 
     def get_state(self) -> Dict[str, torch.Tensor]:
-        return {k: v.clone().detach() for k, v in self.model.state_dict().items()}
+        return {k: v.clone().detach().cpu() for k, v in self.model.state_dict().items()}
 
     def set_state(self, state: Dict[str, torch.Tensor]) -> None:
         current = self.model.state_dict()
         mapped = {k: v.to(current[k].device).type_as(current[k]) for k, v in state.items() if k in current}
         current.update(mapped)
         self.model.load_state_dict(current)
+        
+        

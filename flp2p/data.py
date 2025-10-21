@@ -193,6 +193,10 @@ def build_client_loaders(
         train_parts = dirichlet_partition(labels=labels, num_clients=config.partition.num_clients, alpha=config.partition.dirichlet_alpha, min_partition_size=config.partition.min_partition_size)
     elif config.partition.strategy == "pathological":
         train_parts = pathology_partition(labels=labels, num_clients=config.partition.num_clients, num_classes_per_client=config.partition.num_classes_per_client)
+    elif config.partition.strategy == 'unbalanced_cluster':
+        first_part, second_part = list(map(lambda x: np.array([train_dataset.targets[i] for i in x.tolist()]), dirichlet_partition(labels=labels, num_clients=2, alpha=config.partition.alpha_two_set)))
+        train_parts = dirichlet_partition(labels=first_part, num_clients=config.partition.num_clients//2, alpha=config.partition.intra_cluster_alpha, min_partition_size=config.partition.min_partition_size)
+        train_parts += dirichlet_partition(labels=second_part, num_clients=config.partition.num_clients//2, alpha=config.partition.intra_cluster_alpha, min_partition_size=config.partition.min_partition_size)
     else:
         raise ValueError(f"Unknown partition strategy: {config.partition.strategy}")
 
@@ -209,7 +213,7 @@ def build_client_loaders(
         test_subset = Subset(test_dataset, indices=idxs_test.tolist())
         
         # Use the full test set for all clients by default
-        ####### WARNING : if using Joblib, it is not possible to set num_workers > 0 see : 
+        ####### WARNING : if using Joblib, it is not possible to set num_workers > 0 see : github repo and issue
         train_loader = DataLoader(train_subset, batch_size=min(len(train_subset), config.get("batch_size", 64)), shuffle=True, num_workers=config.data.get("num_workers", 2))
         test_loader = DataLoader(test_subset, batch_size=min(len(test_subset), config.get("batch_size", 64)), shuffle=False, num_workers=config.data.get("num_workers", 2))
         loaders.append((train_loader, test_loader))
