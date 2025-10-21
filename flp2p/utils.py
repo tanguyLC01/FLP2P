@@ -92,7 +92,6 @@ def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: i
     return graph
 
 
-
 def compute_consensus_distance(node_params):
     """Check how far apart node parameters are"""
     param_vectors = []
