@@ -69,6 +69,12 @@ def run_fixed(cfg: DictConfig) -> None:
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
     if cfg.mixing_matrix != 'matcha':
         W = compute_weight_matrix(graph, cfg.mixing_matrix)
+        W = list()
+        for _ in range(cfg.train.rounds):
+            temp = W.copy()
+            if np.random.random() > cfg.main_link_activation:
+                temp[center_node_1, center_node_2] = 0
+            
     else:
         W = list()
         n_nodes = len(graph.nodes)
@@ -100,7 +106,7 @@ def run_fixed(cfg: DictConfig) -> None:
             for i in range(N):
                 mixed = torch.zeros_like(flat_params[0])
                 for j in range(N):
-                    mixed += W[i, j] * flat_params[j]
+                    mixed += W_actual[i, j] * flat_params[j]
                 new_params.append(mixed)
             
             # Update each client model
