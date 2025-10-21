@@ -12,8 +12,8 @@ defaults:
 
 seed: 42
 use_cuda: true
-mixing_matrix: metropolis_hasting
-run_name: main_link_activation
+mixing_matrix: matcha
+run_name: fixed_value
 consensus_lr: 1e-3
 old_gradients: false
 hydra:

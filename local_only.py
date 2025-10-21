@@ -4,8 +4,6 @@ from omegaconf import DictConfig, OmegaConf
 import torch
 import numpy as np
 import random
-import flp2p  # Assuming the flp2p module is installed and configured
-from flp2p.client import Client  # Import Client from flp2p/client.py
 from flp2p.data import build_client_loaders, get_dataset
 from flp2p.networks.lenet5 import LeNet5
 from flp2p.networks.resnet18 import make_resnet18
@@ -127,3 +125,7 @@ def run_local(cfg: DictConfig) -> None:
 
     print_metrics(metrics['train'], 'Train')
     print_metrics(metrics['test'], 'Test')
+    
+    
+if __name__ == "__main__":
+    run_local()
