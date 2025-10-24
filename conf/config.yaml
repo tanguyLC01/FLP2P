@@ -1,6 +1,6 @@
 defaults:
   - data: cifar10
-  - model: resnet18
+  - model: lenet5
   - partition: dirichlet
   - client: default
   - train: default
@@ -12,10 +12,10 @@ defaults:
 
 seed: 42
 use_cuda: true
-mixing_matrix: metropolis_hasting
-run_name: fixed_value
+mixing_matrix: maximum_degree
+run_name: DSGD_maximum_degree_lr_decay
 consensus_lr: 1e-3
-old_gradients: false
+old_gradients: true
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
@@ -25,5 +25,4 @@ hydra:
 same_distrib_test_set: True
 decrease_consensus: True
 main_link_activation: 0.9
-leaf_node_activation: 0.1
-gossip_epochs: 1
+border_link_activation: 0.1

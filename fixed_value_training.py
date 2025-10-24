@@ -29,6 +29,10 @@ def set_flat_params(model, flat_params):
         num_params = p.numel()
         p.data.copy_(flat_params[idx:idx + num_params].view_as(p))
         idx += num_params
+        
+def get_spectral_gap(matrix: np.array) -> float:
+    m = matrix.shape[0]
+    return np.linalg.matrix_norm(matrix @ matrix - 1/m * np.ones((m, m)), ord=2)
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
 def run_fixed(cfg: DictConfig) -> None:
@@ -67,18 +71,34 @@ def run_fixed(cfg: DictConfig) -> None:
     graph = build_topology(cfg.partition.num_clients, cfg.graph, mixing_matrix=cfg.mixing_matrix, seed=cfg.seed, consensus_lr=cfg.consensus_lr)
     pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
+    N = len(clients)
+    max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
+    center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
+    neighbor_center_1 = list(graph.neighbors(center_node_1))[0]
+    neighbor_center_2 = list(graph.neighbors(center_node_2))[0] 
     if cfg.mixing_matrix != 'matcha':
-        W = compute_weight_matrix(graph, cfg.mixing_matrix)
         W = list()
         border_nodes = [n for n in graph.nodes if graph.degree[n] == 1]
         for _ in range(cfg.train.rounds):
-            temp = W.copy()
+            # Copy base graph
+            g_temp = graph.copy()
+
+            # Randomly deactivate the main link
             if np.random.random() > cfg.main_link_activation:
-                temp[center_node_1, center_node_2] = 0
+                if g_temp.has_edge(center_node_1, center_node_2):
+                    g_temp.remove_edge(center_node_1, center_node_2)
+
+            # Randomly deactivate border links
             for border_node in border_nodes:
                 if np.random.random() > cfg.border_link_activation:
-                    temp[border_node, center_node_1] = 0
-                    temp[border_node, center_node_2] = 0
+                    if g_temp.has_edge(border_node, center_node_1):
+                        g_temp.remove_edge(border_node, center_node_1)
+                    if g_temp.has_edge(border_node, center_node_2):
+                        g_temp.remove_edge(border_node, center_node_2)
+            temp = compute_weight_matrix(g_temp, cfg.mixing_matrix)
+            log.info(f"Rounds {_+1}, Spectral Gap = {get_spectral_gap(temp)}")
+            W.append(temp)
+        
     else:
         W = list()
         n_nodes = len(graph.nodes)
@@ -88,13 +108,10 @@ def run_fixed(cfg: DictConfig) -> None:
         alpha = getAlpha(laplacians, probas, n_nodes)
         for _ in range(cfg.train.rounds):
             L_k = np.sum([laplacians[i] for i in range(len(subgraphs)) if np.random.random() < probas[i]], axis=0)
-            W.append(np.eye(n_nodes) - alpha * L_k)
+            temp = np.eye(n_nodes) - alpha * L_k
+            log.info(f"Rounds {_+1}, Spectral Gap = {get_spectral_gap(temp)}")
+            W.append(temp)
 
-    N = len(clients)
-    max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
-    center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
-    neighbor_center_1 = list(graph.neighbors(center_node_1))[0]
-    neighbor_center_2 = list(graph.neighbors(center_node_2))[0] 
 
     for round in range(1, cfg.train.rounds):
         W_actual = None

@@ -30,7 +30,8 @@ class FLClient:
         self.weight_decay = config.get("weight_decay", 0.0)
         self.momentum = config.get("momentum", 0.0)
         # Store gradients of neighbors from the previous round
-        self.neighbor_state: Dict[int, Dict[str, torch.Tensor]] = {}
+        self.neighbor_models: Dict[int, Dict[str, torch.Tensor]] = {}
+
         
         self.total_neighbors_samples = 0
         
@@ -42,7 +43,7 @@ class FLClient:
             neighbor_state: Dict mapping neighbor IDs to their gradients dict (param_name -> tensor)
         """
         for neighbor_id, models in neighbor_state.items():
-            self.neighbor_state[neighbor_id] = models.copy()
+            self.neighbor_models[neighbor_id] = models.copy()
 
             
     def _optimizer(self) -> torch.optim.Optimizer:
@@ -119,9 +120,9 @@ class FLClient:
             aneighbor_weights: List of weights corresponding to the stored neighbor gradients.
             alpha: Learning rate to use for the update. If None, use self.learning_rate.
         """
-        if not hasattr(self, "neighbor_states"): return
-        aggregated = {k: 0.0 for k in self.model.state_dict()}
-        for j, state in self.neighbor_states.items():
+        if not hasattr(self, "neighbor_models"): return
+        aggregated = {k: torch.zeros_like(v).cpu() for k, v in self.model.state_dict().items()}
+        for j, state in self.neighbor_models.items():
             for k in aggregated:
                 aggregated[k] += neighbor_weights[j] * state[k]
 

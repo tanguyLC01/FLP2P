@@ -106,7 +106,8 @@ def main(cfg: DictConfig) -> None:
         consensus_lr=cfg.consensus_lr,
         lr_decay=cfg.train.lr_decay,
         old_gradients=cfg.old_gradients,
-        main_link_activation=cfg.main_link_activation
+        main_link_activation=cfg.main_link_activation,
+        border_link_activation=cfg.border_link_activation
     )
 
     print_metrics(metrics['train'], 'Train')
