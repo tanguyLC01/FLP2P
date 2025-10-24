@@ -155,6 +155,12 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
             # Self-weight
             W[node, node] = 1 - graph.degree[node] / max_degree
             
+    elif mixing_matrix == 'jaccard':
+        for node in nodes:
+            for neighbor in graph.neighbors(node):
+                W[node, neighbor] = len(set(graph.neighbors(node)) & set(graph.neighbors(neighbor))) / len(set(graph.neighbors(node)) | set(graph.neighbors(neighbor)))
+            W[node, node] = 1 - sum(W[node, neighbor] for neighbor in graph.neighbors(node))
+            
     return W
 
 def validate_weight_matrix(W):
