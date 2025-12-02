@@ -113,7 +113,7 @@ class FLClient:
         total_norm = total_norm ** 0.5
         return total_norm
 
-    def update_state(self, neighbor_weights: List[float], consensus_lr: float = 0.1) -> None:
+    def update_state(self, neighbor_weights: List[float]) -> None:
         """
         Update the model state using the aggregated gradient.
         Args:

@@ -4,7 +4,17 @@ import numpy as np
 import networkx as nx
 from typing import Dict, Literal
 import torch
-GOSSIPING = Literal['metropolis_hasting', 'maximum_degree', 'average', 'probability', 'matcha']
+import ot
+
+GOSSIPING = Literal['metropolis_hasting', 'maximum_degree', 'average', 'probability', 'matcha', 'jaccard']
+
+def get_spectral_gap(matrix: np.array) -> float:
+    eigenvals = set(np.abs(np.linalg.eigvals(matrix)))
+    if len(eigenvals) == 1:
+        return 1
+    lambda_2 = sorted(eigenvals, reverse=False)[1]
+    return 1 - lambda_2
+
 
 def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topology") -> None:
     """
@@ -28,7 +38,7 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     net.save_graph(html_path)
 
     
-def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: int = 42, consensus_lr: int = 0.1) -> nx.Graph:
+def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: int = 42) -> nx.Graph:
     if cfg.topology == "ring":
         graph = nx.cycle_graph(num_clients)
     elif cfg.topology == "erdos_renyi":
@@ -52,17 +62,17 @@ def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: i
         for node in cluster1_nodes:
             if node != center1:
                 graph.add_edge(center1, node)
-                graph[center1][node]["probability_selection"] = 1/(len(cluster1_nodes) - 1)
+                graph[center1][node]["probability_selection"] = cfg.border_link_activation
 
         # Connect each node in cluster 2 to center2 (except center2 itself)
         for node in cluster2_nodes:
             if node != center2:
                 graph.add_edge(center2, node)
-                graph[center2][node]["probability_selection"] = 1/(len(cluster1_nodes) - 1)
+                graph[center2][node]["probability_selection"] = cfg.border_link_activation
 
         # Connect the two centers
         graph.add_edge(center1, center2)
-        graph[center1][center2]["probability_selection"] = 1
+        graph[center1][center2]["probability_selection"] = cfg.main_link_activation
         
     elif cfg.topology == 'random_geometric':
         graph = nx.random_geometric_graph(num_clients, radius=cfg.radius, seed=seed)
@@ -156,12 +166,25 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
             W[node, node] = 1 - graph.degree[node] / max_degree
             
     elif mixing_matrix == 'jaccard':
-        for node in nodes:
-            for neighbor in graph.neighbors(node):
-                W[node, neighbor] = len(set(graph.neighbors(node)) & set(graph.neighbors(neighbor))) / len(set(graph.neighbors(node)) | set(graph.neighbors(neighbor)))
-            W[node, node] = 1 - sum(W[node, neighbor] for neighbor in graph.neighbors(node))
-            
+        N = len(nodes)
+        W = np.zeros((N, N))
+
+        for i in nodes:
+            neighbors_i = set(graph.neighbors(i))
+            set_i = neighbors_i | {i}
+            for j in neighbors_i:
+                set_j = set(graph.neighbors(j)) | {j}
+                # Jaccard Intersection over Union
+                intersection = len(set_i & set_j)
+                union = len(set_i | set_j)
+                W[i, j] = 1 - intersection / union
+
+        # # 3. Add Self-Loops to make row sums exactly 1
+        for i in range(N):
+            W[i, i] = max(1.0 - np.sum(W[i, :]), 0)
+            W[i,:] /= np.sum(W[i, :], axis=0)
     return W
+
 
 def validate_weight_matrix(W):
     """Check if W is doubly stochastic"""

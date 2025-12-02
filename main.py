@@ -90,7 +90,7 @@ def main(cfg: DictConfig) -> None:
     
 
     # Graph
-    graph = build_topology(cfg.partition.num_clients, cfg.graph, mixing_matrix=cfg.mixing_matrix, seed=cfg.seed, consensus_lr=cfg.consensus_lr)
+    graph = build_topology(cfg.partition.num_clients, cfg.graph, mixing_matrix=cfg.mixing_matrix, seed=cfg.seed)
     pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
 
@@ -102,12 +102,8 @@ def main(cfg: DictConfig) -> None:
         rounds=cfg.train.rounds,
         local_epochs=cfg.train.local_epochs,
         progress=cfg.train.progress,
-        participation_rate=cfg.train.participation_rate,
-        consensus_lr=cfg.consensus_lr,
         lr_decay=cfg.train.lr_decay,
         old_gradients=cfg.old_gradients,
-        main_link_activation=cfg.main_link_activation,
-        border_link_activation=cfg.border_link_activation
     )
 
     print_metrics(metrics['train'], 'Train')

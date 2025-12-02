@@ -1,2 +1,4 @@
 name: two_clusters
 topology: two_clusters
+main_link_activation: 1
+border_link_activation: 1

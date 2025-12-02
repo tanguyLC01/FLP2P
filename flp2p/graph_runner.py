@@ -11,7 +11,7 @@ import logging
 
 from flp2p.matcha_mixing_matrix import graphToLaplacian, getProbability, getSubGraphs, getAlpha
 from flp2p.data import verify_data_split
-from flp2p.utils import compute_weight_matrix, validate_weight_matrix, GOSSIPING
+from flp2p.utils import compute_weight_matrix, validate_weight_matrix, GOSSIPING, get_spectral_gap
 log = logging.getLogger(__name__)
 
 
@@ -21,13 +21,9 @@ def run_rounds(
     mixing_matrix: GOSSIPING,
     rounds: int = 5,
     local_epochs: int = 1,
-    participation_rate: float = 0.5,
     progress: bool = True,
-    consensus_lr: int = 0.1,
     lr_decay: int = 0,
-    old_gradients: bool = True,
-    main_link_activation: float = 1,
-    border_link_activation: float = 1,
+    old_gradients: bool = True
 ) -> Dict[str, List[Tuple[float, float]]]:
     metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
 
@@ -46,16 +42,18 @@ def run_rounds(
         for i, client in enumerate(clients):
             client.neighbor_models = {n: clients[n].get_state() for n in graph.neighbors(i)}
     
+    max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
+    center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
+    neighbor_center_1 = list([n for n in graph.neighbors(center_node_1) if n != center_node_2])[0]
+    neighbor_center_2 = list([n for n in graph.neighbors(center_node_2) if n != center_node_1])[0]
+    
+        
     if mixing_matrix != 'matcha':
         # Compute the mixing matrix
         W = compute_weight_matrix(graph, mixing_matrix)
         validate_weight_matrix(W)
         
         N = len(clients)
-        max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
-        center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
-        neighbor_center_1 = list(graph.neighbors(center_node_1))[0]
-        neighbor_center_2 = list(graph.neighbors(center_node_2))[0] 
         # log.info(f'{len(list(clients[center_node_1].neighbor_models.keys()))}')
         # log.info(f'{len(list(graph.neighbors(center_node_1)))}')
         for rnd in tqdm(range(rounds), disable=not progress, desc="Rounds"):
@@ -63,17 +61,15 @@ def run_rounds(
             # For each edge, decide if it is active this round (bidirectional selection)
             g_temp = graph.copy()
             border_nodes = [n for n in graph.nodes if graph.degree[n] == 1]
-            if np.random.random() > main_link_activation:
+            if np.random.random() > graph[center_node_1][center_node_2]["probability_selection"]:
                 g_temp.remove_edge(center_node_1, center_node_2)
 
             for border_node in border_nodes:
-                if np.random.random() > border_link_activation:
-                    if g_temp.has_edge(border_node, center_node_1):
-                        g_temp.remove_edge(border_node, center_node_1)
-                    elif g_temp.has_edge(border_node, center_node_2):
-                        g_temp.remove_edge(border_node, center_node_2)
+                if g_temp.has_edge(border_node, center_node_1) and  np.random.random() > graph[border_node][center_node_1]["probability_selection"]:
+                    g_temp.remove_edge(border_node, center_node_1)
+                elif g_temp.has_edge(border_node, center_node_2) and np.random.random() > graph[border_node][center_node_2]["probability_selection"]:
+                    g_temp.remove_edge(border_node, center_node_2)
 
- 
             # Local training
             active_nodes = [n for n in g_temp.nodes if g_temp.degree[n] >= 1]
             log.info(f"Fraction of activated nodes : {len(active_nodes)/len(clients)} ")
@@ -120,9 +116,9 @@ def run_rounds(
             ################# AGGREGATION #################
             log.info(f'Number of model stored in central node 1 : {len(clients[center_node_1].neighbor_models)}')
             for active_node in active_nodes:
-                clients[active_node].update_state(W_active[active_node, :], consensus_lr=consensus_lr)
+                clients[active_node].update_state(W_active[active_node, :])
             
-                    #Evaluate (average across clients)
+            # Evaluate (average across clients)
             with torch.no_grad():
                 total_test_samples = 0
                 total_train_samples = 0
@@ -168,9 +164,9 @@ def run_rounds(
 
             if lr_decay != 0:
                 if type(lr_decay) is int and rnd > lr_decay:
-                    log.info(f'Learning rate: {learning_rate / (rnd - lr_decay + 1)**0.5}')
+                    log.info(f'Learning rate: {learning_rate / (rnd - lr_decay + 1)**1.5}')
                     for client in clients:
-                        client.learning_rate = learning_rate / (rnd - lr_decay + 1)**0.5
+                        client.learning_rate = learning_rate / (rnd - lr_decay + 1)**1.5
                   
                 if lr_decay is float:
                     for client in clients:
@@ -311,10 +307,16 @@ def run_rounds(
             #     return metrics
 
             if lr_decay != 0:
-                for client in clients:
-                    client.learning_rate *= lr_decay
+                if type(lr_decay) is int and rnd > lr_decay:
+                    log.info(f'Learning rate: {learning_rate / (rnd - lr_decay + 1)**1.5}')
+                    for client in clients:
+                        client.learning_rate = learning_rate / (rnd - lr_decay + 1)**1.5
+                  
+                if lr_decay is float:
+                    for client in clients:
+                        client.learning_rate *= lr_decay
                 #consensus_lr *= lr_decay
-                    
+                
             param_vectors = []
             for client in clients:
                 # move each tensor to CPU before flattening

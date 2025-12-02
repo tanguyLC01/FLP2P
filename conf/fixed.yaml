@@ -10,16 +10,18 @@ defaults:
 
 
 
-seed: 42
+seed: 10
 use_cuda: true
-mixing_matrix: metropolis_hasting
-run_name: DSGD_full_activation
+mixing_matrix: jaccard
+run_name: negative_possibility
+consensus_lr: 1e-3
 old_gradients: false
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
   sweep:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
-    subdir: ${mixing_matrix}-gradient:${old_gradients}-equal_test_set:${same_distrib_test_set}
-same_distrib_test_set: false
-
+    subdir: ${mixing_matrix}-${old_gradients}-${model.name}
+decrease_consensus: True
+main_link_activation: 1
+border_link_activation: 1
