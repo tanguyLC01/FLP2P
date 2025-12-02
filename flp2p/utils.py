@@ -4,7 +4,6 @@ import numpy as np
 import networkx as nx
 from typing import Dict, Literal
 import torch
-import ot
 
 GOSSIPING = Literal['metropolis_hasting', 'maximum_degree', 'average', 'probability', 'matcha', 'jaccard']
 
