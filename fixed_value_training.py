@@ -9,7 +9,7 @@ from flp2p.networks.resnet18 import make_resnet18
 from omegaconf import DictConfig
 import numpy as np
 import torch
-from flp2p.utils import build_topology, compute_weight_matrix, plot_topology
+from flp2p.utils import build_topology, compute_weight_matrix, plot_topology, validate_weight_matrix
 import pickle
 import logging
 import hydra
@@ -31,10 +31,13 @@ def set_flat_params(model, flat_params):
         idx += num_params
         
 def get_spectral_gap(matrix: np.array) -> float:
-    m = matrix.shape[0]
-    return np.linalg.matrix_norm(matrix @ matrix - 1/m * np.ones((m, m)), ord=2)
+    eigenvals = set(np.abs(np.linalg.eigvals(matrix)))
+    if len(eigenvals) == 1:
+        return 1
+    lambda_2 = sorted(eigenvals, reverse=False)[1]
+    return 1 - lambda_2
 
-@hydra.main(version_base=None, config_path="conf", config_name="config")
+@hydra.main(version_base=None, config_path="conf", config_name="fixed")
 def run_fixed(cfg: DictConfig) -> None:
     
     device = torch.device("cuda" if torch.cuda.is_available() and cfg.use_cuda else "cpu")
@@ -71,36 +74,53 @@ def run_fixed(cfg: DictConfig) -> None:
     graph = build_topology(cfg.partition.num_clients, cfg.graph, mixing_matrix=cfg.mixing_matrix, seed=cfg.seed, consensus_lr=cfg.consensus_lr)
     pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
+    
+        
+    if cfg.old_gradients:
+        # If old_gradiens is True, fill the neighbord_models with the x_0 of the FL Client just created
+        for i, client in enumerate(clients):
+            client.neighbor_models = {n: clients[n].get_state() for n in graph.neighbors(i)}
+    
+    
     N = len(clients)
     max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
     center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
-    neighbor_center_1 = list(graph.neighbors(center_node_1))[0]
-    neighbor_center_2 = list(graph.neighbors(center_node_2))[0] 
+    neighbor_center_1 = list([n for n in graph.neighbors(center_node_1) if n != center_node_2])[0]
+    neighbor_center_2 = list([n for n in graph.neighbors(center_node_2) if n != center_node_1])[0] 
+    log.info(f'Center_node_1 : {center_node_1}, Center_node_2 : {center_node_2}, Neighbord_1 : {neighbor_center_1}, Neighbor_2 : {neighbor_center_2}')
+
     if cfg.mixing_matrix != 'matcha':
-        W = list()
+        W = compute_weight_matrix(graph, cfg.mixing_matrix)
+    elif cfg.mixing_matrix == 'matcha':
+        W = compute_weight_matrix(graph, 'jaccard') # We use this W for the aggregation part and with old_models updates, we need a full neighbor matrix
+    if cfg.mixing_matrix != 'matcha':
+        W_list = list()
         border_nodes = [n for n in graph.nodes if graph.degree[n] == 1]
+        log.info(f'Number of rounds : {cfg.train.rounds}')
         for _ in range(cfg.train.rounds):
             # Copy base graph
             g_temp = graph.copy()
 
-            # Randomly deactivate the main link
+            # Randomly desactivate the main link
             if np.random.random() > cfg.main_link_activation:
                 if g_temp.has_edge(center_node_1, center_node_2):
                     g_temp.remove_edge(center_node_1, center_node_2)
 
-            # Randomly deactivate border links
+            # Randomly desactivate border links
             for border_node in border_nodes:
                 if np.random.random() > cfg.border_link_activation:
                     if g_temp.has_edge(border_node, center_node_1):
                         g_temp.remove_edge(border_node, center_node_1)
                     if g_temp.has_edge(border_node, center_node_2):
                         g_temp.remove_edge(border_node, center_node_2)
+                        
             temp = compute_weight_matrix(g_temp, cfg.mixing_matrix)
             log.info(f"Rounds {_+1}, Spectral Gap = {get_spectral_gap(temp)}")
-            W.append(temp)
+            validate_weight_matrix(temp)
+            W_list.append(temp)
         
     else:
-        W = list()
+        W_list = list()
         n_nodes = len(graph.nodes)
         subgraphs = getSubGraphs(graph, n_nodes)
         laplacians = graphToLaplacian(subgraphs, n_nodes)
@@ -110,30 +130,39 @@ def run_fixed(cfg: DictConfig) -> None:
             L_k = np.sum([laplacians[i] for i in range(len(subgraphs)) if np.random.random() < probas[i]], axis=0)
             temp = np.eye(n_nodes) - alpha * L_k
             log.info(f"Rounds {_+1}, Spectral Gap = {get_spectral_gap(temp)}")
-            W.append(temp)
+            W_list.append(temp)
 
 
     for round in range(1, cfg.train.rounds):
-        W_actual = None
-        if type(W) == list:
-            W_actual = W[round-1]
-        else:
-            W_actual = W
+        W_actual = W_list[round-1]
             
         with torch.no_grad():
-            flat_params  = [get_flat_params(client.model) for client in clients]
-            new_params = []
+            mask = ~np.eye(W_actual.shape[0], dtype=bool)
+            non_zero_indices  = np.nonzero(W_actual * mask)
+            nodes_involved = set(non_zero_indices[0]) | set(non_zero_indices[1])
+            for active_node in nodes_involved:
+                neighbors_activated = [int(n) for n in graph.neighbors(active_node) if W_actual[active_node, n] > 0]
+                if active_node not in neighbors_activated:
+                    neighbors_activated.append(int(active_node))
+                neighbor_models = {}
+                for n in neighbors_activated:
+                    neighbor_models[n] = clients[n].get_state()
+
+                ################ OLD GRADIENTS PART ########################
+                if cfg.old_gradients:
+                    clients[int(active_node)].store_neighbor_models(neighbor_models)
+
+                ################## ONLY ACTUALIZE WITH NEW GRADIENTS ########################
+                else:
+                    clients[int(active_node)].neighbor_models = neighbor_models 
             
-            for i in range(N):
-                mixed = torch.zeros_like(flat_params[0])
-                for j in range(N):
-                    mixed += W_actual[i, j] * flat_params[j]
-                new_params.append(mixed)
-            
-            # Update each client model
-            for i in range(N):
-                set_flat_params(clients[i].model, new_params[i])
-                
+            W_mixing = None
+            if not cfg.old_gradients:
+                W_mixing = W_actual
+            else:
+                W_mixing = W
+            for active_node in nodes_involved:
+                clients[active_node].update_state(W_mixing[active_node, :])               
         
             param_vectors = []
             for client in clients:
@@ -141,7 +170,7 @@ def run_fixed(cfg: DictConfig) -> None:
                 state = client.model.state_dict()
                 flat = torch.cat([p.detach().cpu().flatten() for p in state.values()])
                 param_vectors.append(flat)
-
+                
             param_vectors = torch.stack(param_vectors, dim=0)  # shape [n_clients, d] on CPU
             mean_model = param_vectors.mean(dim=0)
             
@@ -154,11 +183,14 @@ def run_fixed(cfg: DictConfig) -> None:
             cluster_1_consensus_distance = torch.norm(param_vectors[center_node_1] - param_vectors[neighbor_center_1]).item()
             cluster_2_consensus_distance = torch.norm(param_vectors[center_node_2] - param_vectors[neighbor_center_2]).item()
             
+            
+            mass = torch.mean(torch.norm(param_vectors, dim=1)).item()
             log.info(f'-------------- Round {round} --------------')
             log.info(f"Overall consensus distance : {consensus_distance:.6f}")
             log.info(f"Cluster 1 consensus distance : {cluster_1_consensus_distance:.6f}")
             log.info(f"Cluster 2 consensus distance : {cluster_2_consensus_distance:.6f}")
             log.info(f"Inter-cluster distance : {inter_cluster:.6f}")
+            log.info(f"Mass : {mass}")
 
 
     
