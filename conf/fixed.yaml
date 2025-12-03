@@ -14,7 +14,6 @@ seed: 10
 use_cuda: true
 mixing_matrix: jaccard
 run_name: negative_possibility
-consensus_lr: 1e-3
 old_gradients: false
 hydra:
   run:
@@ -23,5 +22,3 @@ hydra:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
     subdir: ${mixing_matrix}-${old_gradients}-${model.name}
 decrease_consensus: True
-main_link_activation: 1
-border_link_activation: 1

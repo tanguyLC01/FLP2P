@@ -200,7 +200,7 @@ def build_client_loaders(
     else:
         raise ValueError(f"Unknown partition strategy: {config.partition.strategy}")
 
-    if config.same_distrib_test_set is True:
+    if config.same_distrib_test_set is False:
         test_parts = match_test_partition(train_parts, train_labels=labels, test_labels=np.array(test_dataset.targets))
     else:
         test_parts =  [np.arange(len(test_dataset.targets)) for _ in range(config.partition.num_clients)]
@@ -214,8 +214,8 @@ def build_client_loaders(
         
         # Use the full test set for all clients by default
         ####### WARNING : if using Joblib, it is not possible to set num_workers > 0 see : github repo and issue
-        train_loader = DataLoader(train_subset, batch_size=min(len(train_subset), config.get("batch_size", 64)), shuffle=True, num_workers=config.data.get("num_workers", 2))
-        test_loader = DataLoader(test_subset, batch_size=min(len(test_subset), config.get("batch_size", 64)), shuffle=False, num_workers=config.data.get("num_workers", 2))
+        train_loader = DataLoader(train_subset, batch_size=min(len(train_subset), config.data.get("batch_size", 64)), shuffle=True, num_workers=config.data.get("num_workers", 2))
+        test_loader = DataLoader(test_subset, batch_size=min(len(test_subset), config.data.get("batch_size", 64)), shuffle=False, num_workers=config.data.get("num_workers", 2))
         loaders.append((train_loader, test_loader))
     return loaders 
 

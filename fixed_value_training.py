@@ -71,7 +71,7 @@ def run_fixed(cfg: DictConfig) -> None:
         clients.append(client)
         
         
-    graph = build_topology(cfg.partition.num_clients, cfg.graph, mixing_matrix=cfg.mixing_matrix, seed=cfg.seed, consensus_lr=cfg.consensus_lr)
+    graph = build_topology(cfg.partition.num_clients, cfg.graph, mixing_matrix=cfg.mixing_matrix, seed=cfg.seed)
     pickle.dump(graph, open(os.path.join(log_path, "graph.pickle"), 'wb'))
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
     

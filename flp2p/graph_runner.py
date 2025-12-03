@@ -46,16 +46,17 @@ def run_rounds(
     center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
     neighbor_center_1 = list([n for n in graph.neighbors(center_node_1) if n != center_node_2])[0]
     neighbor_center_2 = list([n for n in graph.neighbors(center_node_2) if n != center_node_1])[0]
-    
-        
+    main_link_proba = graph[center_node_1][center_node_2]['probability_selection']
+    border_link_proba = graph[center_node_1][neighbor_center_1]['probability_selection']
+    log.info(f'Border_link_activation : {border_link_proba}')
+    log.info(f'Main_link_activation : {main_link_proba}')
+
     if mixing_matrix != 'matcha':
         # Compute the mixing matrix
         W = compute_weight_matrix(graph, mixing_matrix)
         validate_weight_matrix(W)
         
         N = len(clients)
-        # log.info(f'{len(list(clients[center_node_1].neighbor_models.keys()))}')
-        # log.info(f'{len(list(graph.neighbors(center_node_1)))}')
         for rnd in tqdm(range(rounds), disable=not progress, desc="Rounds"):
 
             # For each edge, decide if it is active this round (bidirectional selection)
@@ -65,19 +66,21 @@ def run_rounds(
                 g_temp.remove_edge(center_node_1, center_node_2)
 
             for border_node in border_nodes:
-                if g_temp.has_edge(border_node, center_node_1) and  np.random.random() > graph[border_node][center_node_1]["probability_selection"]:
+                if g_temp.has_edge(border_node, center_node_1) and  np.random.random() > graph[center_node_2][center_node_1]["probability_selection"]:
                     g_temp.remove_edge(border_node, center_node_1)
-                elif g_temp.has_edge(border_node, center_node_2) and np.random.random() > graph[border_node][center_node_2]["probability_selection"]:
+                elif g_temp.has_edge(border_node, center_node_2) and np.random.random() > graph[center_node_1][center_node_2]["probability_selection"]:
                     g_temp.remove_edge(border_node, center_node_2)
-
-            # Local training
+            
+            # Show the number of active nodes in the generated subgraph
             active_nodes = [n for n in g_temp.nodes if g_temp.degree[n] >= 1]
-            log.info(f"Fraction of activated nodes : {len(active_nodes)/len(clients)} ")
+            log.info(f"Fraction of activated nodes : {len(active_nodes)/len(clients)} ") 
+
+            # Local training of all the nodes
             train_gradient_norm = 0
             weights_per_clients = {}
             for idx, client in enumerate(clients):
                 if idx in active_nodes:
-                    n_samples, gradient_norm, gradients = client.local_train(local_epochs=local_epochs)
+                    _, gradient_norm, _ = client.local_train(local_epochs=local_epochs)
                     train_gradient_norm += gradient_norm
 
 
@@ -99,6 +102,7 @@ def run_rounds(
             ################# GOSSIPING PHASE ##################
             for active_node in active_nodes:
                 neighbors_activated = [int(n) for n in g_temp.neighbors(active_node)]
+                # We add the node itself in the neighbors set to take it into account the aggregation process 
                 if active_node not in neighbors_activated:
                     neighbors_activated.append(int(active_node))
                 neighbor_models = {}
@@ -113,6 +117,20 @@ def run_rounds(
                 else:
                     clients[int(active_node)].neighbor_models = neighbor_models
                     
+            ######## WEIGHT W BY THE ACTIVATION PROBABILITY OF EDEGES #############
+            weights = np.full_like(W_active, 1.0 / border_link_proba)
+
+            # Fix the diagonal to 1 (no scaling)
+            np.fill_diagonal(weights, 1.0)
+            weights[center_node_1, center_node_2] *= 1/main_link_proba
+            weights[center_node_2, center_node_1] *= 1/main_link_proba
+            
+            W_active *= weights
+            row_sums = W_active.sum(axis=1, keepdims=True)
+            # Avoid division by zero
+            row_sums[row_sums == 0] = 1.0
+            W_active /= row_sums
+            
             ################# AGGREGATION #################
             log.info(f'Number of model stored in central node 1 : {len(clients[center_node_1].neighbor_models)}')
             for active_node in active_nodes:
@@ -172,10 +190,6 @@ def run_rounds(
                     for client in clients:
                         client.learning_rate *= lr_decay
                 #consensus_lr *= lr_decay
-
-            max_degree_nodes = sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2]
-            center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]
-         
         
             param_vectors = []
             for client in clients:

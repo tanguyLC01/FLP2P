@@ -1,4 +1,4 @@
 name: cifar10
 root: ./data
-batch_size: 10
+batch_size: 32
 num_workers: 0
