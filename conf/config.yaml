@@ -13,7 +13,7 @@ defaults:
 seed: 42
 use_cuda: true
 mixing_matrix: metropolis_hasting
-run_name: DSGD_partial_activation
+run_name: DSGD_full_activation
 old_gradients: false
 hydra:
   run:
@@ -21,4 +21,5 @@ hydra:
   sweep:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
     subdir: ${mixing_matrix}-gradient:${old_gradients}-equal_test_set:${same_distrib_test_set}
-same_distrib_test_set: False
+same_distrib_test_set: false
+
