@@ -1,3 +1,2 @@
 name: ring
 topology: ring
-er_p: 0.2  # ignored for ring 

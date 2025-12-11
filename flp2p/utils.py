@@ -177,11 +177,16 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
                 intersection = len(set_i & set_j)
                 union = len(set_i | set_j)
                 W[i, j] = 1 - intersection / union
-
+                W[j, i] = 1 - intersection / union
+        
+        # Calculate the flow per nodes
+        flows = np.sum(W, axis=0)
+        global_scaling_factor = np.max(flows)
+        W /= (global_scaling_factor + 1e-10)
+        
         # # 3. Add Self-Loops to make row sums exactly 1
         for i in range(N):
             W[i, i] = max(1.0 - np.sum(W[i, :]), 0)
-            W[i,:] /= np.sum(W[i, :], axis=0)
     return W
 
 

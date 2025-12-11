@@ -104,6 +104,8 @@ def main(cfg: DictConfig) -> None:
         progress=cfg.train.progress,
         lr_decay=cfg.train.lr_decay,
         old_gradients=cfg.old_gradients,
+        client_config=cfg.client,
+        topology_type=cfg.graph.name
     )
 
     print_metrics(metrics['train'], 'Train')

@@ -1,10 +1,10 @@
 defaults:
   - data: cifar10
-  - model: lenet5
-  - partition: dirichlet
+  - model: resnet18
+  - partition: iid
   - client: default
   - train: default
-  - graph: two_clusters
+  - graph: erdos_renyi
   - _self_
   - override hydra/launcher: joblib
 
@@ -12,9 +12,10 @@ defaults:
 
 seed: 42
 use_cuda: true
-mixing_matrix: metropolis_hasting
-run_name: DSGD_full_activation
+mixing_matrix: matcha
+run_name: matcha_iid_no_prob
 old_gradients: false
+aggregation_step_per_round: 1
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}

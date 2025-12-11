@@ -47,8 +47,13 @@ class FLClient:
 
             
     def _optimizer(self) -> torch.optim.Optimizer:
-        return torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay, momentum=self.momentum)
-
+        weights = [v for k, v in self.model.named_parameters() if "weight" in k]
+        biases = [v for k, v in self.model.named_parameters() if "bias" in k]
+        return   torch.optim.SGD(
+             [
+                {"params": weights, "weight_decay": self.weight_decay},
+            ], lr=self.learning_rate, momentum=self.momentum)
+        
     def local_train(self, local_epochs: int = 1, criterion: Optional[nn.Module] = None) -> Tuple[float, float]:
         if criterion is None:
             criterion = nn.CrossEntropyLoss()
@@ -121,7 +126,9 @@ class FLClient:
             alpha: Learning rate to use for the update. If None, use self.learning_rate.
         """
         if not hasattr(self, "neighbor_models"): return
-        aggregated = {k: torch.zeros_like(v).cpu() for k, v in self.model.state_dict().items()}
+        if not isinstance(neighbor_weights, torch.Tensor):
+            neighbor_weights = torch.tensor(neighbor_weights, dtype=torch.float32)
+        aggregated = {k: torch.zeros_like(v, dtype=torch.float32).cpu() for k, v in self.model.state_dict().items()}
         for j, state in self.neighbor_models.items():
             for k in aggregated:
                 aggregated[k] += neighbor_weights[j] * state[k]

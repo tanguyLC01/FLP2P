@@ -1,4 +1,4 @@
-rounds: 1000
+rounds: 300
 local_epochs: 1
 progress: true
-lr_decay: 0.99
+lr_decay: 0
