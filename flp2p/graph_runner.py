@@ -16,7 +16,22 @@ from flp2p.data import verify_data_split
 from flp2p.utils import compute_weight_matrix, validate_weight_matrix, GOSSIPING, get_spectral_gap
 log = logging.getLogger(__name__)
 
-def lr_update(client_config: dict, rnd: int, clients: List[FLClient]):
+
+class graph_runner:
+    
+    def __init__(self,   clients: List[FLClient],
+    graph: nx.Graph,
+    mixing_matrix: GOSSIPING,
+    rounds: int = 5,
+    local_epochs: int = 1,
+    progress: bool = True,
+    old_gradients: bool = True,
+    client_config: Dict = {},
+    topology_type: str = "two_clusters") -> None:
+        
+        
+
+def lr_update(client_config: dict, rnd: int, clients: List[FLClient]) -> None:
         if "lr_schedule" in client_config:
             client = clients[0]
             if (rnd+1) <= client_config.lr_schedule.warmup.epochs:
@@ -39,8 +54,119 @@ def lr_update(client_config: dict, rnd: int, clients: List[FLClient]):
         #     if lr_decay is float:
         #         for client in clients:
         #             client.learning_rate *= lr_decay
+        
+    
+    
+def training(clients: FLClient, local_epochs: int, rnd: int) -> Dict[int, Dict[str, torch.Tensor]]:
+    # Local training of all the nodes
+    train_gradient_norm = 0
+    weights_per_clients = {}
+    
+    for idx, client in enumerate(clients):
+        _, gradient_norm, _ = client.local_train(local_epochs=local_epochs)
+        weights_per_clients[idx] = client.get_state()
+        train_gradient_norm += gradient_norm
 
+    train_results = {
+    'gradient_norm': train_gradient_norm / max(1, len(clients))
+    }
 
+    log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
+    return weights_per_clients
+        
+    
+def gossip_phase(clients: List[FLClient], W: np.array, weights_per_clients: Dict[int, Dict[str, torch.Tensor]], old_gradients: bool) -> None:
+    mask =  ~np.eye(W.shape[0], dtype=bool)
+    communicative_nodes = np.nonzero(W * mask)
+    nodes_involved = set(communicative_nodes[0])
+    for idx_client in range(len(clients)):
+        client = clients[idx_client]
+        if client in nodes_involved:
+            neighbors_activated =  np.where(W[idx_client, :] > 0)[0]
+            neighbor_models = {n: weights_per_clients[int(n)] for n in neighbors_activated}
+
+            ################ OLD GRADIENTS PART ########################
+            if old_gradients:
+                client.store_neighbor_gradients(neighbor_models)
+
+            ################## ONLY ACTUALIZE WITH NEW GRADIENTS ########################
+            else:
+                client.neighbor_models = neighbor_models
+            
+            # We can do the update right now because neihborgs take model that are frozen on the CPU. Hence, the new update will not be seen by the next model and we do not insert any asynchronous update.            
+            clients[idx_client].update_state(W[idx_client, :])
+            
+        else:
+            client.neighbor_models = {}
+            
+def load_metrics(clients: FLClient, metrics: Dict[str, List], rnd: int, topology_type: str, ) -> None:
+    #Evaluate (average across clients)
+    with torch.no_grad():
+        total_test_samples = 0
+        total_train_samples = 0
+        test_weighted_loss = 0.0
+        test_weighted_acc = 0.0
+        train_weighted_loss = 0.0
+        train_weighted_acc = 0.0
+        accuracies = []
+        for client in clients:
+            ###### TEST METRICS #######
+            test_loss, test_acc = client.evaluate()
+            test_num_samples = len(client.test_loader.dataset)
+            test_weighted_loss += test_loss * test_num_samples
+            test_weighted_acc += test_acc * test_num_samples
+            accuracies.append(test_weighted_acc)
+            total_test_samples += test_num_samples
+
+            ###### TRAIN METRICS #######
+            train_loss, train_acc = client.evaluate(client.train_loader)
+            train_num_samples = len(client.train_loader.dataset)
+            train_weighted_loss += train_loss * train_num_samples
+            train_weighted_acc += train_acc * train_num_samples
+            total_train_samples += train_num_samples
+
+        raw_client_accuracies = [acc / len(client.test_loader.dataset) for acc, client in zip(accuracies, clients)]
+        test_avg_loss = test_weighted_loss / total_test_samples
+        test_avg_acc = test_weighted_acc / total_test_samples
+        test_std_acc = np.std(raw_client_accuracies)
+        train_avg_loss = train_weighted_loss / total_train_samples
+        train_avg_acc = train_weighted_acc / total_train_samples
+
+        metrics['train']['loss'].append(train_avg_loss)
+        metrics['train']['accuracy'].append(train_avg_acc)
+        metrics['test']['loss'].append(test_avg_loss)
+        metrics['test']['accuracy'].append(test_avg_acc)
+        metrics['test']['std accuracy'].append(test_std_acc)
+
+        log.info(f"Train, Round {rnd} : loss => {train_avg_loss},  accuracy: {train_avg_acc}")
+        log.info(f"Test, Round {rnd} : loss => {test_avg_loss},  accuracy: {test_avg_acc}, std: {test_std_acc}")
+        
+    param_vectors = []
+    for client in clients:
+        # move each tensor to CPU before flattening
+        state = client.model.state_dict()
+        flat = torch.cat([p.detach().cpu().flatten() for p in state.values()])
+        param_vectors.append(flat)
+
+    param_vectors = torch.stack(param_vectors, dim=0)  # shape [n_clients, d] on CPU
+    mean_model = param_vectors.mean(dim=0)
+    
+    # Overall consensus (mean disagreement)
+    consensus_distance = torch.mean(torch.norm(param_vectors - mean_model, dim=1)).item()
+
+    if topology_type == "two_clusters":
+    # Inter-cluster consensus distances
+        inter_cluster = torch.norm(param_vectors[center_node_1] - param_vectors[center_node_2]).item()
+
+        cluster_1_consensus_distance = torch.norm(param_vectors[center_node_1] - param_vectors[neighbor_center_1]).item()
+        cluster_2_consensus_distance = torch.norm(param_vectors[center_node_2] - param_vectors[neighbor_center_2]).item()
+        
+    log.info(f"Overall consensus distance : {consensus_distance:.6f}")
+    if topology_type == "two_clusters":
+        log.info(f"Cluster 1 consensus distance : {cluster_1_consensus_distance:.6f}")
+        log.info(f"Cluster 2 consensus distance : {cluster_2_consensus_distance:.6f}")
+        log.info(f"Inter-cluster distance : {inter_cluster:.6f}")
+                
 def run_rounds(
     clients: List[FLClient],
     graph: nx.Graph,
@@ -50,7 +176,7 @@ def run_rounds(
     progress: bool = True,
     old_gradients: bool = True,
     client_config: Dict = {},
-    topology_type: str = "twoc_clusters"
+    topology_type: str = "two_clusters"
 ) -> Dict[str, List[Tuple[float, float]]]:
     metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
 
@@ -104,22 +230,9 @@ def run_rounds(
             # Show the number of active nodes in the generated subgraph
             active_nodes = [n for n in g_temp.nodes if g_temp.degree[n] >= 1]
             log.info(f"Fraction of activated nodes : {len(active_nodes)/len(clients)} ") 
-
-            # Local training of all the nodes
-            train_gradient_norm = 0
-            weights_per_clients = {}
-            for idx, client in enumerate(clients):
-                _, gradient_norm, _ = client.local_train(local_epochs=local_epochs)
-                train_gradient_norm += gradient_norm
-
-
-            train_results = {
-            'gradient_norm': train_gradient_norm / max(1, len(clients))
-            }
-
-            log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
-            # metrics['train'].append(train_results)
-            
+                       
+            ################# GOSSIPING PHASE ################
+            weights_per_clients = training(clients, local_epochs, rnd=rnd)
                         
             if not old_gradients:
                 ##### RECOMPUTE W #####
@@ -128,24 +241,10 @@ def run_rounds(
                 W_active = W
                 
             validate_weight_matrix(W_active)
+           
             ################# GOSSIPING PHASE ##################
-            for active_node in active_nodes:
-                neighbors_activated = [int(n) for n in g_temp.neighbors(active_node)]
-                # We add the node itself in the neighbors set to take it into account the aggregation process 
-                if active_node not in neighbors_activated:
-                    neighbors_activated.append(int(active_node))
-                neighbor_models = {}
-                for n in neighbors_activated:
-                    neighbor_models[n] = copy.deepcopy(clients[n].get_state())
-
-                ################ OLD GRADIENTS PART ########################
-                if old_gradients:
-                    clients[int(active_node)].store_neighbor_models(neighbor_models)
-
-                ################## ONLY ACTUALIZE WITH NEW GRADIENTS ########################
-                else:
-                    clients[int(active_node)].neighbor_models = neighbor_models
-                    
+            gossip_phase(clients, W_active, weights_per_clients, old_gradients)
+            
             ######## WEIGHT W BY THE ACTIVATION PROBABILITY OF EDEGES #############
             #weights = np.full_like(W_active, 1.0 / border_link_proba)
 
@@ -162,8 +261,7 @@ def run_rounds(
             
             ################# AGGREGATION #################
             #log.info(f'Number of model stored in central node 1 : {len(clients[center_node_1].neighbor_models)}')
-            for active_node in active_nodes:
-                clients[active_node].update_state(W_active[active_node, :])
+
             
             # Evaluate (average across clients)
             with torch.no_grad():
@@ -258,113 +356,14 @@ def run_rounds(
             
             ############ TRAINING PHASE ##############
              # Local training of all the nodes
-            train_gradient_norm = 0
-            weights_per_clients = {}
-            for idx, client in enumerate(clients):
-                _, gradient_norm, _ = client.local_train(local_epochs=local_epochs)
-                weights_per_clients[idx] = client.get_state()
-                train_gradient_norm += gradient_norm
-
-
-            train_results = {
-            'gradient_norm': train_gradient_norm / max(1, len(clients))
-            }
-
-            log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
+            weights_per_clients = training(clients, local_epochs, rnd=rnd)
             
             ############## GOSSIPING PHASE ##############
-            mask =  ~np.eye(W_actual.shape[0], dtype=bool)
-            non_zero_indices  = np.nonzero(W_actual * mask)
-            nodes_involved = set(non_zero_indices[0]) | set(non_zero_indices[1])
-            log.info(f"Fraction of activated nodes : {len(nodes_involved)/len(clients)} ")
-            for active_node in nodes_involved:
-                neighbors_activated = [v for u, v in edges if W_actual[u, v] > 0]
-                neighbor_models = {}
-                for n in neighbors_activated:
-                    neighbor_models[n] = weights_per_clients[int(n)]
-                neighbor_models[int(active_node)] = weights_per_clients[int(active_node)]
-
-                ################ OLD GRADIENTS PART ########################
-                if old_gradients:
-                    clients[int(active_node)].store_neighbor_gradients(neighbor_models)
-
-                ################## ONLY ACTUALIZE WITH NEW GRADIENTS ########################
-                else:
-                    clients[int(active_node)].neighbor_models = neighbor_models
-            
+            gossip_phase(clients, W_actual, weights_per_clients, old_gradients)
             if topology_type == "two_clusters":
                 log.info(f'Number of model stored in central node 1 : {len(clients[center_node_1].neighbor_models)}')
-            ################# AGGREGATION ##################
-            # Apply aggregated shared states
-            for active_node in nodes_involved:
-                clients[active_node].update_state(W_actual[active_node, :])
             
-            #Evaluate (average across clients)
-            with torch.no_grad():
-                total_test_samples = 0
-                total_train_samples = 0
-                test_weighted_loss = 0.0
-                test_weighted_acc = 0.0
-                train_weighted_loss = 0.0
-                train_weighted_acc = 0.0
-                accuracies = []
-                for client in clients:
-                    ###### TEST METRICS #######
-                    test_loss, test_acc = client.evaluate()
-                    test_num_samples = len(client.test_loader.dataset)
-                    test_weighted_loss += test_loss * test_num_samples
-                    test_weighted_acc += test_acc * test_num_samples
-                    accuracies.append(test_weighted_acc)
-                    total_test_samples += test_num_samples
 
-                    ###### TRAIN METRICS #######
-                    train_loss, train_acc = client.evaluate(client.train_loader)
-                    train_num_samples = len(client.train_loader.dataset)
-                    train_weighted_loss += train_loss * train_num_samples
-                    train_weighted_acc += train_acc * train_num_samples
-                    total_train_samples += train_num_samples
-
-                raw_client_accuracies = [acc / len(client.test_loader.dataset) for acc, client in zip(accuracies, clients)]
-                test_avg_loss = test_weighted_loss / total_test_samples
-                test_avg_acc = test_weighted_acc / total_test_samples
-                test_std_acc = np.std(raw_client_accuracies)
-                train_avg_loss = train_weighted_loss / total_train_samples
-                train_avg_acc = train_weighted_acc / total_train_samples
-
-                metrics['train']['loss'].append(train_avg_loss)
-                metrics['train']['accuracy'].append(train_avg_acc)
-                metrics['test']['loss'].append(test_avg_loss)
-                metrics['test']['accuracy'].append(test_avg_acc)
-                metrics['test']['std accuracy'].append(test_std_acc)
-
-                log.info(f"Train, Round {rnd} : loss => {train_avg_loss},  accuracy: {train_avg_acc}")
-                log.info(f"Test, Round {rnd} : loss => {test_avg_loss},  accuracy: {test_avg_acc}, std: {test_std_acc}")
-                
-            param_vectors = []
-            for client in clients:
-                # move each tensor to CPU before flattening
-                state = client.model.state_dict()
-                flat = torch.cat([p.detach().cpu().flatten() for p in state.values()])
-                param_vectors.append(flat)
-
-            param_vectors = torch.stack(param_vectors, dim=0)  # shape [n_clients, d] on CPU
-            mean_model = param_vectors.mean(dim=0)
-            
-            # Overall consensus (mean disagreement)
-            consensus_distance = torch.mean(torch.norm(param_vectors - mean_model, dim=1)).item()
-
-            if topology_type == "two_clusters":
-            # Inter-cluster consensus distances
-                inter_cluster = torch.norm(param_vectors[center_node_1] - param_vectors[center_node_2]).item()
-
-                cluster_1_consensus_distance = torch.norm(param_vectors[center_node_1] - param_vectors[neighbor_center_1]).item()
-                cluster_2_consensus_distance = torch.norm(param_vectors[center_node_2] - param_vectors[neighbor_center_2]).item()
-                
-            log.info(f"Overall consensus distance : {consensus_distance:.6f}")
-            if topology_type == "two_clusters":
-                log.info(f"Cluster 1 consensus distance : {cluster_1_consensus_distance:.6f}")
-                log.info(f"Cluster 2 consensus distance : {cluster_2_consensus_distance:.6f}")
-                log.info(f"Inter-cluster distance : {inter_cluster:.6f}")
 
 
             # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
