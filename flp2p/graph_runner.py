@@ -9,6 +9,8 @@ from .client import FLClient
 import numpy as np
 import logging
 
+import copy
+
 from flp2p.matcha_mixing_matrix import graphToLaplacian, getProbability, getSubGraphs, getAlpha
 from flp2p.data import verify_data_split
 from flp2p.utils import compute_weight_matrix, validate_weight_matrix, GOSSIPING, get_spectral_gap
@@ -46,7 +48,6 @@ def run_rounds(
     rounds: int = 5,
     local_epochs: int = 1,
     progress: bool = True,
-    lr_decay: int = 0,
     old_gradients: bool = True,
     client_config: Dict = {},
     topology_type: str = "twoc_clusters"
@@ -61,8 +62,7 @@ def run_rounds(
     
     log.info("Data split check on random client")
     verify_data_split(np.random.choice(clients, 1)[0])
-    learning_rate = clients[0].learning_rate
-    
+        
     if old_gradients:
         # If old_gradiens is True, fill the neighbord_models with the x_0 of the FL Client just created
         for i, client in enumerate(clients):
@@ -136,7 +136,7 @@ def run_rounds(
                     neighbors_activated.append(int(active_node))
                 neighbor_models = {}
                 for n in neighbors_activated:
-                    neighbor_models[n] = clients[n].get_state()
+                    neighbor_models[n] = copy.deepcopy(clients[n].get_state())
 
                 ################ OLD GRADIENTS PART ########################
                 if old_gradients:
@@ -256,10 +256,8 @@ def run_rounds(
             log.info(f"Spectral Gap : {get_spectral_gap(W_actual)}")
             lr_update(client_config, rnd, clients)
             
-            mask =  ~np.eye(W_actual.shape[0], dtype=bool)
-            non_zero_indices  = np.nonzero(W_actual * mask)
-            nodes_involved = set(non_zero_indices[0]) | set(non_zero_indices[1])
-            log.info(f"Fraction of activated nodes : {len(nodes_involved)/len(clients)} ")
+            ############ TRAINING PHASE ##############
+             # Local training of all the nodes
             train_gradient_norm = 0
             weights_per_clients = {}
             for idx, client in enumerate(clients):
@@ -267,11 +265,18 @@ def run_rounds(
                 weights_per_clients[idx] = client.get_state()
                 train_gradient_norm += gradient_norm
 
+
             train_results = {
             'gradient_norm': train_gradient_norm / max(1, len(clients))
             }
 
             log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
+            
+            ############## GOSSIPING PHASE ##############
+            mask =  ~np.eye(W_actual.shape[0], dtype=bool)
+            non_zero_indices  = np.nonzero(W_actual * mask)
+            nodes_involved = set(non_zero_indices[0]) | set(non_zero_indices[1])
+            log.info(f"Fraction of activated nodes : {len(nodes_involved)/len(clients)} ")
             for active_node in nodes_involved:
                 neighbors_activated = [v for u, v in edges if W_actual[u, v] > 0]
                 neighbor_models = {}
@@ -319,10 +324,10 @@ def run_rounds(
                     train_weighted_acc += train_acc * train_num_samples
                     total_train_samples += train_num_samples
 
-
+                raw_client_accuracies = [acc / len(client.test_loader.dataset) for acc, client in zip(accuracies, clients)]
                 test_avg_loss = test_weighted_loss / total_test_samples
                 test_avg_acc = test_weighted_acc / total_test_samples
-                test_std_acc = np.std(np.array(accuracies)/total_test_samples)
+                test_std_acc = np.std(raw_client_accuracies)
                 train_avg_loss = train_weighted_loss / total_train_samples
                 train_avg_acc = train_weighted_acc / total_train_samples
 

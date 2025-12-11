@@ -102,7 +102,6 @@ def main(cfg: DictConfig) -> None:
         rounds=cfg.train.rounds,
         local_epochs=cfg.train.local_epochs,
         progress=cfg.train.progress,
-        lr_decay=cfg.train.lr_decay,
         old_gradients=cfg.old_gradients,
         client_config=cfg.client,
         topology_type=cfg.graph.name
