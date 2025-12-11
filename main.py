@@ -7,7 +7,7 @@ from omegaconf import DictConfig, OmegaConf
 
 from flp2p.client import FLClient
 from flp2p.data import build_client_loaders, get_dataset
-from flp2p.graph_runner import run_rounds
+from flp2p.graph_runner import graph_runner
 from flp2p.networks.lenet5 import LeNet5
 from flp2p.networks.resnet18 import make_resnet18
 import logging
@@ -95,7 +95,7 @@ def main(cfg: DictConfig) -> None:
     plot_topology(graph, 'graph_topology', os.path.join(log_path, "graph_topology"))
 
     # Train
-    metrics = run_rounds(
+    runner = graph_runner(
         clients=clients,
         graph=graph,
         mixing_matrix=cfg.mixing_matrix,
@@ -107,6 +107,7 @@ def main(cfg: DictConfig) -> None:
         topology_type=cfg.graph.name
     )
 
+    metrics = runner.run()
     print_metrics(metrics['train'], 'Train')
     print_metrics(metrics['test'], 'Test')
 
