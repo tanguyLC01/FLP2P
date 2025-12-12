@@ -104,7 +104,8 @@ def main(cfg: DictConfig) -> None:
         progress=cfg.train.progress,
         old_gradients=cfg.old_gradients,
         client_config=cfg.client,
-        topology_type=cfg.graph.name
+        topology_type=cfg.graph.name,
+        aggregation_step_per_round=cfg.aggregation_step_per_round
     )
 
     metrics = runner.run()

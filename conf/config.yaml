@@ -1,10 +1,10 @@
 defaults:
   - data: cifar10
-  - model: resnet18
+  - model: lenet5
   - partition: iid
   - client: default
   - train: default
-  - graph: erdos_renyi
+  - graph: two_clusters
   - _self_
   - override hydra/launcher: joblib
 
@@ -12,15 +12,15 @@ defaults:
 
 seed: 42
 use_cuda: true
-mixing_matrix: matcha
-run_name: matcha_iid_no_prob
+mixing_matrix: jaccard
+run_name: DSGD_Jaccard_test
 old_gradients: false
-aggregation_step_per_round: 1
+aggregation_step_per_round: 3
 hydra:
   run:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
   sweep:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
-    subdir: ${mixing_matrix}-gradient:${old_gradients}-equal_test_set:${same_distrib_test_set}
+    subdir: ${mixing_matrix}-partition:${partition.name}-aggregation_step:${aggregation_step_per_round}
 same_distrib_test_set: false
 

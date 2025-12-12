@@ -20,14 +20,15 @@ log = logging.getLogger(__name__)
 class graph_runner:
 
     def __init__(self,   clients: List[FLClient],
-    graph: nx.Graph,
-    mixing_matrix: GOSSIPING,
-    rounds: int = 5,
-    local_epochs: int = 1,
-    progress: bool = True,
-    old_gradients: bool = True,
-    client_config: Dict = {},
-    topology_type: str = "two_clusters") -> None:
+        graph: nx.Graph,
+        mixing_matrix: GOSSIPING,
+        rounds: int = 5,
+        local_epochs: int = 1,
+        progress: bool = True,
+        old_gradients: bool = True,
+        client_config: Dict = {},
+        topology_type: str = "two_clusters",
+        aggregation_step_per_round: int = 1) -> None:
         self.clients = clients
         self.graph = graph
         self.mixing_matrix = mixing_matrix
@@ -37,6 +38,7 @@ class graph_runner:
         self.old_gradients = old_gradients
         self.client_config = client_config
         self.topology_type = topology_type
+        self.aggregation_step_per_round = aggregation_step_per_round
         
         self.metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
         self.metrics = {"train":
@@ -49,11 +51,11 @@ class graph_runner:
         
         if self.topology_type == "two_clusters":
             max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
-            center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
-            neighbor_center_1 = list([n for n in graph.neighbors(center_node_1) if n != center_node_2])[0]
-            neighbor_center_2 = list([n for n in graph.neighbors(center_node_2) if n != center_node_1])[0]
-            main_link_proba = graph[center_node_1][center_node_2]['probability_selection']
-            border_link_proba = graph[center_node_1][neighbor_center_1]['probability_selection']
+            self.center_node_1, self.center_node_2 = [n for n, _ in max_degree_nodes]  
+            self.neighbor_center_1 = list([n for n in graph.neighbors(self.center_node_1) if n != self.center_node_2])[0]
+            self.neighbor_center_2 = list([n for n in graph.neighbors(self.center_node_2) if n != self.center_node_1])[0]
+            main_link_proba = graph[self.center_node_1][self.center_node_2]['probability_selection']
+            border_link_proba = graph[self.center_node_1][self.neighbor_center_1]['probability_selection']
             log.info(f'Border_link_activation : {border_link_proba}')
             log.info(f'Main_link_activation : {main_link_proba}')
 
@@ -105,6 +107,7 @@ class graph_runner:
         mask =  ~np.eye(W.shape[0], dtype=bool)
         communicative_nodes = np.nonzero(W * mask)
         nodes_involved = set(communicative_nodes[0])
+        log.info(f"Nodes involved : {nodes_involved}")
         for idx_client in range(len(self.clients)):
             client = self.clients[idx_client]
             if client in nodes_involved:
@@ -119,6 +122,7 @@ class graph_runner:
                 else:
                     client.neighbor_models = neighbor_models
                 
+                W = np.linalg.matrix_power(W, self.aggregation_step_per_round)
                 # We can do the update right now because neihborgs take model that are frozen on the CPU. Hence, the new update will not be seen by the next model and we do not insert any asynchronous update.            
                 self.clients[idx_client].update_state(W[idx_client, :])
                 
@@ -141,7 +145,7 @@ class graph_runner:
                 test_num_samples = len(client.test_loader.dataset)
                 test_weighted_loss += test_loss * test_num_samples
                 test_weighted_acc += test_acc * test_num_samples
-                accuracies.append(test_weighted_acc)
+                accuracies.append(test_acc)
                 total_test_samples += test_num_samples
 
                 ###### TRAIN METRICS #######
@@ -151,10 +155,9 @@ class graph_runner:
                 train_weighted_acc += train_acc * train_num_samples
                 total_train_samples += train_num_samples
 
-            raw_client_accuracies = [acc / len(client.test_loader.dataset) for acc, client in zip(accuracies, self.clients)]
             test_avg_loss = test_weighted_loss / total_test_samples
             test_avg_acc = test_weighted_acc / total_test_samples
-            test_std_acc = np.std(raw_client_accuracies)
+            test_std_acc = np.std(accuracies)
             train_avg_loss = train_weighted_loss / total_train_samples
             train_avg_acc = train_weighted_acc / total_train_samples
 
@@ -218,7 +221,7 @@ class graph_runner:
             N = len(self.clients)
             for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
                 log.info(f'-------------- Round {rnd} --------------')
-                self.lr_update(self, rnd)
+                self.lr_update(rnd)
 
                 # For each edge, decide if it is active this round (bidirectional selection)
                 g_temp = self.  graph.copy()
@@ -237,7 +240,7 @@ class graph_runner:
                 log.info(f"Fraction of activated nodes : {len(active_nodes)/len(self.clients)} ") 
                         
                 ################# GOSSIPING PHASE ################
-                weights_per_clients = self.training(self, self.local_epochs, rnd=rnd)
+                self.training(rnd=rnd)
                             
                 if not self.old_gradients:
                     ##### RECOMPUTE W #####
@@ -248,7 +251,7 @@ class graph_runner:
                 validate_weight_matrix(W_active)
             
                 ################# GOSSIPING PHASE ##################
-                self.gossip_phase(self.clients, W_active, weights_per_clients, self.old_gradients)
+                self.gossip_phase(W_active)
                 
                 ######## WEIGHT W BY THE ACTIVATION PROBABILITY OF EDEGES #############
                 #weights = np.full_like(W_active, 1.0 / border_link_proba)
@@ -269,21 +272,20 @@ class graph_runner:
 
                 
                 # Evaluate (average across clients)
-                self.load_metrics(self, rnd)
+                self.load_metrics(rnd)
 
                 # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
                 # log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')
                     
         elif self.mixing_matrix == 'matcha':
             W = list()
-            edges = np.array(list(self.graph.edges()))
             n_nodes = len(self.graph.nodes)
             subgraphs = getSubGraphs(self.graph, n_nodes)
             laplacians = graphToLaplacian(subgraphs, n_nodes)
             probas = getProbability(laplacians, 2/5)
             alpha = getAlpha(laplacians, probas, n_nodes)
             log.info(f"alpha : {alpha}")
-            for _ in range(self.rnd):
+            for _ in range(self.rounds):
                 L_k = np.sum([laplacians[i] for i in range(len(subgraphs)) if np.random.random() < probas[i]], axis=0)
                 W.append(np.eye(n_nodes) - alpha * L_k)
                 
@@ -293,18 +295,18 @@ class graph_runner:
                 
                 log.info(f'-------------- Round {rnd} --------------')
                 log.info(f"Spectral Gap : {get_spectral_gap(W_actual)}")
-                self.lr_update(self, rnd)
+                self.lr_update(rnd)
                 
                 ############ TRAINING PHASE ##############
                 # Local training of all the nodes
-                weights_per_clients = self.training(self, rnd=rnd)
+                self.training(rnd=rnd)
                 
                 ############## GOSSIPING PHASE ##############
-                self.gossip_phase(self.clients, W_actual, weights_per_clients, self.old_gradients)
+                self.gossip_phase(W_actual)
                 
 
                 # Evaluate (average across clients)
-                self.load_metrics(self, rnd)
+                self.load_metrics(rnd)
 
                 # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
                 # log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')
