@@ -3,7 +3,7 @@ from typing import Dict, Literal, Optional, Tuple, List
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-
+import copy
 #ShareMode = Literal["backbone", "full"]
 
 
@@ -43,12 +43,12 @@ class FLClient:
             neighbor_state: Dict mapping neighbor IDs to their gradients dict (param_name -> tensor)
         """
         for neighbor_id, models in neighbor_state.items():
-            self.neighbor_models[neighbor_id] = models.copy()
+            self.neighbor_models[neighbor_id] = copy.deepcopy(models)
 
             
     def _optimizer(self) -> torch.optim.Optimizer:
         weights = [v for k, v in self.model.named_parameters() if "weight" in k]
-        biases = [v for k, v in self.model.named_parameters() if "bias" in k]
+        # biases = [v for k, v in self.model.named_parameters() if "bias" in k]
         return   torch.optim.SGD(
              [
                 {"params": weights, "weight_decay": self.weight_decay},
@@ -82,7 +82,7 @@ class FLClient:
 
         num_samples = len(self.train_loader.dataset)
         for name in gradient:
-            gradient[name] /= len(self.train_loader)
+            gradient[name] /= (len(self.train_loader) * local_epochs)
             
         # Optionally, compute average gradient norm
         avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in gradient.values()) ** 0.5
@@ -138,10 +138,10 @@ class FLClient:
     def get_state(self) -> Dict[str, torch.Tensor]:
         return {k: v.clone().detach().cpu() for k, v in self.model.state_dict().items()}
 
-    def set_state(self, state: Dict[str, torch.Tensor]) -> None:
-        current = self.model.state_dict()
-        mapped = {k: v.to(current[k].device).type_as(current[k]) for k, v in state.items() if k in current}
-        current.update(mapped)
-        self.model.load_state_dict(current)
+    # def set_state(self, state: Dict[str, torch.Tensor]) -> None:
+    #     current = self.model.state_dict()
+    #     mapped = {k: v.to(current[k].device).type_as(current[k]) for k, v in state.items() if k in current}
+    #     current.update(mapped)
+    #     self.model.load_state_dict(current)
         
         

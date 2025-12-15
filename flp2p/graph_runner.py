@@ -47,7 +47,7 @@ class graph_runner:
                                     {"loss": [], "accuracy": [], 'std accuracy': []},
         }
         
-        self.weights_per_clients: Dict[int, Dict[str, torch.Tensor]] = {}
+        self.clients_models: Dict[int, Dict[str, torch.Tensor]] = {}
         
         if self.topology_type == "two_clusters":
             max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
@@ -90,10 +90,10 @@ class graph_runner:
     def training(self, rnd: int) -> None:
         # Local training of all the nodes
         train_gradient_norm = 0
-        
+        self.clients_models = {}
         for idx, client in enumerate(self.clients):
             _, gradient_norm, _ = client.local_train(local_epochs=self.local_epochs)
-            self.weights_per_clients[idx] = client.get_state()
+            self.clients_models[idx] = client.get_state()
             train_gradient_norm += gradient_norm
 
         train_results = {
@@ -104,72 +104,70 @@ class graph_runner:
         
     
     def gossip_phase(self, W: np.array) -> None:
-        mask =  ~np.eye(W.shape[0], dtype=bool)
+        mask = ~np.eye(W.shape[0], dtype=bool)
         communicative_nodes = np.nonzero(W * mask)
         nodes_involved = set(communicative_nodes[0])
         log.info(f"Nodes involved : {nodes_involved}")
         for idx_client in range(len(self.clients)):
             client = self.clients[idx_client]
-            if client in nodes_involved:
-                neighbors_activated =  np.where(W[idx_client, :] > 0)[0]
-                neighbor_models = {n: self.weights_per_clients[int(n)] for n in neighbors_activated}
+            if idx_client in nodes_involved:
+                neighbors_activated = np.where(W[idx_client, :] > 0)[0]
+                neighbor_models = {n: self.clients_models[n] for n in neighbors_activated}
 
                 ################ OLD GRADIENTS PART ########################
                 if self.old_gradients:
-                    client.store_neighbor_gradients(neighbor_models)
+                    client.store_neighbor_models(neighbor_models)
 
                 ################## ONLY ACTUALIZE WITH NEW GRADIENTS ########################
                 else:
                     client.neighbor_models = neighbor_models
                 
-                W = np.linalg.matrix_power(W, self.aggregation_step_per_round)
-                # We can do the update right now because neihborgs take model that are frozen on the CPU. Hence, the new update will not be seen by the next model and we do not insert any asynchronous update.            
-                self.clients[idx_client].update_state(W[idx_client, :])
-                
+                # We can do the update right now because neighbors take model that are frozen on the CPU. Hence, the new update will not be seen by the next model and we do not insert any asynchronous update.            
+                client.update_state(W[idx_client, :])
             else:
                 client.neighbor_models = {}
-                
+            
+    @torch.no_grad    
     def load_metrics(self, rnd: int) -> None:
         #Evaluate (average across clients)
-        with torch.no_grad():
-            total_test_samples = 0
-            total_train_samples = 0
-            test_weighted_loss = 0.0
-            test_weighted_acc = 0.0
-            train_weighted_loss = 0.0
-            train_weighted_acc = 0.0
-            accuracies = []
-            for client in self.clients:
-                ###### TEST METRICS #######
-                test_loss, test_acc = client.evaluate()
-                test_num_samples = len(client.test_loader.dataset)
-                test_weighted_loss += test_loss * test_num_samples
-                test_weighted_acc += test_acc * test_num_samples
-                accuracies.append(test_acc)
-                total_test_samples += test_num_samples
+        total_test_samples = 0
+        total_train_samples = 0
+        test_weighted_loss = 0.0
+        test_weighted_acc = 0.0
+        train_weighted_loss = 0.0
+        train_weighted_acc = 0.0
+        accuracies = []
+        for client in self.clients:
+            ###### TEST METRICS #######
+            test_loss, test_acc = client.evaluate()
+            test_num_samples = len(client.test_loader.dataset)
+            test_weighted_loss += test_loss * test_num_samples
+            test_weighted_acc += test_acc * test_num_samples
+            accuracies.append(test_acc)
+            total_test_samples += test_num_samples
 
-                ###### TRAIN METRICS #######
-                train_loss, train_acc = client.evaluate(client.train_loader)
-                train_num_samples = len(client.train_loader.dataset)
-                train_weighted_loss += train_loss * train_num_samples
-                train_weighted_acc += train_acc * train_num_samples
-                total_train_samples += train_num_samples
+            ###### TRAIN METRICS #######
+            train_loss, train_acc = client.evaluate(client.train_loader)
+            train_num_samples = len(client.train_loader.dataset)
+            train_weighted_loss += train_loss * train_num_samples
+            train_weighted_acc += train_acc * train_num_samples
+            total_train_samples += train_num_samples
 
-            test_avg_loss = test_weighted_loss / total_test_samples
-            test_avg_acc = test_weighted_acc / total_test_samples
-            test_std_acc = np.std(accuracies)
-            train_avg_loss = train_weighted_loss / total_train_samples
-            train_avg_acc = train_weighted_acc / total_train_samples
+        test_avg_loss = test_weighted_loss / total_test_samples
+        test_avg_acc = test_weighted_acc / total_test_samples
+        test_std_acc = np.std(accuracies)
+        train_avg_loss = train_weighted_loss / total_train_samples
+        train_avg_acc = train_weighted_acc / total_train_samples
 
-            self.metrics['train']['loss'].append(train_avg_loss)
-            self.metrics['train']['accuracy'].append(train_avg_acc)
-            self.metrics['test']['loss'].append(test_avg_loss)
-            self.metrics['test']['accuracy'].append(test_avg_acc)
-            self.metrics['test']['std accuracy'].append(test_std_acc)
+        self.metrics['train']['loss'].append(train_avg_loss)
+        self.metrics['train']['accuracy'].append(train_avg_acc)
+        self.metrics['test']['loss'].append(test_avg_loss)
+        self.metrics['test']['accuracy'].append(test_avg_acc)
+        self.metrics['test']['std accuracy'].append(test_std_acc)
 
-            log.info(f"Train, Round {rnd} : loss => {train_avg_loss},  accuracy: {train_avg_acc}")
-            log.info(f"Test, Round {rnd} : loss => {test_avg_loss},  accuracy: {test_avg_acc}, std: {test_std_acc}")
-            
+        log.info(f"Train, Round {rnd} : loss => {train_avg_loss},  accuracy: {train_avg_acc}")
+        log.info(f"Test, Round {rnd} : loss => {test_avg_loss},  accuracy: {test_avg_acc}, std: {test_std_acc}")
+        
         param_vectors = []
         for client in self.clients:
             # move each tensor to CPU before flattening
@@ -224,7 +222,7 @@ class graph_runner:
                 self.lr_update(rnd)
 
                 # For each edge, decide if it is active this round (bidirectional selection)
-                g_temp = self.  graph.copy()
+                g_temp = self.graph.copy()
                 if self.topology_type == "two_clusters":
                     border_nodes = [n for n in self.graph.nodes if self.graph.degree[n] == 1]
                     if np.random.random() > self.graph[self.center_node_1][self.center_node_2]["probability_selection"]:
@@ -304,7 +302,6 @@ class graph_runner:
                 ############## GOSSIPING PHASE ##############
                 self.gossip_phase(W_actual)
                 
-
                 # Evaluate (average across clients)
                 self.load_metrics(rnd)
 

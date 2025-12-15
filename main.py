@@ -10,6 +10,7 @@ from flp2p.data import build_client_loaders, get_dataset
 from flp2p.graph_runner import graph_runner
 from flp2p.networks.lenet5 import LeNet5
 from flp2p.networks.resnet18 import make_resnet18
+from flp2p.networks.resnet50 import make_resnet50
 import logging
 import pickle
 import random
@@ -65,18 +66,22 @@ def main(cfg: DictConfig) -> None:
     elif cfg.model.name == "resnet18":
         base_model = make_resnet18(cfg.model).to(device)
         init_state = base_model.state_dict()
+    elif cfg.model.name == "resnet50":
+        base_model = make_resnet50(cfg.model).to(device)
+        init_state = base_model.state_dict()
 
     # Model + Clients
     clients: List[FLClient] = []
     for i in range(cfg.partition.num_clients):
         if cfg.model.name == "lenet5":
             model = LeNet5(cfg.model).to(device)
-            model.load_state_dict(init_state)
         elif cfg.model.name == "resnet18":
             model = make_resnet18(cfg.model).to(device)
-            model.load_state_dict(init_state)
+        elif cfg.model.name == "resnet50":
+            model = make_resnet50(cfg.model).to(device)
         else:
             raise ValueError(f"Unknown model: {cfg.model.name}")
+        model.load_state_dict(init_state)
         train_loader, test_loader = client_loaders[i]
         client = FLClient(
             model=model,
