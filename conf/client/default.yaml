@@ -1,4 +1,4 @@
-learning_rate: 8e-2
+learning_rate: 1e-1
 weight_decay: 5e-4
 momentum: 0
 
@@ -11,5 +11,5 @@ lr_schedule:
         epochs: 5
         start_lr: 1e-2
 
-    decay_milestones: [30, 60, 80]
+    decay_milestones: [100, 255]
     factor: 0.1
