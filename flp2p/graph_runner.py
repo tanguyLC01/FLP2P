@@ -28,7 +28,8 @@ class graph_runner:
         old_gradients: bool = True,
         client_config: Dict = {},
         topology_type: str = "two_clusters",
-        aggregation_step_per_round: int = 1) -> None:
+        aggregation_step_per_round: int = 1,
+        selection_method: Dict = {}) -> None:
         self.clients = clients
         self.graph = graph
         self.mixing_matrix = mixing_matrix
@@ -39,6 +40,7 @@ class graph_runner:
         self.client_config = client_config
         self.topology_type = topology_type
         self.aggregation_step_per_round = aggregation_step_per_round
+        self.selection_method = selection_method
         
         self.metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
         self.metrics = {"train":
@@ -212,69 +214,109 @@ class graph_runner:
                 client.neighbor_models = {n: self.clients[n].get_state() for n in self.graph.neighbors(i)}
 
         if self.mixing_matrix != 'matcha':
-            # Compute the mixing matrix
-            W = compute_weight_matrix(self.graph, self.mixing_matrix)
-            validate_weight_matrix(W)
-            
-            N = len(self.clients)
-            for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
-                log.info(f'-------------- Round {rnd} --------------')
-                self.lr_update(rnd)
+            if self.selection_method.name == 'gradient_based':
+                for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
+                    log.info(f'-------------- Round {rnd} --------------')
+                    self.lr_update(rnd)
+                    
+                    ############ TRAINING PHASE ##############    
+                    # Local training of all the nodes
+                    previous_gradients = {n: self.clients[n].get_stochastic_gradient().values() for n in range(len(self.clients))}
+                    previous_gradients = {n: torch.cat([g.flatten() for g in grads]) for n, grads in previous_gradients.items()}
+                    self.training(rnd=rnd)
+                    new_gradients = {n: self.clients[n].get_stochastic_gradient().values() for n in range(len(self.clients))}
+                    new_gradients = {n: torch.cat([g.flatten() for g in grads]) for n, grads in new_gradients.items()}
+                    
 
-                # For each edge, decide if it is active this round (bidirectional selection)
-                g_temp = self.graph.copy()
-                if self.topology_type == "two_clusters":
-                    border_nodes = [n for n in self.graph.nodes if self.graph.degree[n] == 1]
-                    if np.random.random() > self.graph[self.center_node_1][self.center_node_2]["probability_selection"]:
-                        g_temp.remove_edge(self.center_node_1, self.center_node_2)
-                    for border_node in border_nodes:
-                        if g_temp.has_edge(border_node, self.center_node_1) and  np.random.random() > self.graph[self.center_node_1][border_node]["probability_selection"]:
-                            g_temp.remove_edge(border_node, self.center_node_1)
-                        elif g_temp.has_edge(border_node, self.center_node_2) and np.random.random() > self.graph[border_node][self.center_node_2]["probability_selection"]:
-                            g_temp.remove_edge(border_node, self.center_node_2)
-
-                # Show the number of active nodes in the generated subgraph
-                active_nodes = [n for n in g_temp.nodes if g_temp.degree[n] >= 1]
-                log.info(f"Fraction of activated nodes : {len(active_nodes)/len(self.clients)} ") 
+                    # Compute relative error in terms of gradient norm for all clients
+                    rel_errors = np.array([(torch.norm(new_gradients[n] - previous_gradients[n]).item()/torch.norm(previous_gradients[n]).item()) for n in range(len(self.clients))])
+                    node_for_comm = set(np.where(rel_errors >= self.selection_method.threshold)[0])
+                    g_temp = self.graph.subgraph(node_for_comm).copy()
+                    log.info(f"Nodes selected for communication (rel error >= {self.selection_method.threshold}): {node_for_comm}")
+                    log.info(f"Fraction of activated nodes : {len(node_for_comm)/len(self.clients)} ")
+                    
+                    if not self.old_gradients:
+                        ##### RECOMPUTE W #####
+                        W_active = compute_weight_matrix(g_temp, mixing_matrix=self.mixing_matrix)
+                    else:
+                        W_active = W
                         
-                ################# GOSSIPING PHASE ################
-                self.training(rnd=rnd)
+                    validate_weight_matrix(W_active)
+                
+                    ################# GOSSIPING PHASE ##################
+                    self.gossip_phase(W_active)
+                    
+                    # Evaluate (average across clients)
+                    self.load_metrics(rnd)
+                
+            else:
+                for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
+
+                    # Compute the mixing matrix
+                    W = compute_weight_matrix(self.graph, self.mixing_matrix)
+                    validate_weight_matrix(W)
+                    
+                    N = len(self.clients)
+                    for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
+                        log.info(f'-------------- Round {rnd} --------------')
+                        self.lr_update(rnd)
+
+                        # For each edge, decide if it is active this round (bidirectional selection)
+                        g_temp = self.graph.copy()
+                        if self.topology_type == "two_clusters":
+                            border_nodes = [n for n in self.graph.nodes if self.graph.degree[n] == 1]
+                            if np.random.random() > self.graph[self.center_node_1][self.center_node_2]["probability_selection"]:
+                                g_temp.remove_edge(self.center_node_1, self.center_node_2)
+                            for border_node in border_nodes:
+                                if g_temp.has_edge(border_node, self.center_node_1) and  np.random.random() > self.graph[self.center_node_1][border_node]["probability_selection"]:
+                                    g_temp.remove_edge(border_node, self.center_node_1)
+                                elif g_temp.has_edge(border_node, self.center_node_2) and np.random.random() > self.graph[border_node][self.center_node_2]["probability_selection"]:
+                                    g_temp.remove_edge(border_node, self.center_node_2)
+
+                        # Show the number of active nodes in the generated subgraph
+                        active_nodes = [n for n in g_temp.nodes if g_temp.degree[n] >= 1]
+                        log.info(f"Fraction of activated nodes : {len(active_nodes)/len(self.clients)} ") 
+                                
+                        ################# GOSSIPING PHASE ################
+                        self.training(rnd=rnd)
+                                    
+                        if not self.old_gradients:
+                            ##### RECOMPUTE W #####
+                            W_active = compute_weight_matrix(g_temp, mixing_matrix=self.mixing_matrix)
+                        else:
+                            W_active = W
                             
-                if not self.old_gradients:
-                    ##### RECOMPUTE W #####
-                    W_active = compute_weight_matrix(g_temp, mixing_matrix=self.mixing_matrix)
-                else:
-                    W_active = W
+                        validate_weight_matrix(W_active)
                     
-                validate_weight_matrix(W_active)
-            
-                ################# GOSSIPING PHASE ##################
-                self.gossip_phase(W_active)
-                
-                ######## WEIGHT W BY THE ACTIVATION PROBABILITY OF EDEGES #############
-                #weights = np.full_like(W_active, 1.0 / border_link_proba)
+                        ################# GOSSIPING PHASE ##################
+                        self.gossip_phase(W_active)
+                        
+                        ######## WEIGHT W BY THE ACTIVATION PROBABILITY OF EDEGES #############
+                        #weights = np.full_like(W_active, 1.0 / border_link_proba)
 
-                # Fix the diagonal to 1 (no scaling)
-                # np.fill_diagonal(weights, 1.0)
-                # weights[center_node_1, center_node_2] *= 1/main_link_proba
-                # weights[center_node_2, center_node_1] *= 1/main_link_proba
-                
-                # W_active *= weights
-                # row_sums = W_active.sum(axis=1, keepdims=True)
-                # # Avoid division by zero
-                # row_sums[row_sums == 0] = 1.0
-                # W_active /= row_sums
-                
-                ################# AGGREGATION #################
-                #log.info(f'Number of model stored in central node 1 : {len(clients[center_node_1].neighbor_models)}')
+                        # Fix the diagonal to 1 (no scaling)
+                        # np.fill_diagonal(weights, 1.0)
+                        # weights[center_node_1, center_node_2] *= 1/main_link_proba
+                        # weights[center_node_2, center_node_1] *= 1/main_link_proba
+                        
+                        # W_active *= weights
+                        # row_sums = W_active.sum(axis=1, keepdims=True)
+                        # # Avoid division by zero
+                        # row_sums[row_sums == 0] = 1.0
+                        # W_active /= row_sums
+                        
+                        ################# AGGREGATION #################
+                        #log.info(f'Number of model stored in central node 1 : {len(clients[center_node_1].neighbor_models)}')
+
+                        
+                        # Evaluate (average across clients)
+                        self.load_metrics(rnd)
+
+                        # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
+                        # log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')
+
 
                 
-                # Evaluate (average across clients)
-                self.load_metrics(rnd)
-
-                # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
-                # log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')
-                    
         elif self.mixing_matrix == 'matcha':
             W = list()
             n_nodes = len(self.graph.nodes)

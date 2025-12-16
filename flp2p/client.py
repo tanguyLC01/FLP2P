@@ -45,6 +45,19 @@ class FLClient:
         for neighbor_id, models in neighbor_state.items():
             self.neighbor_models[neighbor_id] = copy.deepcopy(models)
 
+    def get_stochastic_gradient(self, criterion: nn.Module = None) -> Dict[str, torch.Tensor]:
+        if criterion is None:
+            criterion = nn.CrossEntropyLoss()
+        self.model.train()
+        inputs, targets = next(iter(self.train_loader))
+        inputs = inputs.to(self.device)
+        targets = targets.to(self.device)
+        self.model.zero_grad()
+        outputs = self.model(inputs)
+        loss = criterion(outputs, targets)
+        loss.backward()
+        gradient = {name: param.grad.detach().clone() for name, param in self.model.named_parameters() if param.requires_grad}
+        return gradient
             
     def _optimizer(self) -> torch.optim.Optimizer:
         weights = [v for k, v in self.model.named_parameters() if "weight" in k]
