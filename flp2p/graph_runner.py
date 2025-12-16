@@ -231,7 +231,10 @@ class graph_runner:
                     # Compute relative error in terms of gradient norm for all clients
                     rel_errors = np.array([(torch.norm(new_gradients[n] - previous_gradients[n]).item()/torch.norm(previous_gradients[n]).item()) for n in range(len(self.clients))])
                     node_for_comm = set(np.where(rel_errors >= self.selection_method.threshold)[0])
-                    g_temp = self.graph.subgraph(node_for_comm).copy()
+                    g_temp = self.graph.copy()
+                    for u, v in list(g_temp.edges()):
+                        if u not in node_for_comm or v not in node_for_comm:
+                            g_temp.remove_edge(u, v)
                     log.info(f"Nodes selected for communication (rel error >= {self.selection_method.threshold}): {node_for_comm}")
                     log.info(f"Fraction of activated nodes : {len(node_for_comm)/len(self.clients)} ")
                     
