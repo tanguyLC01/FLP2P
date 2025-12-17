@@ -11,5 +11,5 @@ lr_schedule:
         epochs: 5
         start_lr: 1e-2
 
-    decay_milestones: [100, 255]
+    decay_milestones: [100, 250, 400, 550, 700]
     factor: 0.1
