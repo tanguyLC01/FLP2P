@@ -129,6 +129,9 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
     
     W = np.zeros((n_nodes, n_nodes))
     
+    if len(graph.edges) == 0:
+        return np.eye(n_nodes)
+    
     if mixing_matrix == 'metropolis_hasting' or mixing_matrix == 'probability':
         # First pass: compute edge weights
         for node in nodes:
