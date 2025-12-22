@@ -190,6 +190,7 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
         # # 3. Add Self-Loops to make row sums exactly 1
         for i in range(N):
             W[i, i] = max(1.0 - np.sum(W[i, :]), 0)
+            
     return W
 
 
