@@ -1,5 +1,5 @@
 name: dirichlet
-num_clients: 80
+num_clients: 8
 strategy: dirichlet
 dirichlet_alpha: 0.1
 min_partition_size: 1

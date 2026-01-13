@@ -4,6 +4,10 @@ import numpy as np
 import networkx as nx
 from typing import Dict, Literal
 import torch
+import logging
+
+from flp2p.client import FLClient
+log = logging.getLogger(__name__)
 
 GOSSIPING = Literal['metropolis_hasting', 'maximum_degree', 'average', 'probability', 'matcha', 'jaccard']
 
@@ -101,6 +105,22 @@ def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: i
     return graph
 
 
+def lr_update(rnd: int, client_config: Dict, clients: FLClient) -> None:
+    if "lr_schedule" in client_config:
+        client = clients[0]
+        if (rnd+1) <= client_config.lr_schedule.warmup.epochs:
+            for client in clients:
+                lr = (client_config.learning_rate - client_config.lr_schedule.warmup.start_lr) *  (rnd+1) / float(client_config.lr_schedule.warmup.epochs) + client_config.lr_schedule.warmup.start_lr
+                for client in clients:
+                    client.learning_rate = lr 
+        elif (rnd+1) in client_config.lr_schedule.decay_milestones:
+            lr = client_config.lr_schedule.factor
+            for client in clients:
+                client.learning_rate *= lr
+        log.info(f'Lr : {client.learning_rate}')
+
+
+
 def compute_consensus_distance(node_params):
     """Check how far apart node parameters are"""
     param_vectors = []
@@ -128,6 +148,9 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
     n_nodes = len(nodes)
     
     W = np.zeros((n_nodes, n_nodes))
+    
+    if len(graph.edges) == 0:
+        return np.eye(n_nodes)
     
     if mixing_matrix == 'metropolis_hasting' or mixing_matrix == 'probability':
         # First pass: compute edge weights
@@ -187,6 +210,7 @@ def compute_weight_matrix(graph, mixing_matrix: GOSSIPING ='metropolis_hasting')
         # # 3. Add Self-Loops to make row sums exactly 1
         for i in range(N):
             W[i, i] = max(1.0 - np.sum(W[i, :]), 0)
+            
     return W
 
 

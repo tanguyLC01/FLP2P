@@ -1,4 +1,4 @@
-learning_rate: 8e-2
+learning_rate: 5e-2
 weight_decay: 5e-4
 momentum: 0
 
@@ -8,8 +8,9 @@ gradient_clip:
 
 lr_schedule:
     warmup:
-        epochs: 5
-        start_lr: 1e-2
+      epochs: 5
+      start_lr: 0.01
+      
+    decay_milestones: [150, 300, 450]
 
-    decay_milestones: [30, 60, 80]
     factor: 0.1

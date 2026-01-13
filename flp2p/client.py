@@ -1,11 +1,14 @@
-from typing import Dict, Literal, Optional, Tuple, List
+from typing import Dict, Optional, Tuple, List
 
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 import copy
-#ShareMode = Literal["backbone", "full"]
+import logging
 
+
+#ShareMode = Literal["backbone", "full"]
+log = logging.getLogger(__name__)
 
 class FLClient:
     """Federated learning client supporting personalization by sharing only the backbone.
@@ -16,12 +19,14 @@ class FLClient:
 
     def __init__(
         self,
+        client_id: int,
         model: nn.Module,
         device: torch.device,
         train_loader: DataLoader,
         test_loader: Optional[DataLoader] = None,
         config: Optional[Dict] = None,
     ) -> None:
+        self.client_id = client_id
         self.model = model.to(device)
         self.device = device
         self.train_loader = train_loader
@@ -45,14 +50,27 @@ class FLClient:
         for neighbor_id, models in neighbor_state.items():
             self.neighbor_models[neighbor_id] = copy.deepcopy(models)
 
+    def get_stochastic_gradient(self, criterion: nn.Module = None) -> Dict[str, torch.Tensor]:
+        if criterion is None:
+            criterion = nn.CrossEntropyLoss()
+        self.model.train()
+        inputs, targets = next(iter(self.train_loader))
+        inputs = inputs.to(self.device)
+        targets = targets.to(self.device)
+        self.model.zero_grad()
+        outputs = self.model(inputs)
+        loss = criterion(outputs, targets)
+        loss.backward()
+        gradient = {name: param.grad.detach().clone() for name, param in self.model.named_parameters() if param.requires_grad}
+        return gradient
             
     def _optimizer(self) -> torch.optim.Optimizer:
         weights = [v for k, v in self.model.named_parameters() if "weight" in k]
         # biases = [v for k, v in self.model.named_parameters() if "bias" in k]
-        return   torch.optim.SGD(
+        return   torch.optim.Adam(
              [
                 {"params": weights, "weight_decay": self.weight_decay},
-            ], lr=self.learning_rate, momentum=self.momentum)
+            ], lr=self.learning_rate)
         
     def local_train(self, local_epochs: int = 1, criterion: Optional[nn.Module] = None) -> Tuple[float, float]:
         if criterion is None:
@@ -71,23 +89,23 @@ class FLClient:
                 outputs = self.model(inputs)
                 loss = criterion(outputs, targets)
                 loss.backward()
-                optimizer.step()
                 total += targets.size(0)
                 for name, param in self.model.named_parameters():
                     if param.grad is not None and param.requires_grad:
-                        gradient[name] += param.grad.detach().clone()
+                        gradient[name] += param.grad.detach().clone() * inputs.size(0)
+                optimizer.step()
                 with torch.no_grad():
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
 
         num_samples = len(self.train_loader.dataset)
         for name in gradient:
-            gradient[name] /= (len(self.train_loader) * local_epochs)
+            gradient[name] /= num_samples
             
         # Optionally, compute average gradient norm
         avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in gradient.values()) ** 0.5
         
-        return num_samples, avg_grad_norm, gradient
+        return num_samples, avg_grad_norm, self.get_stochastic_gradient()
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
@@ -107,6 +125,8 @@ class FLClient:
             correct += (preds == targets).sum().item()
         avg_loss = total_loss / len(loader) # Same remarks as in train
         avg_acc = correct / num_samples
+        test_evaluation = "Test" if loader == self.test_loader else "Training"
+        log.info(f"Evaluation [{test_evaluation} Client {self.client_id}] - Loss: {avg_loss:.4f}, Accuracy: {avg_acc:.4f}")
         return avg_loss, avg_acc
     
     def get_gradient_norm(self) -> float:

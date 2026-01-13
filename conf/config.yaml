@@ -1,7 +1,7 @@
 defaults:
   - data: cifar10
-  - model: resnet50
-  - partition: iid
+  - model: lenet5
+  - partition: dirichlet
   - client: default
   - train: default
   - graph: two_clusters
@@ -12,8 +12,8 @@ defaults:
 
 seed: 42
 use_cuda: true
-mixing_matrix: matcha
-run_name: reproduction_matcha
+mixing_matrix: jaccard
+run_name: small_graph
 old_gradients: false
 aggregation_step_per_round: 1
 hydra:
@@ -21,6 +21,9 @@ hydra:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
   sweep:
     dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
-    subdir: ${mixing_matrix}-partition:${partition.name}-aggregation_step:${aggregation_step_per_round}
+    subdir: ${mixing_matrix}-selection_method:${selection_method.threshold}-old_gradients:${old_gradients}
 same_distrib_test_set: false
+selection_method: 
+  name: normal
+  threshold: 0
 

@@ -1,4 +1,5 @@
-rounds: 300
+rounds: 500
 local_epochs: 1
 progress: true
+participation_rate: 1.0
 lr_decay: 0

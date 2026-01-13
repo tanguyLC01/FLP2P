@@ -110,7 +110,8 @@ def main(cfg: DictConfig) -> None:
         old_gradients=cfg.old_gradients,
         client_config=cfg.client,
         topology_type=cfg.graph.name,
-        aggregation_step_per_round=cfg.aggregation_step_per_round
+        aggregation_step_per_round=cfg.aggregation_step_per_round,
+        selection_method=cfg.selection_method
     )
 
     metrics = runner.run()
