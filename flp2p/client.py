@@ -1,11 +1,14 @@
-from typing import Dict, Literal, Optional, Tuple, List
+from typing import Dict, Optional, Tuple, List
 
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 import copy
-#ShareMode = Literal["backbone", "full"]
+import logging
 
+
+#ShareMode = Literal["backbone", "full"]
+log = logging.getLogger(__name__)
 
 class FLClient:
     """Federated learning client supporting personalization by sharing only the backbone.
@@ -16,12 +19,14 @@ class FLClient:
 
     def __init__(
         self,
+        client_id: int,
         model: nn.Module,
         device: torch.device,
         train_loader: DataLoader,
         test_loader: Optional[DataLoader] = None,
         config: Optional[Dict] = None,
     ) -> None:
+        self.client_id = client_id
         self.model = model.to(device)
         self.device = device
         self.train_loader = train_loader
@@ -62,10 +67,10 @@ class FLClient:
     def _optimizer(self) -> torch.optim.Optimizer:
         weights = [v for k, v in self.model.named_parameters() if "weight" in k]
         # biases = [v for k, v in self.model.named_parameters() if "bias" in k]
-        return   torch.optim.SGD(
+        return   torch.optim.Adam(
              [
                 {"params": weights, "weight_decay": self.weight_decay},
-            ], lr=self.learning_rate, momentum=self.momentum)
+            ], lr=self.learning_rate)
         
     def local_train(self, local_epochs: int = 1, criterion: Optional[nn.Module] = None) -> Tuple[float, float]:
         if criterion is None:
@@ -100,7 +105,7 @@ class FLClient:
         # Optionally, compute average gradient norm
         avg_grad_norm = sum(grad.norm(2).item() ** 2 for grad in gradient.values()) ** 0.5
         
-        return num_samples, avg_grad_norm, gradient
+        return num_samples, avg_grad_norm, self.get_stochastic_gradient()
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
@@ -120,6 +125,8 @@ class FLClient:
             correct += (preds == targets).sum().item()
         avg_loss = total_loss / len(loader) # Same remarks as in train
         avg_acc = correct / num_samples
+        test_evaluation = "Test" if loader == self.test_loader else "Training"
+        log.info(f"Evaluation [{test_evaluation} Client {self.client_id}] - Loss: {avg_loss:.4f}, Accuracy: {avg_acc:.4f}")
         return avg_loss, avg_acc
     
     def get_gradient_norm(self) -> float:

@@ -10,10 +10,9 @@ from .client import FLClient
 import numpy as np
 import logging
 
-
 from flp2p.matcha_mixing_matrix import graphToLaplacian, getProbability, getSubGraphs, getAlpha
 from flp2p.data import verify_data_split
-from flp2p.utils import compute_weight_matrix, validate_weight_matrix, GOSSIPING, get_spectral_gap
+from flp2p.utils import compute_weight_matrix, validate_weight_matrix, GOSSIPING, get_spectral_gap, lr_update
 log = logging.getLogger(__name__)
 
 
@@ -61,23 +60,6 @@ class graph_runner:
             log.info(f'Border_link_activation : {border_link_proba}')
             log.info(f'Main_link_activation : {main_link_proba}')
 
-        
-
-    def lr_update(self, rnd: int) -> None:
-        if "lr_schedule" in self.client_config:
-            client = self.clients[0]
-            if (rnd+1) <= self.client_config.lr_schedule.warmup.epochs:
-                for client in self.clients:
-                    lr = (self.client_config.learning_rate - self.client_config.lr_schedule.warmup.start_lr) *  (rnd+1) / float(self.client_config.lr_schedule.warmup.epochs) + self.client_config.lr_schedule.warmup.start_lr
-                    for client in self.clients:
-                        client.learning_rate = lr 
-            else:
-                if (rnd+1) in self.client_config.lr_schedule.decay_milestones:
-                    lr = self.client_config.lr_schedule.factor
-                    for client in self.clients:
-                        client.learning_rate *= lr
-            log.info(f'Lr : {client.learning_rate}')
-        # if lr_decay != 0:
         #     if type(lr_decay) is int and rnd > lr_decay:
         #         log.info(f'Learning rate: {learning_rate / (rnd - lr_decay + 1)**1.5}')
         #         for client in clients:
@@ -93,21 +75,21 @@ class graph_runner:
         # Local training of all the nodes
         train_gradient_norm = 0
         self.clients_models = {}
-        gradients = torch.Tensor(len(self.clients))
+        gradients_sum =  {k: torch.zeros_like(v.cpu()) for k, v in self.clients[0].model.state_dict().items()}
         for idx, client in enumerate(self.clients):
             _, gradient_norm, gradient = client.local_train(local_epochs=self.local_epochs)
             self.clients_models[idx] = client.get_state()
+            for k in gradients_sum.keys():
+                gradients_sum[k] += gradient[k].cpu() * len(client.train_loader.dataset)  # Scale model by number of samples
             train_gradient_norm += gradient_norm
-            gradients[idx] = gradient_norm
 
         train_results = {
         'gradient_norm': train_gradient_norm / max(1, len(self.clients))
         }
 
         log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
-        # Log the norm of the sum of the gradients across clients
-        sum_gradients = torch.sum(gradients)
-        norm_sum_gradients = torch.norm(sum_gradients).item()
+        average_gradient = torch.cat([g.flatten() for g in gradients_sum.values()])/sum([len(client.train_loader.dataset) for client in self.clients])
+        norm_sum_gradients = torch.norm(average_gradient, p=2).item()
         log.info(f"Norm of the sum of the gradients across clients: {norm_sum_gradients}")
         
     
@@ -122,7 +104,7 @@ class graph_runner:
                 neighbors_activated = np.where(W[idx_client, :] > 0)[0]
                 neighbor_models = {n: self.clients_models[n] for n in neighbors_activated}
 
-                ################ OLD GRADIENTS PART ########################
+                ################ OLD GRADIENTS PART ######################## 
                 if self.old_gradients:
                     client.store_neighbor_models(neighbor_models)
 
@@ -197,14 +179,12 @@ class graph_runner:
             cluster_1_consensus_distance = torch.norm(param_vectors[self.center_node_1] - param_vectors[self.neighbor_center_1]).item()
             cluster_2_consensus_distance = torch.norm(param_vectors[self.center_node_2] - param_vectors[self.neighbor_center_2]).item()
             log.info(f'Number of model stored in central node 1 : {len(self.clients[self.center_node_1].neighbor_models)}')
-            
-            
-        log.info(f"Overall consensus distance : {consensus_distance:.6f}")
-        if self.topology_type == "two_clusters":
             log.info(f"Cluster 1 consensus distance : {cluster_1_consensus_distance:.6f}")
             log.info(f"Cluster 2 consensus distance : {cluster_2_consensus_distance:.6f}")
             log.info(f"Inter-cluster distance : {inter_cluster:.6f}")
-       
+            
+        log.info(f"Overall consensus distance : {consensus_distance:.6f}")
+      
     def run(
         self
     ) -> Dict[str, List[Tuple[float, float]]]:
@@ -225,7 +205,7 @@ class graph_runner:
             if self.selection_method.name == 'gradient_based':
                 for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
                     log.info(f'-------------- Round {rnd} --------------')
-                    self.lr_update(rnd)
+                    lr_update(rnd, self.client_config, self.clients)
                     
                     ############ TRAINING PHASE ##############    
                     # Save the stochastic  gradients before training
@@ -239,7 +219,6 @@ class graph_runner:
                     new_gradients = {n: self.clients[n].get_stochastic_gradient().values() for n in range(len(self.clients))}
                     new_gradients = {n: torch.cat([g.flatten() for g in grads]) for n, grads in new_gradients.items()}
                     
-
                     # Compute relative error in terms of gradient norm for all clients
                     rel_errors = np.array([(torch.norm(new_gradients[n] - previous_gradients[n]).item()/torch.norm(previous_gradients[n]).item()) for n in range(len(self.clients))])
                     
@@ -269,7 +248,7 @@ class graph_runner:
             else:
                 for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
                     log.info(f'-------------- Round {rnd} --------------')
-                    self.lr_update(rnd)
+                    lr_update(rnd, self.client_config, self.clients)
 
                     # For each edge, decide if it is active this round (bidirectional selection)
                     g_temp = self.graph.copy()
@@ -360,4 +339,4 @@ class graph_runner:
                 # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
                 # log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')
 
-        return self.load_metrics
+        return self.metrics
