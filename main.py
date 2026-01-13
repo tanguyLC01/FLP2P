@@ -84,6 +84,7 @@ def main(cfg: DictConfig) -> None:
         model.load_state_dict(init_state)
         train_loader, test_loader = client_loaders[i]
         client = FLClient(
+            client_id=i,
             model=model,
             device=device,
             train_loader=train_loader,

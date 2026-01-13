@@ -11,6 +11,7 @@ from typing import List, Dict
 import logging
 import os
 from flp2p.client import FLClient
+from flp2p.utils import lr_update
 from main import print_metrics
 
 
@@ -56,6 +57,7 @@ def run_local(cfg: DictConfig) -> None:
             raise ValueError(f"Unknown model: {cfg.model.name}")
         train_loader, test_loader = client_loaders[i]
         client = FLClient(
+            client_id=i,
             model=model,
             device=device,
             train_loader=train_loader,
@@ -72,6 +74,7 @@ def run_local(cfg: DictConfig) -> None:
     }  
 
     for rnd in range(cfg.train.rounds):
+        lr_update(rnd, cfg.client, clients)
         total_test_samples = 0
         total_train_samples = 0
         test_weighted_loss = 0.0
@@ -82,7 +85,7 @@ def run_local(cfg: DictConfig) -> None:
         accuracies = []
         
         for client in clients:
-            num_samples, avg_grad_norm, gradient = client.local_train(local_epochs=cfg.train.local_epochs)
+            _, avg_grad_norm, _ = client.local_train(local_epochs=cfg.train.local_epochs)
             train_gradient_norm += avg_grad_norm
             
             test_loss, test_acc = client.evaluate()
@@ -118,10 +121,6 @@ def run_local(cfg: DictConfig) -> None:
 
         log.info(f"Train, Round {rnd} : loss => {train_avg_loss},  accuracy: {train_avg_acc}")
         log.info(f"Test, Round {rnd} : loss => {test_avg_loss},  accuracy: {test_avg_acc}, std: {test_std_acc}")
-        
-        if cfg.train.lr_decay != 0:
-                for client in clients:
-                    client.learning_rate *= cfg.train.lr_decay
 
     print_metrics(metrics['train'], 'Train')
     print_metrics(metrics['test'], 'Test')
