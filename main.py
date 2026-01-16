@@ -20,7 +20,7 @@ from flp2p.utils import plot_topology, build_topology
 
 log = logging.getLogger(__name__)
 
-def print_metrics(metrics: Dict[str, List[float]], mode: str) -> None:
+def print_metrics(metrics: Dict[str,List[float]], mode: str) -> None:
     losses = metrics['loss']
     accuracies = metrics['accuracy']
     if mode == "Test":
@@ -39,7 +39,7 @@ def print_metrics(metrics: Dict[str, List[float]], mode: str) -> None:
             log.info(res)
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
-def main(cfg: DictConfig) -> None:
+def main(cfg: DictConfig) -> Dict[str, Dict[str, List[float]]]:
     print(OmegaConf.to_yaml(cfg))
     device = torch.device("cuda" if torch.cuda.is_available() and cfg.use_cuda else "cpu")
     np.random.seed(cfg.seed) 
@@ -49,7 +49,7 @@ def main(cfg: DictConfig) -> None:
         torch.cuda.manual_seed(cfg.seed)
         torch.cuda.manual_seed_all(cfg.seed)
         
-    log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
+    log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir # type: ignore[attr-defined]
     
     # Data
     train_ds, test_ds = get_dataset(cfg.data)
@@ -60,6 +60,7 @@ def main(cfg: DictConfig) -> None:
         save_plot_path=log_path
     )
     
+    init_state = {}
     if cfg.model.name == "lenet5":
         base_model = LeNet5(cfg.model).to(device)
         init_state = base_model.state_dict()
