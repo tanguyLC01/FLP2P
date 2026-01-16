@@ -1,11 +1,12 @@
 import collections
+from typing import List
 import networkx as nx
 import random
 import pickle
 import cvxpy as cp
 import numpy as np
 
-def decomposition(graph, size):
+def decomposition(graph, size) -> list:
     node_degree = [[i, 0] for i in range(size)]
     node_to_node = [[] for i in range(size)]
     node_degree_dict = collections.defaultdict(int)
@@ -59,9 +60,10 @@ def decomposition(graph, size):
         node_degree[:] = node_degree[::-1]
     return subgraphs
 
-def getSubGraphs(graph, size):
+def getSubGraphs(graph, size) -> list:
     subgraphs = list()
-    for i in range(80-1):
+    M1 = nx.Graph()
+    for i in range(len(graph.nodes)-1):
         M1 = nx.max_weight_matching(graph)
     if nx.is_perfect_matching(graph, M1):
         graph.remove_edges_from(list(M1))
@@ -79,7 +81,7 @@ def getSubGraphs(graph, size):
     return subgraphs
 
         
-def graphToLaplacian(subGraphs, size):
+def graphToLaplacian(subGraphs, size) -> List[np.ndarray]:
     L_matrices = list()
     for i, subgraph in enumerate(subGraphs):
         tmp_G = nx.Graph()
@@ -89,7 +91,7 @@ def graphToLaplacian(subGraphs, size):
 
     return L_matrices
     
-def getProbability(L_matrices, commBudget):
+def getProbability(L_matrices, commBudget) -> np.ndarray:
     num_subgraphs = len(L_matrices)
     p = cp.Variable(num_subgraphs)
     L = p[0]*L_matrices[0]
@@ -108,13 +110,16 @@ def getProbability(L_matrices, commBudget):
 
     # get solution
     tmp_p = p.value
+    if tmp_p is None:
+        print("CVX optimization failed!")
+        exit()
     originActivationRatio = np.zeros((num_subgraphs))
     for i, pval in enumerate(tmp_p):
         originActivationRatio[i] = np.real(float(pval))
 
     return np.minimum(originActivationRatio, 1) 
 
-def getAlpha(L_matrices, probabilities, num_nodes):
+def getAlpha(L_matrices, probabilities, num_nodes) -> float:
     num_subgraphs = len(L_matrices)
     
     # prepare matrices
@@ -136,5 +141,7 @@ def getAlpha(L_matrices, probabilities, num_nodes):
     constraint = [(1-s)*I - 2*a*mean_L-J + b*(np.dot(mean_L,mean_L)+2*var_L) << 0, a>=0, s>=0, b>=0, cp.square(a) <= b]
     problem = cp.Problem(cp.Minimize(obj_fn), constraint)
     problem.solve(solver='CVXOPT', kktsolver=cp.ROBUST_KKTSOLVER)
-
+    if a.value is None:
+        print("CVX optimization failed!")
+        exit()
     return  float(a.value)

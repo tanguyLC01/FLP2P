@@ -1,8 +1,9 @@
+from omegaconf import DictConfig
 from pyvis.network import Network
 import matplotlib.pyplot as plt
 import numpy as np
 import networkx as nx
-from typing import Dict, Literal
+from typing import Dict, List, Literal
 import torch
 import logging
 
@@ -11,7 +12,7 @@ log = logging.getLogger(__name__)
 
 GOSSIPING = Literal['metropolis_hasting', 'maximum_degree', 'average', 'probability', 'matcha', 'jaccard']
 
-def get_spectral_gap(matrix: np.array) -> float:
+def get_spectral_gap(matrix: np.ndarray) -> float:
     eigenvals = set(np.abs(np.linalg.eigvals(matrix)))
     if len(eigenvals) == 1:
         return 1
@@ -28,7 +29,7 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     self_loops = list(nx.selfloop_edges(graph_no_self_loops))
     graph_no_self_loops.remove_edges_from(self_loops)
 
-    net = Network(notebook=False, width="700px", height="700px", bgcolor="#222222", font_color="white")
+    net = Network(notebook=False, width="700px", height="700px", bgcolor="#222222", font_color=True)
     net.from_nx(graph_no_self_loops)
     for u, v, data in graph_no_self_loops.edges(data=True):
         if "probability_selection" in data:
@@ -41,7 +42,7 @@ def plot_topology(graph: nx.Graph, title: str = "Topology", path: str = "topolog
     net.save_graph(html_path)
 
     
-def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: int = 42) -> nx.Graph:
+def build_topology(num_clients: int, cfg: DictConfig, mixing_matrix: GOSSIPING,seed: int = 42) -> nx.Graph:
     if cfg.topology == "ring":
         graph = nx.cycle_graph(num_clients)
     elif cfg.topology == "erdos_renyi":
@@ -92,7 +93,7 @@ def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: i
 
     graph.remove_edges_from(nx.selfloop_edges(graph))
     if mixing_matrix == 'maximum_degree':
-        max_degree = max([val for (_, val) in graph.degree()])
+        max_degree = max([val for (_, val) in graph.degree()])  # type: ignore[attr-defined]
         for node in graph.nodes():
             for neighbor in graph.neighbors(node):
                 graph[node][neighbor]["weight"] = 1/max_degree
@@ -100,12 +101,12 @@ def build_topology(num_clients: int, cfg: Dict, mixing_matrix: GOSSIPING,seed: i
     elif mixing_matrix == 'metropolis_hasting':
         for node in graph.nodes():
             for neighbor in graph.neighbors(node):
-                graph[node][neighbor]["weight"] = 1/(1+max(graph.degree[node], graph.degree[neighbor]))
+                graph[node][neighbor]["weight"] = 1/(1+max(graph.degree[node], graph.degree[neighbor]))  # type: ignore[attr-defined]
 
     return graph
 
 
-def lr_update(rnd: int, client_config: Dict, clients: FLClient) -> None:
+def lr_update(rnd: int, client_config: DictConfig, clients: List[FLClient]) -> None:
     if "lr_schedule" in client_config:
         client = clients[0]
         if (rnd+1) <= client_config.lr_schedule.warmup.epochs:

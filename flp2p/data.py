@@ -1,7 +1,8 @@
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List, Sequence, Tuple, Protocol, Sequence, cast
 
 import numpy as np
+from omegaconf import DictConfig
 import torch
 from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms
@@ -9,32 +10,39 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 from joblib.externals.loky.backend.context import get_context
 
-def get_mnist_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
+from flp2p.client import FLClient
+
+class DatasetWithTargets(Protocol):
+    """ We create this Protocol class because torch dataset do not implement "targets" attribute in their defintion but most of the datasets used - especially in torchvision - have this attribute."""
+    targets: Sequence[int]
+    
+
+def get_mnist_datasets(root: str = "./data") -> Tuple[DatasetWithTargets, DatasetWithTargets]:
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,)),
     ])
     train = datasets.MNIST(root=root, train=True, download=True, transform=transform)
     test = datasets.MNIST(root=root, train=False, download=True, transform=transform)
-    return train, test
+    return cast(DatasetWithTargets, train), cast(DatasetWithTargets, test)
 
-def get_cifar10_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
+def get_cifar10_datasets(root: str = "./data") -> Tuple[DatasetWithTargets, DatasetWithTargets]:
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
     train = datasets.CIFAR10(root=root, train=True, download=True, transform=transform)
     test = datasets.CIFAR10(root=root, train=False, download=True, transform=transform)
-    return train, test
+    return cast(DatasetWithTargets, train), cast(DatasetWithTargets, test)
 
-def get_fashion_mnist_datasets(root: str = "./data") -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
+def get_fashion_mnist_datasets(root: str = "./data") -> Tuple[DatasetWithTargets, DatasetWithTargets]:
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,)),  # Fashion-MNIST is grayscale (1 channel)
     ])
     train = datasets.FashionMNIST(root=root, train=True, download=True, transform=transform)
     test = datasets.FashionMNIST(root=root, train=False, download=True, transform=transform)
-    return train, test
+    return cast(DatasetWithTargets, train), cast(DatasetWithTargets, test)
 
 def iid_partition(num_clients: int, labels: np.ndarray) -> List[np.ndarray]:
     indices = np.random.permutation(len(labels))
@@ -104,7 +112,7 @@ def pathology_partition(labels: np.ndarray, num_clients: int, num_classes_per_cl
         for label in rand_set_label:
             idx = np.random.choice(len(class_to_indices[label]), replace=False)
             rand_set.append(class_to_indices[label].pop(idx))
-        dict_users[cid] = np.concatenate(rand_set)
+        dict_users[cid] = list(np.concatenate(rand_set))
     
     return [np.array(idxs, dtype=np.int64) for idxs in dict_users.values()]
 
@@ -170,7 +178,7 @@ def plot_partition_distribution(partitions: List[np.ndarray], labels: np.ndarray
     plt.savefig(os.path.join(path_to_save, f"{title}.png"))
     plt.close()
 
-def get_dataset(config: Dict) -> Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]:
+def get_dataset(config: DictConfig) -> Tuple[DatasetWithTargets, DatasetWithTargets]:
     if config.name == "mnist":
         return get_mnist_datasets(root=config.root)
     elif config.name == "cifar10":
@@ -180,12 +188,17 @@ def get_dataset(config: Dict) -> Tuple[torch.utils.data.Dataset, torch.utils.dat
     else:
         raise ValueError(f"Unknown dataset: {config.name}")
 
+
+
+
+
 def build_client_loaders(
-    train_dataset: torch.utils.data.Dataset,
-    test_dataset: torch.utils.data.Dataset,
-    config: Dict,
+    train_dataset: DatasetWithTargets,
+    test_dataset: DatasetWithTargets    ,
+    config: DictConfig,
     save_plot_path: str = "./"
 ) -> List[Tuple[DataLoader, DataLoader]]:
+ 
     labels = np.array(train_dataset.targets)
     if config.partition.strategy == "iid":
         train_parts = iid_partition(num_clients=config.partition.num_clients, labels=labels)
@@ -209,8 +222,8 @@ def build_client_loaders(
     
     loaders: List[Tuple[DataLoader, DataLoader]] = []
     for idxs_train, idxs_test in zip(train_parts, test_parts):
-        train_subset = Subset(train_dataset, indices=idxs_train.tolist())
-        test_subset = Subset(test_dataset, indices=idxs_test.tolist())
+        train_subset = Subset(cast(torch.utils.data.Dataset, train_dataset), indices=idxs_train.tolist())
+        test_subset = Subset(cast(torch.utils.data.Dataset, test_dataset), indices=idxs_test.tolist())
         
         # Use the full test set for all clients by default
         ####### WARNING : if using Joblib, it is not possible to set num_workers > 0 see : github repo and issue
@@ -220,15 +233,15 @@ def build_client_loaders(
     return loaders 
 
 
-def verify_data_split(client):
+def verify_data_split(client: FLClient) -> None:
     # Sample a few examples from train and test
     train_batch = next(iter(client.train_loader))
-    test_batch = next(iter(client.test_loader))
-    
     print(f"Train batch shape: {train_batch[0].shape}")
-    print(f"Test batch shape: {test_batch[0].shape}")
+    if client.test_loader is not None:
+        test_batch = next(iter(client.test_loader))
+        print(f"Test batch shape: {test_batch[0].shape}")
     
-    # Check if there's overlap (shouldn't be any)
-    train_hash = hash(train_batch[0].flatten().sum().item())
-    test_hash = hash(test_batch[0].flatten().sum().item())
-    print(f"Different data: {train_hash != test_hash}")
+        # Check if there's overlap (shouldn't be any)
+        train_hash = hash(train_batch[0].flatten().sum().item())
+        test_hash = hash(test_batch[0].flatten().sum().item())
+        print(f"Different data: {train_hash != test_hash}")

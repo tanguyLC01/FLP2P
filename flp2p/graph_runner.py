@@ -1,11 +1,10 @@
-import matplotlib.pyplot as plt
 from typing import Dict, List, Literal, Tuple
 
 import networkx as nx
-from sklearn import metrics
+from omegaconf import DictConfig, OmegaConf
 import torch
 from tqdm import tqdm
-
+import random
 from .client import FLClient
 import numpy as np
 import logging
@@ -14,7 +13,7 @@ from flp2p.matcha_mixing_matrix import graphToLaplacian, getProbability, getSubG
 from flp2p.data import verify_data_split
 from flp2p.utils import compute_weight_matrix, validate_weight_matrix, GOSSIPING, get_spectral_gap, lr_update
 log = logging.getLogger(__name__)
-
+from utils import lr_update
 
 class graph_runner:
 
@@ -25,13 +24,13 @@ class graph_runner:
         local_epochs: int = 1,
         progress: bool = True,
         old_gradients: bool = True,
-        client_config: Dict = {},
+        client_config: DictConfig = OmegaConf.create(),
         topology_type: str = "two_clusters",
         aggregation_step_per_round: int = 1,
-        selection_method: Dict = {}) -> None:
+        selection_method: DictConfig = OmegaConf.create()) -> None:
         self.clients = clients
         self.graph = graph
-        self.mixing_matrix = mixing_matrix
+        self.mixing_matrix : GOSSIPING = mixing_matrix
         self.rounds = rounds
         self.local_epochs = local_epochs
         self.progress = progress
@@ -41,7 +40,6 @@ class graph_runner:
         self.aggregation_step_per_round = aggregation_step_per_round
         self.selection_method = selection_method
         
-        self.metrics: Dict[str, List[Tuple[float, float]]] = {"train": [], 'test': []}
         self.metrics = {"train":
                                     {"loss": [], "accuracy": []},
                         "test":    
@@ -51,7 +49,7 @@ class graph_runner:
         self.clients_models: Dict[int, Dict[str, torch.Tensor]] = {}
         
         if self.topology_type == "two_clusters":
-            max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
+            max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2]) # type: ignore[attr-defined]
             self.center_node_1, self.center_node_2 = [n for n, _ in max_degree_nodes]  
             self.neighbor_center_1 = list([n for n in graph.neighbors(self.center_node_1) if n != self.center_node_2])[0]
             self.neighbor_center_2 = list([n for n in graph.neighbors(self.center_node_2) if n != self.center_node_1])[0]
@@ -59,16 +57,6 @@ class graph_runner:
             border_link_proba = graph[self.center_node_1][self.neighbor_center_1]['probability_selection']
             log.info(f'Border_link_activation : {border_link_proba}')
             log.info(f'Main_link_activation : {main_link_proba}')
-
-        #     if type(lr_decay) is int and rnd > lr_decay:
-        #         log.info(f'Learning rate: {learning_rate / (rnd - lr_decay + 1)**1.5}')
-        #         for client in clients:
-        #             client.learning_rate = learning_rate / (rnd - lr_decay + 1)**1.5
-                
-        #     if lr_decay is float:
-        #         for client in clients:
-        #             client.learning_rate *= lr_decay
-        
     
     
     def training(self, rnd: int) -> None:
@@ -80,20 +68,20 @@ class graph_runner:
             _, gradient_norm, gradient = client.local_train(local_epochs=self.local_epochs)
             self.clients_models[idx] = client.get_state()
             for k in gradients_sum.keys():
-                gradients_sum[k] += gradient[k].cpu() * len(client.train_loader.dataset)  # Scale model by number of samples
-            train_gradient_norm += gradient_norm
+                gradients_sum[k] += gradient[k].cpu() * len(client.train_loader.dataset)  # Scale model by number of samples # type: ignore[attr-defined]
+            train_gradient_norm += gradient_norm 
 
         train_results = {
         'gradient_norm': train_gradient_norm / max(1, len(self.clients))
         }
 
         log.info(f"Train, Round {rnd} : gradient_norm : {train_results['gradient_norm']}")
-        average_gradient = torch.cat([g.flatten() for g in gradients_sum.values()])/sum([len(client.train_loader.dataset) for client in self.clients])
+        average_gradient = torch.cat([g.flatten() for g in gradients_sum.values()])/sum([len(client.train_loader.dataset) for client in self.clients]) # type: ignore[attr-defined]
         norm_sum_gradients = torch.norm(average_gradient, p=2).item()
         log.info(f"Norm of the sum of the gradients across clients: {norm_sum_gradients}")
         
     
-    def gossip_phase(self, W: np.array) -> None:
+    def gossip_phase(self, W: np.ndarray) -> None:
         mask = ~np.eye(W.shape[0], dtype=bool)
         communicative_nodes = np.nonzero(W * mask)
         nodes_involved = set(communicative_nodes[0])
@@ -130,7 +118,7 @@ class graph_runner:
         for client in self.clients:
             ###### TEST METRICS #######
             test_loss, test_acc = client.evaluate()
-            test_num_samples = len(client.test_loader.dataset)
+            test_num_samples = len(client.test_loader.dataset) # type: ignore[attr-defined]
             test_weighted_loss += test_loss * test_num_samples
             test_weighted_acc += test_acc * test_num_samples
             accuracies.append(test_acc)
@@ -138,7 +126,7 @@ class graph_runner:
 
             ###### TRAIN METRICS #######
             train_loss, train_acc = client.evaluate(client.train_loader)
-            train_num_samples = len(client.train_loader.dataset)
+            train_num_samples = len(client.train_loader.dataset) # type: ignore[attr-defined]
             train_weighted_loss += train_loss * train_num_samples
             train_weighted_acc += train_acc * train_num_samples
             total_train_samples += train_num_samples
@@ -187,10 +175,10 @@ class graph_runner:
       
     def run(
         self
-    ) -> Dict[str, List[Tuple[float, float]]]:
+    ) -> Dict[str, Dict[str, List[float]]]:
         
         log.info("Data split check on random client")
-        verify_data_split(np.random.choice(self.clients, 1)[0])
+        verify_data_split(random.choice(self.clients))
             
         if self.old_gradients:
             # If old_gradiens is True, fill the neighbord_models with the x_0 of the FL Client just created
@@ -200,7 +188,7 @@ class graph_runner:
         if self.mixing_matrix != 'matcha':
             # Compute the mixing matrix
             W = compute_weight_matrix(self.graph, self.mixing_matrix)
-            validate_weight_matrix(W)
+            validate_weight_matrix(W) # Check the gossip matrix validates the doubly stochasticity and the symmetric
             
             if self.selection_method.name == 'gradient_based':
                 for rnd in tqdm(range(self.rounds), disable=not self.progress, desc="Rounds"):
@@ -253,7 +241,7 @@ class graph_runner:
                     # For each edge, decide if it is active this round (bidirectional selection)
                     g_temp = self.graph.copy()
                     if self.topology_type == "two_clusters":
-                        border_nodes = [n for n in self.graph.nodes if self.graph.degree[n] == 1]
+                        border_nodes = [n for n in self.graph.nodes if self.graph.degree[n] == 1]  # type: ignore[attr-defined]
                         if np.random.random() > self.graph[self.center_node_1][self.center_node_2]["probability_selection"]:
                             g_temp.remove_edge(self.center_node_1, self.center_node_2)
                         for border_node in border_nodes:
@@ -263,7 +251,7 @@ class graph_runner:
                                 g_temp.remove_edge(border_node, self.center_node_2)
 
                     # Show the number of active nodes in the generated subgraph
-                    active_nodes = [n for n in g_temp.nodes if g_temp.degree[n] >= 1]
+                    active_nodes = [n for n in g_temp.nodes if g_temp.degree[n] >= 1] # type: ignore[attr-defined]
                     log.info(f"Fraction of activated nodes : {len(active_nodes)/len(self.clients)} ") 
                             
                     ################# GOSSIPING PHASE ################
@@ -280,29 +268,8 @@ class graph_runner:
                     ################# GOSSIPING PHASE ##################
                     self.gossip_phase(W_active)
                     
-                    ######## WEIGHT W BY THE ACTIVATION PROBABILITY OF EDEGES #############
-                    #weights = np.full_like(W_active, 1.0 / border_link_proba)
-
-                    # Fix the diagonal to 1 (no scaling)
-                    # np.fill_diagonal(weights, 1.0)
-                    # weights[center_node_1, center_node_2] *= 1/main_link_proba
-                    # weights[center_node_2, center_node_1] *= 1/main_link_proba
-                    
-                    # W_active *= weights
-                    # row_sums = W_active.sum(axis=1, keepdims=True)
-                    # # Avoid division by zero
-                    # row_sums[row_sums == 0] = 1.0
-                    # W_active /= row_sums
-                    
-                    ################# AGGREGATION #################
-                    #log.info(f'Number of model stored in central node 1 : {len(clients[center_node_1].neighbor_models)}')
-
-                    
                     # Evaluate (average across clients)
                     self.load_metrics(rnd)
-
-                    # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
-                    # log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')
 
 
                 
@@ -324,7 +291,7 @@ class graph_runner:
                 
                 log.info(f'-------------- Round {rnd} --------------')
                 log.info(f"Spectral Gap : {get_spectral_gap(W_actual)}")
-                self.lr_update(rnd)
+                lr_update(rnd, self.client_config, self.clients)
                 
                 ############ TRAINING PHASE ##############
                 # Local training of all the nodes
@@ -335,8 +302,5 @@ class graph_runner:
                 
                 # Evaluate (average across clients)
                 self.load_metrics(rnd)
-
-                # full_mean, full_std = compute_consensus_distance([client.model.state_dict() for client in clients])
-                # log.info(f'Mean Distance between models : {full_mean}, Std between models : {full_std}')
-
+                
         return self.metrics

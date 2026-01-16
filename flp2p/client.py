@@ -1,13 +1,14 @@
 from typing import Dict, Optional, Tuple, List
 
+from omegaconf import DictConfig
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
+import numpy as np
 import copy
 import logging
 
 
-#ShareMode = Literal["backbone", "full"]
 log = logging.getLogger(__name__)
 
 class FLClient:
@@ -24,16 +25,16 @@ class FLClient:
         device: torch.device,
         train_loader: DataLoader,
         test_loader: Optional[DataLoader] = None,
-        config: Optional[Dict] = None,
+        config: Optional[DictConfig] = None,
     ) -> None:
         self.client_id = client_id
         self.model = model.to(device)
         self.device = device
         self.train_loader = train_loader
         self.test_loader = test_loader
-        self.learning_rate = config.get("learning_rate", 0.01)
-        self.weight_decay = config.get("weight_decay", 0.0)
-        self.momentum = config.get("momentum", 0.0)
+        self.learning_rate = config["learning_rate"] if config is not None else 0.01
+        self.weight_decay = config["weight_decay"] if config is not None else 0.0
+        self.momentum = config["momentum"] if config is not None else 0.0
         # Store gradients of neighbors from the previous round
         self.neighbor_models: Dict[int, Dict[str, torch.Tensor]] = {}
 
@@ -50,7 +51,7 @@ class FLClient:
         for neighbor_id, models in neighbor_state.items():
             self.neighbor_models[neighbor_id] = copy.deepcopy(models)
 
-    def get_stochastic_gradient(self, criterion: nn.Module = None) -> Dict[str, torch.Tensor]:
+    def get_stochastic_gradient(self, criterion: nn.Module | None = None) -> Dict[str, torch.Tensor]:
         if criterion is None:
             criterion = nn.CrossEntropyLoss()
         self.model.train()
@@ -61,7 +62,7 @@ class FLClient:
         outputs = self.model(inputs)
         loss = criterion(outputs, targets)
         loss.backward()
-        gradient = {name: param.grad.detach().clone() for name, param in self.model.named_parameters() if param.requires_grad}
+        gradient = {name: param.grad.detach().clone() for name, param in self.model.named_parameters() if param.requires_grad and param.grad is not None}
         return gradient
             
     def _optimizer(self) -> torch.optim.Optimizer:
@@ -72,14 +73,14 @@ class FLClient:
                 {"params": weights, "weight_decay": self.weight_decay},
             ], lr=self.learning_rate)
         
-    def local_train(self, local_epochs: int = 1, criterion: Optional[nn.Module] = None) -> Tuple[float, float]:
+    def local_train(self, local_epochs: int = 1, criterion: nn.Module | None = None) -> Tuple[float, float, Dict[str, torch.Tensor]]:
         if criterion is None:
             criterion = nn.CrossEntropyLoss()
         optimizer = self._optimizer()
         self.model.train()
         correct = 0
         total = 0
-        gradient = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad}
+        gradient = {name: torch.zeros_like(param) for name, param in self.model.named_parameters() if param.requires_grad and param.grad is not None}
 
         for _ in range(local_epochs):
             for inputs, targets in self.train_loader:
@@ -98,7 +99,7 @@ class FLClient:
                     preds = outputs.argmax(dim=1)
                     correct += (preds == targets).sum().item()
 
-        num_samples = len(self.train_loader.dataset)
+        num_samples = len(self.train_loader.dataset)  # type: ignore[attr-defined]
         for name in gradient:
             gradient[name] /= num_samples
             
@@ -109,11 +110,14 @@ class FLClient:
 
     @torch.no_grad()
     def evaluate(self, data_loader: Optional[DataLoader] = None) -> Tuple[float, float]:
-        loader = data_loader or self.test_loader
+        if data_loader is None:
+            loader = self.train_loader
+        else:
+            loader = data_loader
         self.model.eval()
         criterion = nn.CrossEntropyLoss()
         total_loss = 0.0
-        num_samples = len(loader.dataset)
+        num_samples = len(loader.dataset) # type: ignore[attr-defined]
         correct = 0
         for inputs, targets in loader:
             inputs = inputs.to(self.device)
@@ -138,20 +142,19 @@ class FLClient:
         total_norm = total_norm ** 0.5
         return total_norm
 
-    def update_state(self, neighbor_weights: List[float]) -> None:
+    def update_state(self, neighbor_weights: np.ndarray) -> None:
         """
         Update the model state using the aggregated gradient.
         Args:
             aneighbor_weights: List of weights corresponding to the stored neighbor gradients.
             alpha: Learning rate to use for the update. If None, use self.learning_rate.
         """
+        neighbor_weights_tensor = torch.tensor(neighbor_weights, dtype=torch.float32) if not isinstance(neighbor_weights, torch.Tensor) else neighbor_weights
         if not hasattr(self, "neighbor_models"): return
-        if not isinstance(neighbor_weights, torch.Tensor):
-            neighbor_weights = torch.tensor(neighbor_weights, dtype=torch.float32)
         aggregated = {k: torch.zeros_like(v, dtype=torch.float32).cpu() for k, v in self.model.state_dict().items()}
         for j, state in self.neighbor_models.items():
             for k in aggregated:
-                aggregated[k] += neighbor_weights[j] * state[k]
+                aggregated[k] += neighbor_weights_tensor[j] * state[k]
 
         self.model.load_state_dict({k: v.to(self.device) for k, v in aggregated.items()})
 
