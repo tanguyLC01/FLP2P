@@ -30,7 +30,14 @@ def set_flat_params(model, flat_params):
         p.data.copy_(flat_params[idx:idx + num_params].view_as(p))
         idx += num_params
         
-def get_spectral_gap(matrix: np.array) -> float:
+class EmptyDataset(torch.utils.data.Dataset):
+    def __getitem__(self, index):
+        pass
+ 
+    def __len__(self):
+        return 0
+        
+def get_spectral_gap(matrix: np.ndarray) -> float:
     eigenvals = set(np.abs(np.linalg.eigvals(matrix)))
     if len(eigenvals) == 1:
         return 1
@@ -48,10 +55,12 @@ def run_fixed(cfg: DictConfig) -> None:
         torch.cuda.manual_seed(cfg.seed)
         torch.cuda.manual_seed_all(cfg.seed)
 
-    log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
+    log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir # type: ignore
 
 
     # Model + Clients
+    empty_dataset = EmptyDataset() # In fixed value training, there is no learning, so no dataset is needed
+    train_loader, test_loader = torch.utils.data.DataLoader(empty_dataset), torch.utils.data.DataLoader(empty_dataset)
     clients: List[FLClient] = []
     for i in range(cfg.partition.num_clients):
         if cfg.model.name == "lenet5":
@@ -60,8 +69,8 @@ def run_fixed(cfg: DictConfig) -> None:
             model = make_resnet18(cfg.model).to(device)
         else:
             raise ValueError(f"Unknown model: {cfg.model.name}")
-        train_loader, test_loader = None, None
         client = FLClient(
+            client_id = i,
             model=model,
             device=device,
             train_loader=train_loader,
@@ -83,7 +92,7 @@ def run_fixed(cfg: DictConfig) -> None:
     
     
     N = len(clients)
-    max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])
+    max_degree_nodes = list(sorted(graph.degree, key=lambda x: x[1], reverse=True)[:2])  # type: ignore[attr-defined]
     center_node_1, center_node_2 = [n for n, _ in max_degree_nodes]  
     neighbor_center_1 = list([n for n in graph.neighbors(center_node_1) if n != center_node_2])[0]
     neighbor_center_2 = list([n for n in graph.neighbors(center_node_2) if n != center_node_1])[0] 
@@ -95,7 +104,7 @@ def run_fixed(cfg: DictConfig) -> None:
         W = compute_weight_matrix(graph, 'jaccard') # We use this W for the aggregation part and with old_models updates, we need a full neighbor matrix
     if cfg.mixing_matrix != 'matcha':
         W_list = list()
-        border_nodes = [n for n in graph.nodes if graph.degree[n] == 1]
+        border_nodes = [n for n in graph.nodes if graph.degree[n] == 1]  # type: ignore[attr-defined]
         log.info(f'Number of rounds : {cfg.train.rounds}')
         for _ in range(cfg.train.rounds):
             # Copy base graph
@@ -160,7 +169,7 @@ def run_fixed(cfg: DictConfig) -> None:
             if not cfg.old_gradients:
                 W_mixing = W_actual
             else:
-                W_mixing = W
+                W_mixing = W  # type: ignore[attr-defined]
             for active_node in nodes_involved:
                 clients[active_node].update_state(W_mixing[active_node, :])               
         

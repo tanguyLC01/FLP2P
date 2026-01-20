@@ -4,6 +4,7 @@ import flp2p  # Assuming the flp2p module is installed and configured
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import torch
+from torch import nn
 
 from flp2p.data import build_client_loaders, get_dataset
 from typing import List
@@ -13,6 +14,7 @@ from flp2p.client import FLClient
 import logging
 from flp2p.utils import lr_update
 from main import print_metrics
+import random
 
 """
 This file implements a simplified classical FedAvg simulation
@@ -56,7 +58,7 @@ def simulate_fedavg(cfg: DictConfig) -> None:
         torch.cuda.manual_seed(cfg.seed)
         torch.cuda.manual_seed_all(cfg.seed)
           
-    log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
+    log_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir # type: ignore
     train_ds, test_ds = get_dataset(cfg.data)
     client_loaders = build_client_loaders(
         train_dataset=train_ds,
@@ -65,6 +67,8 @@ def simulate_fedavg(cfg: DictConfig) -> None:
         save_plot_path=log_path
     )
     
+    init_state = {}
+    base_model = nn.Identity()
     if cfg.model.name == "lenet5":
         base_model = LeNet5(cfg.model).to(device)
         init_state = base_model.state_dict()
@@ -73,6 +77,7 @@ def simulate_fedavg(cfg: DictConfig) -> None:
         init_state = base_model.state_dict()
 
     # Model + Clients
+
     clients: List[FLClient] = []
     for i in range(cfg.partition.num_clients):
         if cfg.model.name == "lenet5":
@@ -106,7 +111,7 @@ def simulate_fedavg(cfg: DictConfig) -> None:
     
     for rnd in range(cfg.train.rounds):
         lr_update(rnd, cfg.client, clients)
-        sampled_clients = np.random.choice(clients, size=int(cfg.train.participation_rate * len(clients)), replace=False)
+        sampled_clients = random.sample(clients, k=int(cfg.train.participation_rate * len(clients)))
         train_gradient_norm = 0
         models = []
         total_train_samples = 0
@@ -160,7 +165,7 @@ def simulate_fedavg(cfg: DictConfig) -> None:
         for client in clients:
             ###### TEST METRICS #######
             test_loss, test_acc = client.evaluate()
-            test_num_samples = len(client.test_loader.dataset)
+            test_num_samples = len(client.test_loader.dataset) # type: ignore[attr-defined]
             test_weighted_loss += test_loss * test_num_samples
             test_weighted_acc += test_acc * test_num_samples
             accuracies.append(test_acc)
@@ -168,7 +173,7 @@ def simulate_fedavg(cfg: DictConfig) -> None:
 
             ###### TRAIN METRICS #######
             train_loss, train_acc = client.evaluate(client.train_loader)
-            train_num_samples = len(client.train_loader.dataset)
+            train_num_samples = len(client.train_loader.dataset) # type: ignore[attr-defined]
             train_weighted_loss += train_loss * train_num_samples
             train_weighted_acc += train_acc * train_num_samples
             total_train_samples += train_num_samples
