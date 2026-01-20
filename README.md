@@ -1,53 +1,86 @@
-# FLP2P: Decentralized Federated Learning (MNIST, LeNet-5)
-
-Minimal decentralized FL with personalization:
-- Networks: `LeNet5` with separable backbone and classifier
-- Clients: local train/eval, share backbone or full model
-- Graph runner: gossip-style averaging over ring or Erdos-Rényi graph
-- Hydra configs for easy experiment management
+# Project Overview
+The goal of this project is to create a Distributed Federated Learning framework to be able to run decentralized algorithms with PyTorch models.
 
 ## Setup
 
 ```bash
-python -m venv .venv
-. .venv/Scripts/activate  # Windows PowerShell
+python3 -m venv ./personalisation_env
+source ./personalisation_env/bin/activate
 pip install -r requirements.txt
 ```
 
-## Run (Hydra)
+## 
 
-Base run using defaults (`conf/config.yaml`):
+## Configuration
+The configuration files are in the `conf` folder. We use Hydra system to be able to handle multiple configurations at once.<br>
+### Graph
+You find all the possible graphs you can generate in this repo and their specific parameter. The repo is mainly built (metrics analysis and plots) for the two cluster topology.
 
-```bash
-python main.py
+### config.yaml
+We present a generic config file to run an a DFL experiment.
+```
+defaults:
+  - data: cifar10
+  - model: lenet5
+  - partition: dirichlet
+  - client: default
+  - train: default
+  - graph: two_clusters
+  - _self_
+  - override hydra/launcher: joblib
+
+
+
+seed: 42
+use_cuda: true
+mixing_matrix: jaccard
+run_name: small_graph
+old_gradients: false
+aggregation_step_per_round: 1
+hydra:
+  run:
+    dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: ./${run_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${mixing_matrix}-selection_method:${selection_method.threshold}-old_gradients:${old_gradients}
+same_distrib_test_set: false
+selection_method: 
+  name: normal
+  threshold: 0
+```
+In this config, we run LeNet5 on every client who all have a fraction of the CIFAR-10 dataset, partitioned along the dirichlet distribution.
+We set the mixing/gossiping matrix to Jaccard. The available matrices are "jaccard", "metroplis_hasting", "maximum_degree" and the "matcha" method.
+#### Metroplis Hasting
+```math
+\left[ W \right]_{ij} = 
+\begin{cases} 
+    \frac{1}{1 + \max\{d_i(t), d_j(t)\}} & \{i, j\} \in \mathcal{E} \\
+    1 - \sum_{k \in \mathcal{N}_i(t)} W_{ik}(t) & i = j \\
+    0 & \text{otherwise}
+\end{cases}
 ```
 
-Override number of clients and rounds:
-
-```bash
-python main.py partition.num_clients=3 train.rounds=2
+#### Jaccard
+```math
+\left[ W \right]_{ij} = 
+\begin{cases} 
+    \frac{|\mathcal{N}_i \cap \mathcal{N}_j|}{|\mathcal{N}_i \cup \mathcal{N}_j|}  & \{i, j\} \in \mathcal{E} \\
+    1 - \sum_{k \in \mathcal{N}_i(t)} W_{ik}(t) & i = j \\
+    0 & \text{otherwise}
+\end{cases}
 ```
 
-Switch to Dirichlet non-IID partitioning and change alpha:
-
-```bash
-python main.py partition=@partition/dirichlet partition.alpha=0.3
+#### Maximum Degree
+```math
+\left[ W \right]_{ij} = \begin{cases} 
+    \frac{1}{1+\max_{i \in \mathcal{V}}d_i} \quad &\text{for} \quad (i,j) \in \mathcal{E} \quad \text{or} \quad i=j \\
+    0 &\text{otherwise}
+\end{cases}
 ```
 
-Use Erdős-Rényi topology with p=0.3:
+#### Matcba
+see the code in `matcha_mixing_matrix.py`
 
-```bash
-python main.py graph=@graph/erdos_renyi graph.er_p=0.3
-```
 
-Share the full model instead of just the backbone:
 
-```bash
-python main.py client.share_mode=full
-```
 
-Change batch size and workers:
-
-```bash
-python main.py data.batch_size=128 data.num_workers=4
-```
