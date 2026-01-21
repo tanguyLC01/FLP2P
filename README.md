@@ -143,7 +143,10 @@ Then, you run :
 ```
 python3 main.py
 ```
-
+If you  want to launch a configuration from another config file, you can create one at the root of the conf/ directory. For example, you can have `conf/fixed.yaml` for a fixed training.And to run the graph_runner with this config, you run in the terminal. <br>
+```
+python3 main.py --config-name fixed.yaml
+```
 ## Get metrics and plots
 To be able to generate plots and metrics analysis, you have to go into the `compare_training.ipynb`. In this file, you find in the first box :
 ```python
